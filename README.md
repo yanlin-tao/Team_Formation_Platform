@@ -16,7 +16,7 @@ The goal of this project is to **make group formation easier, faster, and more e
 
 ## Repository Information
 - **Repository Name:** `fa25-cs411-team001-SQLMaster`
-- **Organization:** UIUC CS411 GitHub
+- **Organization:** CS 411 Database Systems
 - **Stage:** Stage 0 – Team Formation
 
 ---
