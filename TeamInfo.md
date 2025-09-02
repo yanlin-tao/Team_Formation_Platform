@@ -19,9 +19,18 @@
 
 |   Info      |        Description     |
 | ----------- | ---------------------- |
-|  Title      |                        |
+|  Title      |       TeamUp UIUC      |
 | System URL  |      link_to_system    |
 | Video Link  |      link_to_video     |
 
 ## Project Summary
 
+# TeamUp UIUC
+
+**TeamUp UIUC** is a course-based teammate matching platform for UIUC students. Many classes at UIUC require group projects, but students often struggle to find teammates if they don’t already know classmates in the same course. Our system organizes postings by course and semester, allowing students to:
+
+- Create posts to introduce themselves and indicate they are looking for teammates
+- Browse and search existing posts within a course
+- Connect with others who are also seeking teammates
+
+The goal of this project is to **make group formation easier, faster, and more efficient** for students across UIUC.
