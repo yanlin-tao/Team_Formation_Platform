@@ -22,12 +22,12 @@ The goal of this project is to **make group formation easier, faster, and more e
 ---
 
 ## Team Information
-| Role      | Name        | NetID              | GitHub (if any)     |
+| Role      | Name        | NetID              | GitHub      |
 |-----------|-------------|--------------------|---------------------|
-| Captain   | Ning Wei    | ningwei3@illinois.edu | @ningwei           |
-| Member    | Jack Jiang  | jackj6@illinois.edu  | @jackj6            |
-| Member    | Lixuan Gu   | lixuang2@illinois.edu | @lixuang2         |
-| Member    | Yanlin Tao  | tao17@illinois.edu   | @tao17             |
+| Captain   | Ning Wei    | ningwei3@illinois.edu | @AllenWn           |
+| Member    | Jack Jiang  | jackj6@illinois.edu  | @jackj6441            |
+| Member    | Lixuan Gu   | lixuang2@illinois.edu | @GuLixuan         |
+| Member    | Yanlin Tao  | tao17@illinois.edu   | @yanlin-tao             |
 
 For detailed team information, see [TeamInfo.md](./TeamInfo.md).
 
