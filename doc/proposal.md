@@ -1,4 +1,4 @@
-# 6. Functionality (What the website delivers & how users interact)
+# 6. Functionality 
 
 ## 6.1 Roles & Permissions
 - **Student (NetID-authenticated)**: Navigate by term/course/section; create/browse/search posts; send/receive join requests; create/manage teams; edit profile (skills, availability); comment (optional); bookmark (optional).
@@ -7,45 +7,45 @@
 
 ---
 
-## 6.2 Feature List (clear list of functionality)
+## 6.2 Feature List 
 
 ### A) Discover & Navigate
 - **Term → Course → Section** navigation to see the space’s Posts and Teams.
 - **Search/Filter**: keyword (title/content), skill tags, status (open/locked), remaining slots, recency (updated_at), optionally by section.
 - **Course/Section info**: title, instructor, meeting times (from official data).
 
-### B) Posts (teammate-seeking ads)
+### B) Posts 
 - **Create**: Student creates one active post within a term/course (section optional).
 - **Read**: List & detail views (title, content, skills, target size, author summary).
 - **Update**: Author edits title/content/skills, switches `open/locked`, or archives.
 - **Delete**: Author deletes or archives; archived posts are hidden from default lists.
 
-### C) Teams (capacity & lifecycle)
+### C) Teams
 - **Create**: From a post or standalone; set `target_size` and notes.
 - **Read**: Show members, open slots (`target_size - current_members`), status (`open/locked/full/closed`).
 - **Update**: Owner locks/unlocks, changes target size/notes; membership changes trigger **auto-full** when capacity is reached.
 - **Delete/Close**: Owner closes (`closed`); hard delete only in dev—production uses close.
 
-### D) Membership (TeamMember)
+### D) Membership 
 - **Add**: Accept a request or invite approved user into the team.
 - **Read**: Team page lists members & roles.
 - **Update**: Owner edits a member’s role (FE/BE/PM…).
 - **Delete**: Owner removes member; member can leave team.
 
-### E) Match Requests (contact/join workflow)
+### E) Match Requests 
 - **Create**: **User→User** or **User→Team** (XOR target), with optional message and source post reference.
 - **Read**: Inbox (received) and Sent boxes; filter by status/time, paginated.
 - **Update**: Target **accept/reject**; sender **withdraw**; system **expire**.
 - **Delete**: No hard delete; state transitions to `withdrawn/expired` (audit trail).
 - **Side-effects**: `accepted` → auto-add to `TeamMember` and notify both sides.
 
-### F) Profiles (User)
+### F) Profiles 
 - **Create**: First login initializes a user profile.
 - **Read**: Author cards on posts; full profile page for self/others (public fields only).
 - **Update**: Edit `display_name`, `bio`, `avatar` (opt); manage **UserSkill** and **AvailabilityBlock**.
 - **Deactivate**: Soft-deactivate (hide public info, keep history).
 
-### G) (Optional) Comments, Bookmarks, Notifications
+### G) Comments, Bookmarks, Notifications
 - **Comments**: Threaded discussion under posts; author/admin may hide/delete.
 - **Bookmarks**: Save posts or teams for quick access.
 - **Notifications**: In-app alerts for new requests, accepted/rejected, team full, etc.
@@ -57,7 +57,7 @@
 
 ---
 
-## 6.3 CRUD Matrix (who does what, when)
+## 6.3 CRUD Matrix
 
 ### 6.3.1 Posts
 | Actor | Action | Data | When (intent) | Inputs | Validations / Rules | Side-effects |
@@ -86,7 +86,7 @@
 | System | **Update** | MatchRequest | Expire | `status=expired` | `expires_at` passed | Hide from default inbox views |
 | Any | **Read** | MatchRequest | Inbox/Sent | filters: status/time | — | — |
 
-### 6.3.4 Profiles (User, Skills, Availability)
+### 6.3.4 Profiles
 | Actor | Action | Data | When | Inputs | Validations / Rules | Side-effects |
 |---|---|---|---|---|---|---|
 | System | **Create** | User | First login | `netid`, `email?` | `netid` unique | Initialize empty profile |
@@ -99,7 +99,7 @@
 
 ---
 
-## 6.4 Search / Filter / Sort (typical queries)
+## 6.4 Search / Filter / Sort 
 - **Posts list**: filter by `term_id`, `course_id`, `(section_id?)`, `status=open`, `skills[]`, `q`; sort by `updated_at DESC`; paginate.
 - **Teams list**: filter by `term_id`, `course_id`, `(section_id?)`, `status IN (open, locked)`, `open_slots > 0`; sort by `updated_at DESC`.
 - **Inbox**: `to_user_id` **or** `to_team_id` + `status IN (pending)` + `created_at DESC`; paginate.
