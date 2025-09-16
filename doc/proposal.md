@@ -27,12 +27,15 @@ Motivated by students’ common concern—“I want to find good project teammat
 
 On the technical side, the frontend is implemented in React and JavaScript for a clear user interface, while the backend uses Python to handle authentication, post and team lifecycle management, and join requests. Data is stored in MySQL to support our featured functions. Together, this system helps students with the current team formation concerns. 
 
+---
 
 # III. Usefulness
 
 # IV. Creative Component
 
 # V. Data Sources
+
+---
 
 # VI. Data Model
 
@@ -59,6 +62,9 @@ On the technical side, the frontend is implemented in React and JavaScript for a
         style="width:100%; height:auto; max-width:100%;">
   <br><em>Figure 1. ER Diagram</em>
 </p>
+
+---
+
 # VII. Functionality 
 
 ## 1. Roles & Permissions
