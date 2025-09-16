@@ -49,7 +49,8 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 ## Entity–Relationship Diagram
 
-![ER Diagram](./img_src/entity_relation.png)
+<img src="./img_src/entity_relation.png" alt="ER Diagram"
+     style="width:60%; height:auto; max-width:100%;">
 
 # VII. Functionality 
 
@@ -157,21 +158,24 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 Our Team Up! platform gives students a simple way to find teammates. The left menu has main tools like notifications, search, direct messages (DMs), My Courses, and My Teams, so students can quickly reach what they need.
 
-![UI Diagram](./img_src/entry.png)
+<img src="./img_src/entry.png" alt="UI Diagram"
+     style="width:60%; height:auto; max-width:100%;">
 
 At the top, a large search bar lets students look up courses by name or code, or browse by course tags. Below, popular posts are shown with team requests and view counts. Students can open these posts to learn more and send a join request or message.
 
-![UI Diagram](./img_src/post.png)
+<img src="./img_src/post.png" alt="UI Diagram"
+     style="width:60%; height:auto; max-width:100%;">
 
 The "Course Section" page is for working within one class. Students can filter posts by skills, time, or role, and see posts ranked by best match. They can also create new posts for assignments. This setup is more than just posting and replying—it supports profiles, skill filters, and reputation-based teamwork.
 
-![UI Diagram](./img_src/profile.png)
+<img src="./img_src/profile.png" alt="UI Diagram"
+     style="width:60%; height:auto; max-width:100%;">
 
 On the "Profile" page, students can list their courses, skills, groups, and add a short description with a reputation score. They can edit skills, manage groups, and share their profile, which makes teaming more open and fair.
 
 ---
 
-# IV. Architecture & APIs
+# IX. Architecture & APIs
 
 ### Frontend
 - Built with React and JavaScript.
@@ -215,3 +219,6 @@ On the "Profile" page, students can list their courses, skills, groups, and add 
 #### Application APIs
 - Send and track join requests.
 - Approve, reject, or cancel requests.
+
+
+# X. Project Work Distribution
