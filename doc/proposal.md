@@ -45,6 +45,10 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 | **UserSkill**| Junction table linking users to skills (with level).            | user_id (FK→User), skill_id (FK→Skill), level (PK: user_id + skill_id)                                                      | Implements N–M: User ↔ Skill                                                                          |
 
 
+## Entity–Relationship Diagram
+
+![ER Diagram](./img_src/entity_relation.png)
+
 # VII. Functionality 
 
 ## 1. Roles & Permissions
