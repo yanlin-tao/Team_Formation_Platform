@@ -46,9 +46,11 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 ## Data Preview
 
+📁 **[View Full Dataset: `course-catalog.csv`](../data/course-catalog.csv)** *(12,000+ rows)*
+
 Below is a sample of our real course catalog data showing the structure and content we're working with:
 
-<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; overflow-x: auto;">
+<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; overflow-x: auto; font-size: 0.9em;">
 
 | Year | Term | Subject | Number | Name | Credit Hours | CRN | Section | Type | Start Time | End Time | Days | Room | Building | Instructors |
 |------|------|---------|--------|------|--------------|-----|---------|------|------------|----------|------|------|----------|-------------|
