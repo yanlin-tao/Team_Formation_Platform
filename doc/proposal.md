@@ -1,5 +1,11 @@
 # TEAMUP! UIUC!
 
+<p align="right">
+    <img src="./img_src/label.png" alt="label Diagram"
+        style="width:300px; height:auto; max-width:30%;">
+  <br><em>Figure 1. ER Diagram</em>
+</p>
+
 **Repository:** `fa25-cs411-team001-SQLMaster`
 
 ---
@@ -49,9 +55,11 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 ## Entity–Relationship Diagram
 
-<img src="./img_src/entity_relation.png" alt="ER Diagram"
-     style="width:60%; height:auto; max-width:100%;">
-
+<p align="center">
+    <img src="./img_src/entity_relation.png" alt="ER Diagram"
+        style="width:100%; height:auto; max-width:100%;">
+  <br><em>Figure 1. ER Diagram</em>
+</p>
 # VII. Functionality 
 
 ## 1. Roles & Permissions
@@ -158,18 +166,27 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 Our Team Up! platform gives students a simple way to find teammates. The left menu has main tools like notifications, search, direct messages (DMs), My Courses, and My Teams, so students can quickly reach what they need.
 
-<img src="./img_src/entry.png" alt="UI Diagram"
-     style="width:60%; height:auto; max-width:100%;">
+<p align="center">
+    <img src="./img_src/entry.png" alt="UI Diagram"
+        style="width:60%; height:auto; max-width:100%;">
+       <br><em>Figure 2. entry page </em>
+</p>
 
 At the top, a large search bar lets students look up courses by name or code, or browse by course tags. Below, popular posts are shown with team requests and view counts. Students can open these posts to learn more and send a join request or message.
 
-<img src="./img_src/post.png" alt="UI Diagram"
-     style="width:60%; height:auto; max-width:100%;">
+<p align="center">
+    <img src="./img_src/post.png" alt="UI Diagram"
+        style="width:60%; height:auto; max-width:100%;">
+       <br><em>Figure 3. post page </em>
+</p>
 
 The "Course Section" page is for working within one class. Students can filter posts by skills, time, or role, and see posts ranked by best match. They can also create new posts for assignments. This setup is more than just posting and replying—it supports profiles, skill filters, and reputation-based teamwork.
 
-<img src="./img_src/profile.png" alt="UI Diagram"
-     style="width:60%; height:auto; max-width:100%;">
+<p align="center">
+    <img src="./img_src/profile.png" alt="UI Diagram"
+        style="width:60%; height:auto; max-width:100%;">
+       <br><em>Figure 4. profile page </em>
+</p>
 
 On the "Profile" page, students can list their courses, skills, groups, and add a short description with a reputation score. They can edit skills, manage groups, and share their profile, which makes teaming more open and fair.
 
