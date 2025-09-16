@@ -47,14 +47,14 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 # VII. Functionality 
 
-## 1 Roles & Permissions
+## 1. Roles & Permissions
 - **Student (NetID-authenticated)**: Navigate by term/course/section; create/browse/search posts; send/receive join requests; create/manage teams; edit profile (skills, availability); comment (optional); bookmark (optional).
 - **Team Owner**: Everything a Student can do **plus** lock/close team, remove members, adjust target size, manage role needs (optional).
 - **System (ETL/Service)**: Sync public **Term/Course/Section** data; run background jobs (capacity/status updates, request expiry).
 
 ---
 
-## 2 Feature List 
+## 2. Feature List 
 
 ### A) Discover & Navigate
 - **Term → Course → Section** navigation to see the space’s Posts and Teams.
@@ -104,7 +104,7 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 ---
 
-## 3 CRUD Matrix
+## 3. CRUD Matrix
 
 ### a Posts
 | Actor | Action | Data | When (intent) | Inputs | Validations / Rules | Side-effects |
@@ -144,7 +144,7 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 ---
 
-## 4 Search / Filter / Sort 
+## 4. Search / Filter / Sort 
 - **Posts list**: filter by `term_id`, `course_id`, `(section_id?)`, `status=open`, `skills[]`, `q`; sort by `updated_at DESC`; paginate.
 - **Teams list**: filter by `term_id`, `course_id`, `(section_id?)`, `status IN (open, locked)`, `open_slots > 0`; sort by `updated_at DESC`.
 - **Inbox**: `to_user_id` **or** `to_team_id` + `status IN (pending)` + `created_at DESC`; paginate.
@@ -153,3 +153,63 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 # VIII. UI Mockups
 
+Our Team Up! platform gives students a simple way to find teammates. The left menu has main tools like notifications, search, direct messages (DMs), My Courses, and My Teams, so students can quickly reach what they need.
+
+![UI Diagram](./img_src/entry.png)
+
+At the top, a large search bar lets students look up courses by name or code, or browse by course tags. Below, popular posts are shown with team requests and view counts. Students can open these posts to learn more and send a join request or message.
+
+![UI Diagram](./img_src/post.png)
+
+The "Course Section" page is for working within one class. Students can filter posts by skills, time, or role, and see posts ranked by best match. They can also create new posts for assignments. This setup is more than just posting and replying—it supports profiles, skill filters, and reputation-based teamwork.
+
+![UI Diagram](./img_src/profile.png)
+
+On the "Profile" page, students can list their courses, skills, groups, and add a short description with a reputation score. They can edit skills, manage groups, and share their profile, which makes teaming more open and fair.
+
+---
+
+# IV. Architecture & APIs
+
+### Frontend
+- Built with React and JavaScript.
+- Lets students browse courses, make posts, join teams, and manage applications.
+- Talks to the backend using REST APIs.
+
+### Backend
+- Built with FastAPI (Python).
+- Handles main logic like login, posts, teams, and applications.
+- Calculates match scores and gives APIs for the frontend.
+
+### Database
+- Uses MySQL 8 to keep data such as Users, Courses, Sections, Posts, Teams, Applications, Skills, and Availability.
+- Keeps data linked, supports filters, and powers the matching system.
+
+### Deployment
+- Runs in Docker for easy setup.
+- Uses Docker Compose locally and AWS/Render in the cloud.
+- GitHub Actions pipeline for tests and auto builds.
+
+### Main APIs
+
+#### Auth APIs
+- Login with NetID (SSO) and create JWT tokens for sessions.
+
+#### Course & Section APIs
+- Get semesters, courses, and sections.
+- Manage student enrollments.
+
+#### Profile APIs
+- Edit skills, role choices, time slots, and self-intro.
+
+#### Post & Search APIs
+- Make or update team-finding posts.
+- Search/filter by course, section, skill, date, or time.
+
+#### Team APIs
+- Form and manage teams.
+- Add members, set team size, and auto-close when full.
+
+#### Application APIs
+- Send and track join requests.
+- Approve, reject, or cancel requests.
