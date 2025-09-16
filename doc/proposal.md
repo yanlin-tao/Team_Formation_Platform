@@ -1,30 +1,19 @@
-<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-    <div style="flex: 1;">
-        <h1 style="font-size: 4em; font-weight: bold; color: white; margin: 0; text-shadow: 3px 3px 6px rgba(0,0,0,0.3); letter-spacing: 2px;">
-            TEAMUP! UIUC!
-        </h1>
-        <div style="margin-top: 15px;">
-            <p style="color: #f8f9fa; font-size: 1.2em; margin: 5px 0; font-weight: 500;">
-                <strong>Repository:</strong> <code style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 5px; color: white;">fa25-cs411-team001-SQLMaster</code>
-            </p>
-            <div style="margin-top: 10px;">
-                <p style="color: #e9ecef; font-size: 1.1em; margin: 3px 0;">
-                    <strong>Team Members:</strong>
-                </p>
-                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 8px;">
-                    <span style="background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 20px; color: white; font-size: 0.95em;">Ning Wei (ningwei3)</span>
-                    <span style="background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 20px; color: white; font-size: 0.95em;">Jack Jiang (jackj6)</span>
-                    <span style="background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 20px; color: white; font-size: 0.95em;">Lixuan Gu (lixuang2)</span>
-                    <span style="background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 20px; color: white; font-size: 0.95em;">Yanlin Tao (tao17)</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div style="margin-left: 30px;">
-        <img src="./img_src/label.png" alt="label Diagram"
-             style="width: 150px; height: auto; border-radius: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.2); background: white; padding: 10px;">
-    </div>
-</div>
+# TEAMUP! UIUC!
+
+<p align="left">
+    <img src="./img_src/label.png" alt="label Diagram"
+        style="width:300px; height:auto; max-width:30%;">
+</p>
+
+**Repository:** `fa25-cs411-team001-SQLMaster`
+
+---
+
+## Team Members
+- Ning Wei -ningwei3
+- Jack Jiang -jackj6
+- Lixuan Gu -lixuang2
+- Yanlin Tao -tao17
 
 ---
 
