@@ -1,9 +1,8 @@
 # TEAMUP! UIUC!
 
-<p align="right">
+<p align="left">
     <img src="./img_src/label.png" alt="label Diagram"
         style="width:300px; height:auto; max-width:30%;">
-  <br><em>Figure 1. ER Diagram</em>
 </p>
 
 **Repository:** `fa25-cs411-team001-SQLMaster`
