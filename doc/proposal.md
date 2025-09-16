@@ -103,11 +103,6 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 - **Bookmarks**: Save posts or teams for quick access.
 - **Notifications**: In-app alerts for new requests, accepted/rejected, team full, etc.
 
-> **Beyond posts & replies (explicitly addressed):**  
-> 1) **Team capacity automation** (open slots/full transitions),  
-> 2) **Skill-based filters**,  
-> 3) **Availability overlap hints** (optional; based on AvailabilityBlock and section meeting times).
-
 ---
 
 ## 3. CRUD Matrix
@@ -156,6 +151,7 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 - **Inbox**: `to_user_id` **or** `to_team_id` + `status IN (pending)` + `created_at DESC`; paginate.
 - **Members view**: `team_id` join `TeamMember` → user cards with roles.
 
+---
 
 # VIII. UI Mockups
 
