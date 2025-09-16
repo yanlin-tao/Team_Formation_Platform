@@ -284,7 +284,7 @@ On the "Profile" page, students can list their courses, skills, groups, and add 
 
 # X. Project Work Distribution
 
-| Area | Core Responsibilities / Scope | Example Endpoints (if applicable) | Primary | Secondary |
+| Area | Core Responsibilities / Scope | Example Endpoints | Primary | Secondary |
 |---|---|---|---|---|
 | **Workstream – Data & ETL** | Import Spring 2025 course/section CSV; cleaning & de-dup; schema mapping to `term/course/section`; seed scripts for synthetic users/posts/teams; snapshots. | N/A | <Name 1> | <Name 2> |
 | **Workstream – Backend APIs (Core)** | FastAPI setup; auth plumbing; common DTOs; pagination & validation; error handling; OpenAPI docs. | `GET /health`, `GET /version` | <Name 2> | <Name 3> |
