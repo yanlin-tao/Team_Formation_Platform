@@ -35,6 +35,43 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 # V. Data Sources
 
+**Source A — Real (Primary): UIUC Course Catalog / Schedule (Spring 2025)**  
+- **Provenance.** Exported last term from the UIUC catalog/schedule dataset (collected via STAT107 course resources), covering *all* Spring 2025 offerings.  
+- **Format.** CSV (originally from JSON), with rich section-level details.  
+- **Fields captured (partial).** `Year`, `Term`, `YearTerm`, `Subject`, `Number`, `Name`, `Description`, `Credit Hours`, `Section Info`, `Degree Attributes`, `Schedule Information`, `CRN`, `Section`, `Status Code`, `Part of Term`, `Section Title`, `Section Credit Hours`, `Section Status`, `Enrollment Status`, `Type`, `Type Code`, `Start Time`, `End Time`, `Days of Week`, `Room`, `Building`, `Instructors`.  
+- **Cardinality (rows).** **12,000+ rows** (≥ 1k requirement satisfied by *real* data).  
+- **Degree (columns).** ≈ 26+ columns.  
+- **Use in our app.** This is the authoritative real source for our **Term / Course / Section** backbone and for search/filter metadata in the course spaces (e.g., instructor, meeting time, delivery mode).  
+- **Refresh & snapshots.** We treat Spring 2025 as a **frozen snapshot** for Stage 1/2; subsequent terms can be added as additional snapshots. We will keep the raw CSV in `data/raw/` and a normalized export in `data/processed/`.
+
+## Data Preview
+
+Below is a sample of our real course catalog data showing the structure and content we're working with:
+
+<div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; overflow-x: auto;">
+
+| Year | Term | Subject | Number | Name | Credit Hours | CRN | Section | Type | Start Time | End Time | Days | Room | Building | Instructors |
+|------|------|---------|--------|------|--------------|-----|---------|------|------------|----------|------|------|----------|-------------|
+| 2025 | Spring | AAS | 100 | Intro Asian American Studies | 3 hours | 69781 | AB | Lecture-Discussion | 02:00 PM | 03:20 PM | MW | 304 | Noyes Laboratory | Geng, C |
+| 2025 | Spring | AAS | 100 | Intro Asian American Studies | 3 hours | 30107 | AD1 | Discussion/Recitation | 09:00 AM | 09:50 AM | F | 1030 | Literatures, Cultures, & Ling | Siglos, D;Wang, Y |
+| 2025 | Spring | AAS | 100 | Intro Asian American Studies | 3 hours | 41729 | AD2 | Discussion/Recitation | 10:00 AM | 10:50 AM | F | 1030 | Literatures, Cultures, & Ling | Siglos, D;Wang, Y |
+| 2025 | Spring | AAS | 200 | U.S. Race and Empire | 3 hours | 64396 | A | Lecture-Discussion | 12:30 PM | 01:50 PM | TR | 148 | Armory | Sawada, E |
+| 2025 | Spring | AAS | 201 | US Racial & Ethnic Politics | 3 hours | 66639 | OL1 | Online | ARRANGED | ARRANGED | - | - | - | Lee, Y |
+
+</div>
+
+**Source B — Synthetic (Development/Test): Users & Activity (Posts / Teams / MatchRequests / Comments)**  
+- **Why synthetic.** Actual enrollment/teaming and user-generated posts are private; before public launch we have no real user content.  
+- **What we generate.**  
+  - `user` (NetID-like ids, display_name, bio),  
+  - `post` (course-scoped teammate-seeking posts),  
+  - `team` and `team_member` (capacity-driven teams),  
+  - `match_request` (user↔user or user↔team requests),  
+  - `comment` (threaded discussions, optional).  
+- **Format.** CSV/JSON seed files ingested via scripts; we will tag these rows with a **seed batch id** and/or set a **`provenance = 'synthetic'`** flag (app-level) to keep them clearly separated from real data.  
+- **Planned volume (for testing).** e.g., ~1,500–2,000 posts, ~800–1,200 teams, ~3,000+ match requests, balanced across multiple subjects/sections to exercise search, pagination, and capacity logic. *(Exact counts are configurable; real ≥1k is already satisfied by Source A.)*  
+- **Scope limitation.** Synthetic data is **dev/demo only** and will not be mixed with real production user content.
+
 ---
 
 # VI. Data Model
