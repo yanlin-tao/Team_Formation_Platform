@@ -5,10 +5,10 @@
 ---
 
 ## Team Members
-- ningwei3
-- jackj6
-- lixuang2
-- tao17
+- Ning Wei -ningwei3
+- Jack Jiang -jackj6
+- Lixuan Gu -lixuang2
+- Yanlin Tao -tao17
 
 ---
 
@@ -106,7 +106,7 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 ## 3. CRUD Matrix
 
-### a Posts
+### Posts
 | Actor | Action | Data | When (intent) | Inputs | Validations / Rules | Side-effects |
 |---|---|---|---|---|---|---|
 | Student | **Create** | Post | Wants to find teammates in a course | `term_id`, `course_id`, `(section_id)`, `title`, `content`, `skills[]`, `target_team_size` | ≤1 active post per `(user, term, course[, section])`; title required; length limits | Create `PostSkill`; optional notifications |
@@ -114,7 +114,7 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 | Author | **Update** | Post | Edit info/status | title/content/skills/visibility/status | State machine: `open↔locked`, `→ archived` | Bumps `updated_at` |
 | Author | **Delete/Archive** | Post | No longer recruiting | — | Prefer archive (soft) | Hidden from default lists |
 
-### b Teams & Membership
+### Teams & Membership
 | Actor | Action | Data | When | Inputs | Validations / Rules | Side-effects |
 |---|---|---|---|---|---|---|
 | Student | **Create** | Team | Forms a team | `term_id`, `course_id`, `(section_id)`, `target_size`, `notes` | `target_size` ∈ [1,10] | Initial member = owner; status `open` |
@@ -124,7 +124,7 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 | Owner | **Add** | TeamMember | Accept/invite success | `user_id`, `role` | Unique `(team_id, user_id)`; team not full | `open_slots--`; may set `full` |
 | Owner/Member | **Delete** | TeamMember | Kick/leave | `user_id` | Owner cannot self-kick without transfer/close | `open_slots++`; may reopen if was `full` |
 
-### c Match Requests
+### Match Requests
 | Actor | Action | Data | When | Inputs | Validations / Rules | Side-effects |
 |---|---|---|---|---|---|---|
 | Student | **Create** | MatchRequest | Initiate contact | `from_user_id`, `(to_user_id XOR to_team_id)`, `message`, `post_id?` | XOR target; de-duplicate identical pending (app-level) | Notify target |
@@ -133,7 +133,7 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 | System | **Update** | MatchRequest | Expire | `status=expired` | `expires_at` passed | Hide from default inbox views |
 | Any | **Read** | MatchRequest | Inbox/Sent | filters: status/time | — | — |
 
-### d Profiles
+### Profiles
 | Actor | Action | Data | When | Inputs | Validations / Rules | Side-effects |
 |---|---|---|---|---|---|---|
 | System | **Create** | User | First login | `netid`, `email?` | `netid` unique | Initialize empty profile |
