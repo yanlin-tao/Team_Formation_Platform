@@ -31,7 +31,26 @@ On the technical side, the frontend is implemented in React and JavaScript for a
 
 # III. Usefulness
 
+TeamUp! UIUC! provides a highly focused solution for students to seek ideal project teammates in specific courses and sections. Our platform integrates the course section data, student profiles and skills, and interactive team management features. Users can build their profiles, highlight their skills and teammate expectations, create posts, and send requests or messages to potential team members. Team owners can manage the team interactively, including locking or unlocking the team, tracking the formation progress, checking the match request inbox,  and assigning roles to members. The platform also includes a profile scoring system, reflecting feedback from students’ past collaboration performance. This helps peers quickly assess potential teammates and encourages stronger contributions in teamwork. By combining these features, we believe our website will benefit the entire UIUC community. It reduces the time and friction during team formation, fosters more efficient and equitable group work experience for students, and eases management burdens for instructors. 
+
+The current popular platforms for team formation include Canvas, Campuswire, and Discord. TeamUp! UIUC! differentiates itself through course-specific team formation and skill-based matching. Discord offers real-time chat and community servers, but lacks structured course integration and team tracking. Campuswire provides course-seperated Q&A and discussion forums, but was not designed for team formation. Team formation information lacks centralized management, and the personal profiles are extremely limited. Canvas manages assignments, grades, and course content, yet does not support student communication and matching. In contrast, our platform perfectly combines these functions, offering centralized team formation management for each course while enabling real-time chat and personal portfolio building, making team coordination much more flexible.
+
+---
+
 # IV. Creative Component
+
+Our website incorporates three technically complex features that create more intuitive user workflows and interactions. 
+
+### Interactive Team Management
+Unlike a traditional static list of team members, we develop a real-time interactive and dynamic dashboard for team management. Team owners can filter and manage teams based on skills and preferred roles. We use visualizations, for example, a heatmap, to highlight team composition, open slots, and skill coverage. Using drag-and-drop interfaces, the owners can assign roles such as Frontend Developer, Backend Developer, or Project Manager to members. The interface updates in real time as students accept invitations, leave teams, or are removed, providing immediate feedback to all team members. Technically, this involves frontend dynamic components, backend synchronization, conflict resolution, and responsive UI design, which together make team management intuitive, efficient, and visually engaging.
+
+### Skills Matching System
+Our second creative component is an intelligent matching system that goes beyond basic profile browsing. The matching system generated personalized recommendations by evaluating the skill overlap, the collaboration preferences, and the workstyle. According to those metrics, the platform will calculate a synergy score, which predictively estimates the compatibility with potential teams. This requires a technically challenging, multi-dimensional matching recommendation algorithm, data transformations, and building a weighted scoring model. The personalized recommendation feature will significantly enhance the user experience by transitioning from passive browsing and searching to active recommendations. 
+
+### Reputation Score
+Unlike the skill matching system, a reputation score is a feedback-based rating rather than a predictive one. After completing a project or study group, teammates can provide structured evaluations across multiple dimensions, including reliability, contribution quality, and communication.  Over time, the system also integrates previous semesters’ behavior, enabling reputation to stabilize through repeated collaboration across different courses and semesters. This requires careful schema design for scalability. Reputation updates must be handled whenever peer evaluations are submitted, which introduces challenges with concurrency control and consistency in the database. 
+
+---
 
 # V. Data Sources
 
