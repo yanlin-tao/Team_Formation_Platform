@@ -58,7 +58,7 @@ Unlike the skill matching system, a reputation score is a feedback-based rating 
 - **Provenance.** Exported last term from the UIUC catalog/schedule dataset (collected via STAT107 course resources), covering *all* Spring 2025 offerings.  
 - **Format.** CSV (originally from JSON), with rich section-level details.  
 - **Fields captured (partial).** `Year`, `Term`, `YearTerm`, `Subject`, `Number`, `Name`, `Description`, `Credit Hours`, `Section Info`, `Degree Attributes`, `Schedule Information`, `CRN`, `Section`, `Status Code`, `Part of Term`, `Section Title`, `Section Credit Hours`, `Section Status`, `Enrollment Status`, `Type`, `Type Code`, `Start Time`, `End Time`, `Days of Week`, `Room`, `Building`, `Instructors`.  
-- **Cardinality (rows).** **12,000+ rows** (≥ 1k requirement satisfied by *real* data).  
+- **Cardinality (rows).** **12,000+ rows**
 - **Degree (columns).** ≈ 26+ columns.  
 - **Use in our app.** This is the authoritative real source for our **Term / Course / Section** backbone and for search/filter metadata in the course spaces (e.g., instructor, meeting time, delivery mode).  
 - **Refresh & snapshots.** We treat Spring 2025 as a **frozen snapshot** for Stage 1/2; subsequent terms can be added as additional snapshots. We will keep the raw CSV in `data/raw/` and a normalized export in `data/processed/`.
