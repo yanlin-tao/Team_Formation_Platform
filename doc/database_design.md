@@ -1,12 +1,8 @@
 # PT1 Stage 2 — Conceptual & Logical Database Design
 
-## 1. ER Model (choose ERD)
-- Embedded image (Figure 1)
-- One-sentence note: we use ERD (not UML).
+## 1. ER Model design
 
-## 2. Assumptions & Justifications
-### 2.1 Entities
-### 1.1 Entities Overview
+### 1.1 Entities
 
 | **Entity** | **Purpose** | **Primary Key** | **Key Attributes** | **Relationships (Summary)** | **Notes / Rationale** |
 |-------------|-------------|----------------|--------------------|-----------------------------|------------------------|
@@ -23,7 +19,7 @@
 | **Comment** | Threaded discussion under posts. | `id` | `post_id (FK)`, `user_id (FK)`, `parent_comment_id (FK,opt)`, `content`, `status`, `created_at`, `updated_at` | N–1: → Post/User; 1–N: → self(replies) | Supports hierarchical replies. |
 
 
-### 2.2 Relationships & Cardinalities
+### 1.2 Relationships & Cardinalities
 - Term (1) — (N) Course: description, optionality, rationale
 - Course (1) — (N) Section: ...
 - User (1) — (N) Post: ...
@@ -32,16 +28,18 @@
 - MatchRequest: User→User / User→Team (XOR): ...
 - (Any other relationships you draw on the ERD)
 
-## 3. Normalization (3NF / BCNF)
+### 1.3 ER diagram
+
+## 2. Normalization (3NF / BCNF)
 - Functional dependencies & keys: give for 4–6 core tables
 - Decomposition steps (if any) and why
 - Proof or argument each table is in 3NF/BCNF (or justified denormalization)
 - Summary table: which NF each table satisfies
 
-## 4. Logical Design — Relational Schema (not SQL)
+## 3. Logical Design — Relational Schema (not SQL)
 - One line per table using: Table(col:Domain [PK], col:Domain [FK to t.c], ...)
 - Cover all tables present in ERD
 
-## 5. Appendix
+## 4. Appendix
 - Mapping notes (ER→Relational)
 - Terminology (ENUM domain values)
