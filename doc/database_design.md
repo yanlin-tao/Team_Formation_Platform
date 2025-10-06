@@ -4,45 +4,51 @@
 
 ### 1.1 Entities
 
-# 1.1 Entities — Normalized Data Model
-
-| **Entity** | **Purpose** | **Primary Key** | **Key Attributes** | **Relationships** | **Relational Schema (Conceptual → Logical)** |
-|-------------|--------------|-----------------|--------------------|-------------------|---------------------------------------------|
-| **Term** | Represents an academic term (e.g., FA25) that scopes all courses, posts, and teams. | `term_id` | `code` (unique, e.g. FA25), `name`, `start_date`, `end_date`, `created_at`, `updated_at` | 1–N → **Course** | `Term(term_id: INT [PK], code: VARCHAR(8) UNIQUE, name: VARCHAR(32), start_date: DATE, end_date: DATE, created_at: DATETIME, updated_at: DATETIME)` |
-| **Course** | A course instance offered in a specific term (e.g., CS 411 in FA25). | `course_id` | `term_id` (FK), `subject`, `number`, `title`, `credits`, `created_at`, `updated_at` | N–1 → **Term**; 1–N → **Section**, **Post**, **Team** | `Course(course_id: INT [PK], term_id: INT [FK → Term.term_id], subject: VARCHAR(16), number: VARCHAR(16), title: VARCHAR(255), credits: INT, created_at: DATETIME, updated_at: DATETIME)` |
-| **Section** | A particular section of a course with its instructor and meeting info. | `section_id` | `course_id` (FK), `crn` (unique), `section_code`, `instructor`, `meeting_json`, `location`, `delivery_mode`, `created_at`, `updated_at` | N–1 → **Course**; 1–N (opt) → **Post**, **Team** | `Section(section_id: INT [PK], course_id: INT [FK → Course.course_id], crn: VARCHAR(16), section_code: VARCHAR(16), instructor: VARCHAR(255), meeting_json: JSON, location: VARCHAR(64), delivery_mode: VARCHAR(16), created_at: DATETIME, updated_at: DATETIME)` |
-| **User** | Authenticated student profile (NetID-based) storing minimal public information. | `user_id` | `netid` (unique), `email` (unique opt), `phone_number`, `display_name`, `avatar_url`, `created_at`, `updated_at` | 1–N → **Post**, **Comment**, **MatchRequest (from)**; N–M ↔ **Team** (via TeamMember); N–M ↔ **Skill** (via UserSkill) | `User(user_id: INT [PK], netid: VARCHAR(64) UNIQUE, email: VARCHAR(255) UNIQUE, phone_number: VARCHAR(32), display_name: VARCHAR(255), avatar_url: VARCHAR(512), created_at: DATETIME, updated_at: DATETIME)` |
-| **Skill** | Normalized vocabulary of skills for users and posts (used for filtering / matching). | `skill_id` | `name` (unique), `category`, `created_at` | 1–N → **UserSkill**, **PostSkill** | `Skill(skill_id: INT [PK], name: VARCHAR(64) UNIQUE, category: VARCHAR(64), created_at: DATETIME)` |
-| **UserSkill** | Junction table linking users and skills with optional proficiency level. | `(user_id, skill_id)` | `level`, `created_at` | N–1 → **User**, **Skill** (implements N–M) | `UserSkill(user_id: INT [FK → User.user_id], skill_id: INT [FK → Skill.skill_id], level: INT, created_at: DATETIME, [PK user_id, skill_id])` |
-| **Post** | Teammate-seeking post under a course/section; visible to other students. | `post_id` | `user_id` (FK), `course_id` (FK), `section_id` (FK opt), `title`, `content`, `team_id` (FK opt), `created_at`, `updated_at` | N–1 → **User/Course/Section**; 1–N → **Comment**, **MatchRequest**; N–M ↔ **Skill** (via PostSkill) | `Post(post_id: INT [PK], user_id: INT [FK → User.user_id], course_id: INT [FK → Course.course_id], section_id: INT [FK → Section.section_id], title: VARCHAR(255), content: TEXT, team_id: INT [FK → Team.team_id], created_at: DATETIME, updated_at: DATETIME)` |
-| **PostSkill** | Junction table connecting posts to desired skills (keeps schema in 1NF). | `(post_id, skill_id)` | — | N–1 → **Post**, **Skill** (implements N–M) | `PostSkill(post_id: INT [FK → Post.post_id], skill_id: INT [FK → Skill.skill_id], [PK post_id, skill_id])` |
-| **Team** | Represents a project team with capacity, membership, and status. | `team_id` | `course_id` (FK), `section_id` (FK opt), `target_size`, `notes`, `status` (ENUM), `created_at`, `updated_at` | N–1 → **Course/Section**; 1–N → **TeamMember**, **MatchRequest**; N–M ↔ **User** (via TeamMember) | `Team(team_id: INT [PK], course_id: INT [FK → Course.course_id], section_id: INT [FK → Section.section_id], target_size: INT, notes: TEXT, status: VARCHAR(16), created_at: DATETIME, updated_at: DATETIME)` |
-| **TeamMember** | Junction table representing team membership and member roles. | `(team_id, user_id)` | `role`, `joined_at` | N–1 → **Team**, **User** (implements N–M) | `TeamMember(team_id: INT [FK → Team.team_id], user_id: INT [FK → User.user_id], role: VARCHAR(32), joined_at: DATETIME, [PK team_id, user_id])` |
-| **MatchRequest** | Workflow entity for join/contact requests between users or teams (XOR target). | `request_id` | `from_user_id` (FK), `to_user_id` (FK opt), `to_team_id` (FK opt), `post_id` (FK opt), `message`, `status` (ENUM), `created_at`, `decision_at`, `expires_at` | N–1 → **User(from)**; N–1 (XOR) → **User(to)** / **Team(to)**; N–1 (opt) → **Post** | `MatchRequest(request_id: INT [PK], from_user_id: INT [FK → User.user_id], to_user_id: INT [FK → User.user_id], to_team_id: INT [FK → Team.team_id], post_id: INT [FK → Post.post_id], message: VARCHAR(1000), status: VARCHAR(16), created_at: DATETIME, decision_at: DATETIME, expires_at: DATETIME)` |
-| **Comment** | Threaded comment entity for post discussions (with optional nesting). | `comment_id` | `post_id` (FK), `user_id` (FK), `parent_comment_id` (FK self opt), `content`, `status`, `created_at`, `updated_at` | N–1 → **Post**, **User**; 1–N → **Comment** (self-replies) | `Comment(comment_id: INT [PK], post_id: INT [FK → Post.post_id], user_id: INT [FK → User.user_id], parent_comment_id: INT [FK → Comment.comment_id], content: TEXT, status: VARCHAR(16), created_at: DATETIME, updated_at: DATETIME)` |
-
----
-
-### Summary of Relationship Cardinalities
-
-- **Term (1) — ( N ) Course**  
-- **Course (1) — ( N ) Section**, **Post**, **Team**  
-- **User (1) — ( N ) Post**, **Comment**, **MatchRequest (from)**  
-- **User (N) — (M) Team** (via TeamMember)  
-- **User (N) — (M) Skill** (via UserSkill)  
-- **Post (N) — (M) Skill** (via PostSkill)  
-- **MatchRequest (XOR)** target: User *or* Team  
-- **Comment (self)** 1–N hierarchy through `parent_comment_id`
+| Entity | Description | Key Attributes (PK & FKs) |
+|---|---|---|
+| **Term** | Academic term (e.g., Spring 2025) that scopes courses, sections, posts, and teams. | **term_id (PK)** |
+| **Course** | A course instance offered in a specific term (e.g., CS 411). | **course_id (PK)**, **term_id (FK)** |
+| **Section** | A specific section of a course with instructor/meeting details. | **section_id (PK)**, **course_id (FK)** |
+| **User** | Student account (NetID-based) with public/profile info. | **user_id (PK)** |
+| **Skill** | Normalized skill tag used in profiles and matching. | **skill_id (PK)** |
+| **Post** | Teammate-seeking post tied to term/course/(optional section). | **post_id (PK)**, **user_id (FK)**, **term_id (FK)**, **course_id (FK)**, **section_id (FK)**, **team_id (FK)** |
+| **Team** | Project team with capacity/status under a course/(optional section). | **team_id (PK)**, **owner_user_id (FK)**, **term_id (FK)**, **course_id (FK)**, **section_id (FK)** |
+| **TeamMember** | Junction for User ↔ Team membership with role/joined time. | **team_id (FK)**, **user_id (FK)** |
+| **UserSkill** | Junction for User ↔ Skill with optional level. | **user_id (FK)**, **skill_id (FK)** |
+| **MatchRequest** | Join/contact request workflow (target is user *or* team). | **request_id (PK)**, **from_user_id (FK)**, **to_user_id (FK)**, **to_team_id (FK)**, **post_id (FK)** |
+| **Comment** | Threaded comments under posts (optional nesting). | **comment_id (PK)**, **post_id (FK)**, **user_id (FK)**, **parent_comment_id (FK)** |
 
 
-### 1.2 Relationships & Cardinalities
-- Term (1) — (N) Course: description, optionality, rationale
-- Course (1) — (N) Section: ...
-- User (1) — (N) Post: ...
-- Team (N) — (M) User via TeamMember: ...
-- User (N) — (M) Skill via UserSkill: ...
-- MatchRequest: User→User / User→Team (XOR): ...
-- (Any other relationships you draw on the ERD)
+### 1.2 Relationships & Cardinalities 
+
+> Format: **Name** — *Type / Cardinality* — **Participation** — Notes & Business Rules
+
+- **Term ↔ Course** — *1-to-N* — **Term (mandatory), Course (mandatory)** — Each course belongs to exactly one term; a term has many courses.
+- **Course ↔ Section** — *1-to-N* — **Course (mandatory), Section (mandatory)** — A section is defined for exactly one course; a course has many sections.
+- **Term ↔ Post** — *1-to-N* — **Term (mandatory), Post (mandatory)** — Each post is scoped to one term; a term has many posts.
+- **Course ↔ Post** — *1-to-N* — **Course (mandatory), Post (mandatory)** — Each post is tied to one course; a course has many posts.
+- **Section ↔ Post** — *1-to-N (optional on Post)* — **Section (optional), Post (optional)** — A post may (optionally) be tied to a specific section; a section can have many posts.
+- **User (author) ↔ Post** — *1-to-N* — **User (mandatory), Post (mandatory)** — One user authors many posts; each post has exactly one author.
+
+- **Term ↔ Team** — *1-to-N* — **Term (mandatory), Team (mandatory)** — Each team is scoped to one term; a term has many teams.
+- **Course ↔ Team** — *1-to-N* — **Course (mandatory), Team (mandatory)** — Each team is tied to one course; a course has many teams.
+- **Section ↔ Team** — *1-to-N (optional on Team)* — **Section (optional), Team (optional)** — A team may be tied to a section; a section can have many teams.
+- **User (owner) ↔ Team** — *1-to-N* — **User (mandatory), Team (mandatory)** — A team has exactly one owner; one user can own many teams.
+
+- **User ↔ Team (via TeamMember)** — *N-to-M* — **Both sides optional per row** — Implemented through **TeamMember(team_id, user_id)**; a user can join many teams and a team has many members. Business rule: `(team_id, user_id)` unique; capacity/auto-full enforced at app level.
+
+- **User ↔ Skill (via UserSkill)** — *N-to-M* — **Both sides optional per row** — Implemented through **UserSkill(user_id, skill_id)**; a user can have many skills, a skill can tag many users. Business rule: `(user_id, skill_id)` unique.
+
+- **Post ↔ Comment** — *1-to-N* — **Post (mandatory), Comment (mandatory)** — A post can have many comments; each comment belongs to exactly one post.
+- **User ↔ Comment** — *1-to-N* — **User (mandatory), Comment (mandatory)** — A user can write many comments; each comment has exactly one author.
+- **Comment (parent) ↔ Comment (reply)** — *1-to-N (optional)* — **Parent optional, Reply optional** — Nested threads via `parent_comment_id`; top-level comments have `NULL` parent.
+
+- **User (sender) ↔ MatchRequest** — *1-to-N* — **User (mandatory), MatchRequest (mandatory)** — Each request has exactly one sender; a user can send many requests.
+- **User (target) ↔ MatchRequest** — *1-to-N (optional on MatchRequest)* — **User (optional), MatchRequest (optional)** — Request may target a **user**; many requests can target the same user.  
+- **Team (target) ↔ MatchRequest** — *1-to-N (optional on MatchRequest)* — **Team (optional), MatchRequest (optional)** — Request may target a **team**; many requests can target the same team.  
+  - **XOR constraint:** exactly one of `to_user_id` or `to_team_id` is non-null per request.
+- **Post (source) ↔ MatchRequest** — *1-to-N (optional on MatchRequest)* — **Post (optional), MatchRequest (optional)** — A request may reference the post it came from (for context/audit).
+
 
 ### 1.3 ER diagram
 
