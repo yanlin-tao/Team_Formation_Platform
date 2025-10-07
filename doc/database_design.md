@@ -303,6 +303,8 @@ A post can require multiple skills; a skill can be required by many posts.
   <br><em>Figure 1. ER Diagram</em>
 </p>
 
+---
+
 <p align="center">
     <img src="./img_src/State_diagram.png" alt="ER Diagram"
         style="width:100%; height:auto; max-width:100%;">
