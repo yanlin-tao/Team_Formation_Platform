@@ -433,7 +433,7 @@ We can verify this by checking each table individually as follows:
 
 Relational Schema:
 
-*Term*
+*Term*  
 Term(term_id: INT [PK], name: VARCHAR(64), start_date: DATE, end_date: DATE)
 
 | Column | Domain | Key | Description |
