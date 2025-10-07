@@ -469,6 +469,168 @@ MatchRequest(request_id: INT [PK], from_user_id: INT [FK to User.user_id], to_us
 **PostSkill**  
 PostSkill(post_id: INT [PK, FK to Post.post_id], skill_id: INT [PK, FK to Skill.skill_id])
 
+## 3. Logical Design — Relational Schema (not SQL)
+
+Each table below is defined according to the relational schema format:
+
+---
+
+### **Term**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| term_id | INT | PK | Unique identifier for each academic term |
+| name | VARCHAR(64) |  | Term code or label (e.g., “Spring 2025”) |
+| start_date | DATE |  | Term start date |
+| end_date | DATE |  | Term end date |
+
+---
+
+### **Course**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| course_id | INT | PK | Unique course identifier (e.g., sp25CS411) |
+| term_id | INT | FK → Term.term_id | References the term the course belongs to |
+| subject | VARCHAR(16) |  | Subject prefix (CS, ECE, STAT, etc.) |
+| number | VARCHAR(16) |  | Course number |
+| title | VARCHAR(128) |  | Course title |
+| credits | DECIMAL(3,1) |  | Credit hours |
+| created_at | TIMESTAMP |  | Record creation time |
+| updated_at | TIMESTAMP |  | Last update time |
+
+---
+
+### **Section**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| section_id | INT | PK | Unique section identifier |
+| course_id | INT | FK → Course.course_id | References parent course |
+| term_id | INT | FK → Term.term_id | References academic term |
+| crn | VARCHAR(16) |  | Course Reference Number |
+| section_code | VARCHAR(16) |  | Section code (A, AB, OL1, etc.) |
+| instructor | VARCHAR(128) |  | Instructor name(s) |
+| meeting_time | VARCHAR(128) |  | Meeting schedule |
+| location | VARCHAR(128) |  | Room information |
+| delivery_mode | VARCHAR(32) |  | In-person / online |
+| created_at | TIMESTAMP |  | Record creation time |
+| updated_at | TIMESTAMP |  | Last update time |
+
+---
+
+### **User**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| user_id | INT | PK | Unique user ID |
+| netid | VARCHAR(64) |  | Campus NetID |
+| email | VARCHAR(128) |  | Contact email |
+| phone_number | VARCHAR(32) |  | Optional phone number |
+| display_name | VARCHAR(128) |  | Public display name |
+| avatar_url | VARCHAR(256) |  | Profile image URL |
+| bio | VARCHAR(1024) |  | Short introduction |
+| score | DECIMAL(4,1) |  | Reputation or feedback score |
+| major | VARCHAR(64) |  | Declared major |
+| grade | VARCHAR(16) |  | Academic year or level |
+| created_at | TIMESTAMP |  | Record creation time |
+| updated_at | TIMESTAMP |  | Last update time |
+
+---
+
+### **Skill**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| skill_id | INT | PK | Unique skill identifier |
+| name | VARCHAR(64) |  | Skill name |
+| category | VARCHAR(64) |  | Skill category |
+| created_at | TIMESTAMP |  | Record creation time |
+
+---
+
+### **UserSkill**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| user_id | INT | PK, FK → User.user_id | References user |
+| skill_id | INT | PK, FK → Skill.skill_id | References skill |
+| level | VARCHAR(16) |  | Skill proficiency |
+| created_at | TIMESTAMP |  | Record creation time |
+
+---
+
+### **Team**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| team_id | INT | PK | Unique team identifier |
+| owner_user_id | INT | FK → User.user_id | Team owner |
+| course_id | INT | FK → Course.course_id | Associated course |
+| section_id | INT | FK → Section.section_id | Associated section |
+| target_size | INT |  | Expected team size |
+| notes | VARCHAR(1024) |  | Additional info |
+| status | VARCHAR(16) |  | Open / Full / Closed |
+| created_at | TIMESTAMP |  | Record creation time |
+| updated_at | TIMESTAMP |  | Last update time |
+
+---
+
+### **TeamMember**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| team_id | INT | PK, FK → Team.team_id | Team reference |
+| user_id | INT | PK, FK → User.user_id | User reference |
+| role | VARCHAR(32) |  | Role inside the team |
+| joined_at | TIMESTAMP |  | Join date |
+
+---
+
+### **Post**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| post_id | INT | PK | Unique post identifier |
+| user_id | INT | FK → User.user_id | Author of the post |
+| course_id | INT | FK → Course.course_id | Associated course |
+| section_id | INT | FK → Section.section_id | Associated section |
+| team_id | INT | FK → Team.team_id | Related team |
+| title | VARCHAR(128) |  | Post title |
+| content | VARCHAR(4000) |  | Main text |
+| status | VARCHAR(16) |  | Open / Archived |
+| created_at | TIMESTAMP |  | Creation time |
+| updated_at | TIMESTAMP |  | Update time |
+
+---
+
+### **Comment**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| comment_id | INT | PK | Unique comment ID |
+| post_id | INT | FK → Post.post_id | Related post |
+| user_id | INT | FK → User.user_id | Author |
+| parent_comment_id | INT | FK → Comment.comment_id | Parent comment (nullable) |
+| content | VARCHAR(2000) |  | Comment text |
+| status | VARCHAR(16) |  | Visibility status |
+| created_at | TIMESTAMP |  | Creation time |
+| updated_at | TIMESTAMP |  | Update time |
+
+---
+
+### **MatchRequest**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| request_id | INT | PK | Unique request identifier |
+| from_user_id | INT | FK → User.user_id | Request sender |
+| to_user_id | INT | FK → User.user_id | Request target user |
+| to_team_id | INT | FK → Team.team_id | Request target team |
+| post_id | INT | FK → Post.post_id | Optional source post |
+| message | VARCHAR(1024) |  | Message content |
+| status | VARCHAR(16) |  | Pending / Accepted / Rejected / Withdrawn |
+| created_at | TIMESTAMP |  | Request creation time |
+| decision_at | TIMESTAMP |  | Decision timestamp |
+| expires_at | TIMESTAMP |  | Expiry time |
+
+---
+
+### **PostSkill**
+| Column | Domain | Key | Description |
+|---------|---------|------|-------------|
+| post_id | INT | PK, FK → Post.post_id | References post |
+| skill_id | INT | PK, FK → Skill.skill_id | References required skill |
+
 
 ## IV. Appendix
 
