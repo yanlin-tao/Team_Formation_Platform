@@ -7,7 +7,7 @@
 
 # 1. ER Model design
 
-## 1.1 Entities
+## *1.1 Entities*
 
 ---
 
@@ -148,7 +148,7 @@ Represents a join or contact request from a user to a team, optionally referenci
 ### A) Posts & Comments
 
 #### **User — Post (1–M)**
-**Assumptions & Rationale**  
+
 A user authors posts to recruit teammates. Each post has exactly one author; a user can author many posts.
 
 - **Cardinality:** 1 (User) — M (Post)
@@ -157,7 +157,7 @@ A user authors posts to recruit teammates. Each post has exactly one author; a u
 - **Notes/Constraints:** Author cannot be changed without updating the FK.
 
 #### **Team — Post (1–M)**
-**Assumptions & Rationale**  
+ 
 Every post is associated with one team (e.g., recruiting into a specific team), while a team can have multiple posts across time.
 
 - **Cardinality:** 1 (Team) — M (Post)
@@ -166,7 +166,7 @@ Every post is associated with one team (e.g., recruiting into a specific team), 
 - **Notes/Constraints:** Enforces single-team context per post.
 
 #### **Post — Comment (1–M)**
-**Assumptions & Rationale**  
+
 Comments belong to a single post; a post can have many comments.
 
 - **Cardinality:** 1 (Post) — M (Comment)
@@ -175,7 +175,7 @@ Comments belong to a single post; a post can have many comments.
 - **Notes/Constraints:** Deleting/archiving a post should hide or cascade per policy.
 
 #### **User — Comment (1–M)**
-**Assumptions & Rationale**  
+
 A user writes comments; each comment has exactly one author.
 
 - **Cardinality:** 1 (User) — M (Comment)
@@ -184,7 +184,7 @@ A user writes comments; each comment has exactly one author.
 - **Notes/Constraints:** Supports moderation and audit trails.
 
 #### **Comment — Comment (1–M)**
-**Assumptions & Rationale**  
+
 Nested/threaded comments: a comment may reply to a single parent; a parent can have many replies.
 
 - **Cardinality:** 1 (Parent Comment) — M (Child Comments)
@@ -197,7 +197,7 @@ Nested/threaded comments: a comment may reply to a single parent; a parent can h
 ### B) University Enrollments
 
 #### **Term — Course (1–M)**
-**Assumptions & Rationale**  
+ 
 Courses are offered in specific academic terms; a term includes many courses.
 
 - **Cardinality:** 1 (Term) — M (Course)
@@ -206,7 +206,7 @@ Courses are offered in specific academic terms; a term includes many courses.
 - **Notes/Constraints:** Matches source catalog structure.
 
 #### **Course — Section (1–M)**
-**Assumptions & Rationale**  
+
 A course has multiple sections; each section belongs to exactly one course.
 
 - **Cardinality:** 1 (Course) — M (Section)
@@ -215,7 +215,7 @@ A course has multiple sections; each section belongs to exactly one course.
 - **Notes/Constraints:** Section uses composite identity per design (`CRN` + `course_id`).
 
 #### **Section — Team (1–M)**
-**Assumptions & Rationale**  
+
 Teams can be tied to a specific section; a section can host many teams.
 
 - **Cardinality:** 1 (Section) — M (Team)
@@ -224,7 +224,7 @@ Teams can be tied to a specific section; a section can host many teams.
 - **Notes/Constraints:** Ensures team context aligns with section scheduling.
 
 #### **Course — Team (1–M)**
-**Assumptions & Rationale**  
+ 
 Each team is associated with one course; a course can have many teams.
 
 - **Cardinality:** 1 (Course) — M (Team)
@@ -237,7 +237,7 @@ Each team is associated with one course; a course can have many teams.
 ### C) Match Request
 
 #### **User — Match_request (1–M)**
-**Assumptions & Rationale**  
+
 A user can send multiple match requests; each request has exactly one sender.
 
 - **Cardinality:** 1 (User) — M (Match_request)
@@ -246,7 +246,7 @@ A user can send multiple match requests; each request has exactly one sender.
 - **Notes/Constraints:** Sender is immutable after creation.
 
 #### **Team — Match_request (1–M)**
-**Assumptions & Rationale**  
+
 Requests target a specific team; a team can receive many requests.
 
 - **Cardinality:** 1 (Team) — M (Match_request)
@@ -255,7 +255,7 @@ Requests target a specific team; a team can receive many requests.
 - **Notes/Constraints:** Team inbox is derived by filtering on this FK.
 
 #### **Post — Match_request (0..1 – M)**
-**Assumptions & Rationale**  
+
 A request may reference the originating post for context (optional); a post can have many associated requests.
 
 - **Cardinality:** 0..1 (Post) — M (Match_request)
@@ -267,10 +267,8 @@ A request may reference the originating post for context (optional); a post can 
 
 ### D) Relationship Sets (N–M)
 
-> These are modeled conceptually as relationships with attributes (if any) and are implemented as junction tables.
-
 #### **User — Team (M–M) via `team_member`**
-**Assumptions & Rationale**  
+
 Users can join many teams; teams have multiple members. Membership has attributes (role, joined_at).
 
 - **Cardinality:** M (User) — M (Team)
@@ -279,7 +277,7 @@ Users can join many teams; teams have multiple members. Membership has attribute
 - **Notes/Constraints:** `roles`, `joined_at` belong to the relationship.
 
 #### **User — Skill (M–M) via `user_skill`**
-**Assumptions & Rationale**  
+
 A user can hold multiple skills; a skill can be held by many users.
 
 - **Cardinality:** M (User) — M (Skill)
@@ -288,7 +286,7 @@ A user can hold multiple skills; a skill can be held by many users.
 - **Notes/Constraints:** `level` is an attribute of the relationship.
 
 #### **Post — Skill (M–M) via `post_skill`**
-**Assumptions & Rationale**  
+ 
 A post can require multiple skills; a skill can be required by many posts.
 
 - **Cardinality:** M (Post) — M (Skill)
@@ -299,8 +297,125 @@ A post can require multiple skills; a skill can be required by many posts.
 
 ### 1.3 ER diagram
 
-## 2. Normalization (3NF / BCNF)
+## 2. Normalization (BCNF)
 
+A database schema is in **Boyce–Codd Normal Form (BCNF)** if, for every nontrivial functional dependency (X → Y),  
+X must be a **superkey** for the relation.  
+Our schema adheres to BCNF.  
+We can verify this by checking each table individually as follows:
+
+---
+
+### **Term**
+**Functional dependencies:**
+- term_id → name, start_date, end_date  
+**Justification:**  
+term_id is a superkey as it identifies all attributes.  
+No partial or transitive dependencies exist.
+
+---
+
+### **Course**
+**Functional dependencies:**
+- course_id → term_id, subject, number, title, credits  
+**Justification:**  
+course_id is a superkey as it identifies all attributes.  
+No partial or transitive dependencies exist.
+
+---
+
+### **Section**
+**Functional dependencies:**
+- (CRN, course_id) → instructor, meeting_time, location, delivery_mode  
+**Justification:**  
+The composite key (CRN, course_id) is a superkey of the relation.  
+No partial or transitive dependencies exist.  
+The same CRN may be used for different courses or sections in different semesters.  
+The course_id uniquely identifies the course in the specific semester, which means the composite key is necessary.
+
+---
+
+### **User**
+**Functional dependencies:**
+- user_id → netid, email, phone_number, display_name, avatar_url, bio, score, major, grade  
+**Justification:**  
+user_id is a superkey as it identifies all attributes.  
+No partial or transitive dependencies exist.
+
+---
+
+### **Post**
+**Functional dependencies:**
+- post_id → user_id, team_id, title, content, created_at, updated_at  
+**Justification:**  
+post_id is a superkey as it identifies all attributes.  
+No partial or transitive dependencies exist.
+
+---
+
+### **Comment**
+**Functional dependencies:**
+- comment_id → post_id, user_id, parent_comment_id, content, status, created_at, updated_at  
+**Justification:**  
+comment_id is a superkey as it identifies all attributes.  
+No partial or transitive dependencies exist.
+
+---
+
+### **Team**
+**Functional dependencies:**
+- team_id → course_id, section_id, team_name, target_size, notes, status, created_at, updated_at  
+**Justification:**  
+team_id is a superkey as it identifies all attributes.  
+No partial or transitive dependencies exist.
+
+---
+
+### **Skill**
+**Functional dependencies:**
+- skill_id → name, category  
+**Justification:**  
+skill_id is a superkey as it identifies all attributes.  
+No partial or transitive dependencies exist.
+
+---
+
+### **Match_request**
+**Functional dependencies:**
+- request_id → from_user_id, to_team_id, post_id, status, message, created_at  
+**Justification:**  
+request_id is a superkey as it identifies all attributes.  
+No partial or transitive dependencies exist.
+
+---
+
+### **team_member**
+**Functional dependencies:**
+- (team_id, user_id) → roles, joined_at  
+**Justification:**  
+The composite key (team_id, user_id) is a superkey.  
+Each team-user pair is unique, so the composite key uniquely determines all other attributes.  
+There are no other functional dependencies.
+
+---
+
+### **user_skill**
+**Functional dependencies:**
+- (user_id, skill_id) → level  
+**Justification:**  
+The combination of user_id and skill_id uniquely determines the proficiency level.  
+No smaller subset of attributes can do that.  
+No partial or transitive dependencies exist.
+
+---
+
+### **post_skill**
+**Functional dependencies:**
+- (post_id, skill_id) → ∅ (no extra attributes)  
+**Justification:**  
+It’s a trivial functional dependency, but it is still compliant with BCNF.
+
+---
 
 ## 3. Logical Design — Relational Schema
 
