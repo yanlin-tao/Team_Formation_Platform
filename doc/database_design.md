@@ -143,7 +143,7 @@ Represents a join or contact request from a user to a team, optionally referenci
 
 ---
 
-## * 1.2 Relationships & Cardinalities *
+##  *1.2 Relationships & Cardinalities*
 
 ### A) Posts & Comments
 
