@@ -5,7 +5,7 @@
         style="width:300px; height:auto; max-width:30%;">
 </p>
 
-# 1. ER Model design
+# I. ER Model design
 
 ## *1.1 Entities*
 
@@ -297,7 +297,7 @@ A post can require multiple skills; a skill can be required by many posts.
 
 ### 1.3 ER diagram
 
-## 2. Normalization (BCNF)
+## II. Normalization (BCNF)
 
 A database schema is in **Boyce–Codd Normal Form (BCNF)** if, for every nontrivial functional dependency (X → Y),  
 X must be a **superkey** for the relation.  
@@ -417,8 +417,8 @@ It’s a trivial functional dependency, but it is still compliant with BCNF.
 
 ---
 
-## 3. Logical Design — Relational Schema
+## III. Logical Design — Relational Schema
 
 
-## 4. Appendix
+## IV. Appendix
 
