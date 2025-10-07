@@ -1,5 +1,10 @@
 # PT1 Stage 2 — Conceptual & Logical Database Design
 
+<p align="left">
+    <img src="./img_src/label.png" alt="label Diagram"
+        style="width:300px; height:auto; max-width:30%;">
+</p>
+
 # 1. ER Model design
 
 ## 1.1 Entities
