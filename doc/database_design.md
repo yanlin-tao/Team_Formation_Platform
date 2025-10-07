@@ -1,4 +1,4 @@
-# PT1 Stage 2 — Conceptual & Logical Database Design
+# Conceptual & Logical Database Design
 
 <p align="left">
     <img src="./img_src/label.png" alt="label Diagram"
@@ -435,11 +435,11 @@ Relational Schema:
 
 *Term*  
 
-Term(term_id: INT [PK], name: VARCHAR(64), start_date: DATE, end_date: DATE)
+Term(term_id: VARCHAR(32) [PK], name: VARCHAR(64), start_date: DATE, end_date: DATE)
 
 | Column | Domain | Key | Description |
 |---------|---------|------|-------------|
-| term_id | INT | PK | Unique identifier for each academic term |
+| term_id | VARCHAR(32) | PK | Unique identifier for each academic term |
 | name | VARCHAR(64) |  | Term code or label (e.g., “Spring 2025”) |
 | start_date | DATE |  | Term start date |
 | end_date | DATE |  | Term end date |
@@ -448,12 +448,12 @@ Term(term_id: INT [PK], name: VARCHAR(64), start_date: DATE, end_date: DATE)
 
 *Course*  
 
-Course(course_id: INT [PK], term_id: INT [FK to Term.term_id], subject: VARCHAR(16), number: VARCHAR(16), title: VARCHAR(128), credits: DECIMAL(3,1), created_at: TIMESTAMP, updated_at: TIMESTAMP)
+Course(course_id: VARCHAR(32) [PK], term_id: VARCHAR(32) [FK to Term.term_id], subject: VARCHAR(16), number: VARCHAR(16), title: VARCHAR(128), credits: DECIMAL(3,1), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
 |---------|---------|------|-------------|
-| course_id | INT | PK | Unique course identifier (e.g., sp25CS411) |
-| term_id | INT | FK → Term.term_id | References the term the course belongs to |
+| course_id | VARCHAR(32) | PK | Unique course identifier (e.g., sp25CS411) |
+| term_id | VARCHAR(32) | FK → Term.term_id | References the term the course belongs to |
 | subject | VARCHAR(16) |  | Subject prefix (CS, ECE, STAT, etc.) |
 | number | VARCHAR(16) |  | Course number |
 | title | VARCHAR(128) |  | Course title |
@@ -465,13 +465,13 @@ Course(course_id: INT [PK], term_id: INT [FK to Term.term_id], subject: VARCHAR(
 
 *Section*  
 
-Section(section_id: INT [PK], course_id: INT [FK to Course.course_id], term_id: INT [FK to Term.term_id], crn: VARCHAR(16), section_code: VARCHAR(16), instructor: VARCHAR(128), meeting_time: VARCHAR(128), location: VARCHAR(128), delivery_mode: VARCHAR(32), created_at: TIMESTAMP, updated_at: TIMESTAMP)
+Section(section_id: INT [PK], course_id: VARCHAR(32) [FK to Course.course_id], term_id: VARCHAR(32) [FK to Term.term_id], crn: VARCHAR(16), section_code: VARCHAR(16), instructor: VARCHAR(128), meeting_time: VARCHAR(128), location: VARCHAR(128), delivery_mode: VARCHAR(32), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
 |---------|---------|------|-------------|
 | section_id | INT | PK | Unique section identifier |
-| course_id | INT | FK → Course.course_id | References parent course |
-| term_id | INT | FK → Term.term_id | References academic term |
+| course_id | VARCHAR(32) | FK → Course.course_id | References parent course |
+| term_id | VARCHAR(32) | FK → Term.term_id | References academic term |
 | crn | VARCHAR(16) |  | Course Reference Number |
 | section_code | VARCHAR(16) |  | Section code (A, AB, OL1, etc.) |
 | instructor | VARCHAR(128) |  | Instructor name(s) |
@@ -532,15 +532,15 @@ UserSkill(user_id: INT [PK, FK to User.user_id], skill_id: INT [PK, FK to Skill.
 
 *Team*  
 
-Team(team_id: INT [PK], owner_user_id: INT [FK to User.user_id], course_id: INT [FK to Course.course_id], section_id: INT [FK to Section.section_id], target_size: INT, notes: VARCHAR(1024), status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
+Team(team_id: INT [PK], course_id: VARCHAR(32) [FK to Course.course_id], section_id: VARCHAR(32) [FK to Section.section_id], target_size: INT, notes: VARCHAR(1024), team_name: VARCHAR(128), status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
 |---------|---------|------|-------------|
 | team_id | INT | PK | Unique team identifier |
-| owner_user_id | INT | FK → User.user_id | Team owner |
-| course_id | INT | FK → Course.course_id | Associated course |
-| section_id | INT | FK → Section.section_id | Associated section |
+| course_id | VARCHAR(32) | FK → Course.course_id | Associated course |
+| section_id | VARCHAR(32) | FK → Section.section_id | Associated section |
 | target_size | INT |  | Expected team size |
+| team_name | VARCHAR(128) |  | Name of the team |
 | notes | VARCHAR(1024) |  | Additional info |
 | status | VARCHAR(16) |  | Open / Full / Closed |
 | created_at | TIMESTAMP |  | Record creation time |
@@ -563,14 +563,14 @@ TeamMember(team_id: INT [PK, FK to Team.team_id], user_id: INT [PK, FK to User.u
 
 *Post*  
 
-Post(post_id: INT [PK], user_id: INT [FK to User.user_id], course_id: INT [FK to Course.course_id], section_id: INT [FK to Section.section_id], team_id: INT [FK to Team.team_id], title: VARCHAR(128), content: VARCHAR(4000), status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
+Post(post_id: INT [PK], user_id: INT [FK to User.user_id], course_id: VARCHAR(32) [FK to Course.course_id], section_id: VARCHAR(32) [FK to Section.section_id], team_id: INT [FK to Team.team_id], title: VARCHAR(128), content: VARCHAR(4000), status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
 |---------|---------|------|-------------|
 | post_id | INT | PK | Unique post identifier |
 | user_id | INT | FK → User.user_id | Author of the post |
-| course_id | INT | FK → Course.course_id | Associated course |
-| section_id | INT | FK → Section.section_id | Associated section |
+| course_id | VARCHAR(32) | FK → Course.course_id | Associated course |
+| section_id | VARCHAR(32) | FK → Section.section_id | Associated section |
 | team_id | INT | FK → Team.team_id | Related team |
 | title | VARCHAR(128) |  | Post title |
 | content | VARCHAR(4000) |  | Main text |
