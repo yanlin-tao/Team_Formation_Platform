@@ -311,6 +311,8 @@ A post can require multiple skills; a skill can be required by many posts.
   <br><em>Figure 2. State Diagram</em>
 </p>
 
+---
+
 ## II. Normalization (BCNF)
 
 A database schema is in **Boyce–Codd Normal Form (BCNF)** if, for every nontrivial functional dependency (X → Y),  
