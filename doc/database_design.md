@@ -584,6 +584,7 @@ MatchRequest(request_id: INT [PK], from_user_id: INT [FK to User.user_id], to_us
 | expires_at | TIMESTAMP |  | Expiry time |
 
 *PostSkill*  
+
 PostSkill(post_id: INT [PK, FK to Post.post_id], skill_id: INT [PK, FK to Skill.skill_id])
 
 | Column | Domain | Key | Description |
