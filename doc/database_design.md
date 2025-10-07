@@ -297,6 +297,18 @@ A post can require multiple skills; a skill can be required by many posts.
 
 ### 1.3 ER diagram
 
+<p align="center">
+    <img src="./img_src/ER_diagram.png" alt="ER Diagram"
+        style="width:100%; height:auto; max-width:100%;">
+  <br><em>Figure 1. ER Diagram</em>
+</p>
+
+<p align="center">
+    <img src="./img_src/State_diagram.png" alt="ER Diagram"
+        style="width:100%; height:auto; max-width:100%;">
+  <br><em>Figure 2. State Diagram</em>
+</p>
+
 ## II. Normalization (BCNF)
 
 A database schema is in **Boyce–Codd Normal Form (BCNF)** if, for every nontrivial functional dependency (X → Y),  
@@ -431,8 +443,6 @@ We can verify this by checking each table individually as follows:
 
 ## III. Logical Design — Relational Schema
 
-Relational Schema:
-
 *Term*  
 
 Term(term_id: VARCHAR(32) [PK], name: VARCHAR(64), start_date: DATE, end_date: DATE)
@@ -464,12 +474,7 @@ Course(course_id: VARCHAR(32) [PK], term_id: VARCHAR(32) [FK to Term.term_id], s
 *Section*  
 
 Section(  
- course_id: VARCHAR(32) [PK, FK to Course.course_id],  
- crn: VARCHAR(16) [PK],  
- instructor: VARCHAR(128),  
- meeting_time: VARCHAR(128),  
- location: VARCHAR(128),  
- delivery_mode: VARCHAR(32),  
+ course_id: VARCHAR(32) [PK, FK to Course.course_id],  crn: VARCHAR(16) [PK],  instructor: VARCHAR(128),  meeting_time: VARCHAR(128),  location: VARCHAR(128),  delivery_mode: VARCHAR(32),  
 )
 
 | Column       | Domain       | Key                               | Description                          |
@@ -529,16 +534,7 @@ UserSkill(user_id: INT [FK to User.user_id], skill_id: INT [FK to Skill.skill_id
 
 *Team*  
 
-Team(team_id: INT [PK],  
- course_id: VARCHAR(32) [FK to Section.course_id],  
- section_id: VARCHAR(16) [FK to Section.crn],  
- team_name: VARCHAR(128),  
- target_size: INT,  
- notes: VARCHAR(1024),  
- status: VARCHAR(16),  
- created_at: TIMESTAMP,  
- updated_at: TIMESTAMP  
-)
+Team(team_id: INT [PK],  course_id: VARCHAR(32) [FK to Section.course_id], section_id: VARCHAR(16) [FK to Section.crn], team_name: VARCHAR(128), target_size: INT,  notes: VARCHAR(1024),  status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column     | Domain       | Key                              | Description                |
 |------------|--------------|----------------------------------|----------------------------|
@@ -607,14 +603,7 @@ Comment(comment_id: INT [PK], post_id: INT [FK to Post.post_id], user_id: INT [F
 
 *MatchRequest*  
 
-MatchRequest(request_id: INT [PK],  
- from_user_id: INT [FK to User.user_id],  
- to_team_id: INT [FK to Team.team_id],  
- post_id: INT [FK to Post.post_id],  
- message: VARCHAR(1024),  
- status: VARCHAR(16),  
- created_at: TIMESTAMP,  
-)
+MatchRequest(request_id: INT [PK], from_user_id: INT [FK to User.user_id], to_team_id: INT [FK to Team.team_id], post_id: INT [FK to Post.post_id], message: VARCHAR(1024), status: VARCHAR(16), created_at: TIMESTAMP)
 
 | Column       | Domain       | Key                     | Description                 |
 |--------------|--------------|-------------------------|-----------------------------|
