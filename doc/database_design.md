@@ -141,7 +141,13 @@ Represents a join or contact request from a user to a team, optionally referenci
 - **message** — Optional message body.
 - **created_at** — Creation timestamp.
 
+
 ---
+---
+
+
+
+
 
 ## 1.2 Relationships & Cardinalities
 
