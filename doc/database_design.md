@@ -308,10 +308,11 @@ We can verify this by checking each table individually as follows:
 
 ### **Term**
 **Functional dependencies:**
-- term_id → name, start_date, end_date  
+- term_id → name, start_date, end_date
+
 **Justification:**  
-term_id is a superkey as it identifies all attributes.  
-No partial or transitive dependencies exist.
+- term_id is a superkey as it identifies all attributes.  
+- No partial or transitive dependencies exist.
 
 ---
 
