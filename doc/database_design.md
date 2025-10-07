@@ -318,103 +318,114 @@ We can verify this by checking each table individually as follows:
 
 ### **Course**
 **Functional dependencies:**
-- course_id → term_id, subject, number, title, credits  
+- course_id → term_id, subject, number, title, credits
+
 **Justification:**  
-course_id is a superkey as it identifies all attributes.  
-No partial or transitive dependencies exist.
+- course_id is a superkey as it identifies all attributes.  
+- No partial or transitive dependencies exist.
 
 ---
 
 ### **Section**
 **Functional dependencies:**
-- (CRN, course_id) → instructor, meeting_time, location, delivery_mode  
+- (CRN, course_id) → instructor, meeting_time, location, delivery_mode
+
 **Justification:**  
-The composite key (CRN, course_id) is a superkey of the relation.  
-No partial or transitive dependencies exist.  
-The same CRN may be used for different courses or sections in different semesters.  
-The course_id uniquely identifies the course in the specific semester, which means the composite key is necessary.
+- The composite key (CRN, course_id) is a superkey of the relation.  
+- No partial or transitive dependencies exist.  
+- The same CRN may be used for different courses or sections in different semesters.  
+- The course_id uniquely identifies the course in the specific semester, which means the composite key is necessary.
 
 ---
 
 ### **User**
 **Functional dependencies:**
-- user_id → netid, email, phone_number, display_name, avatar_url, bio, score, major, grade  
+- user_id → netid, email, phone_number, display_name, avatar_url, bio, score, major, grade
+
 **Justification:**  
-user_id is a superkey as it identifies all attributes.  
-No partial or transitive dependencies exist.
+- user_id is a superkey as it identifies all attributes.  
+- No partial or transitive dependencies exist.
 
 ---
 
 ### **Post**
 **Functional dependencies:**
-- post_id → user_id, team_id, title, content, created_at, updated_at  
+- post_id → user_id, team_id, title, content, created_at, updated_at
+
 **Justification:**  
-post_id is a superkey as it identifies all attributes.  
-No partial or transitive dependencies exist.
+- post_id is a superkey as it identifies all attributes.  
+- No partial or transitive dependencies exist.
 
 ---
 
 ### **Comment**
 **Functional dependencies:**
-- comment_id → post_id, user_id, parent_comment_id, content, status, created_at, updated_at  
+- comment_id → post_id, user_id, parent_comment_id, content, status, created_at, updated_at
+
 **Justification:**  
-comment_id is a superkey as it identifies all attributes.  
-No partial or transitive dependencies exist.
+- comment_id is a superkey as it identifies all attributes.  
+- No partial or transitive dependencies exist.
 
 ---
 
 ### **Team**
 **Functional dependencies:**
-- team_id → course_id, section_id, team_name, target_size, notes, status, created_at, updated_at  
+- team_id → course_id, section_id, team_name, target_size, notes, status, created_at, updated_at
+
 **Justification:**  
-team_id is a superkey as it identifies all attributes.  
-No partial or transitive dependencies exist.
+- team_id is a superkey as it identifies all attributes.  
+- No partial or transitive dependencies exist.
 
 ---
 
 ### **Skill**
 **Functional dependencies:**
-- skill_id → name, category  
+- skill_id → name, category
+
 **Justification:**  
-skill_id is a superkey as it identifies all attributes.  
-No partial or transitive dependencies exist.
+- skill_id is a superkey as it identifies all attributes.  
+- No partial or transitive dependencies exist.
 
 ---
 
 ### **Match_request**
 **Functional dependencies:**
-- request_id → from_user_id, to_team_id, post_id, status, message, created_at  
+- request_id → from_user_id, to_team_id, post_id, status, message, created_at
+
 **Justification:**  
-request_id is a superkey as it identifies all attributes.  
-No partial or transitive dependencies exist.
+- request_id is a superkey as it identifies all attributes.  
+- No partial or transitive dependencies exist.
 
 ---
 
 ### **team_member**
 **Functional dependencies:**
 - (team_id, user_id) → roles, joined_at  
+
 **Justification:**  
-The composite key (team_id, user_id) is a superkey.  
-Each team-user pair is unique, so the composite key uniquely determines all other attributes.  
-There are no other functional dependencies.
+- The composite key (team_id, user_id) is a superkey.  
+- Each team-user pair is unique, so the composite key uniquely determines all other attributes.  
+- There are no other functional dependencies.
 
 ---
 
 ### **user_skill**
 **Functional dependencies:**
 - (user_id, skill_id) → level  
+
 **Justification:**  
-The combination of user_id and skill_id uniquely determines the proficiency level.  
-No smaller subset of attributes can do that.  
-No partial or transitive dependencies exist.
+- The combination of user_id and skill_id uniquely determines the proficiency level.  
+- No smaller subset of attributes can do that.  
+- No partial or transitive dependencies exist.
 
 ---
 
 ### **post_skill**
 **Functional dependencies:**
 - (post_id, skill_id) → ∅ (no extra attributes)  
+
 **Justification:**  
-It’s a trivial functional dependency, but it is still compliant with BCNF.
+- It’s a trivial functional dependency, but it is still compliant with BCNF.
 
 ---
 
