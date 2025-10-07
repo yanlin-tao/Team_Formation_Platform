@@ -1,71 +1,163 @@
 # PT1 Stage 2 — Conceptual & Logical Database Design
 
-## 1. ER Model design
+# 1. ER Model design
 
-### 1.1 Entities
+## 1.1 Entities
 
-| Entity | Description | Attributes (incl. PK/FK) |
-|---|---|---|
-| **Term** | Academic term that scopes courses, sections, posts, and teams. | **term_id (PK)**, code (unique), name, start_date, end_date, created_at, updated_at |
-| **Course** | A course instance offered in a specific term. | **course_id (PK)**, **term_id (FK)**, subject, number, title, credits, created_at, updated_at |
-| **Section** | A specific section of a course with instructor/meeting info. | **section_id (PK)**, **course_id (FK)**, crn (unique), section_code, instructor, meeting_time *(or meeting_json)*, location, delivery_mode, created_at, updated_at |
-| **User** | Student account (NetID-based) with public/profile info. | **user_id (PK)**, netid (unique), email (unique, opt), phone_number (opt), display_name, avatar_url, bio (opt), score (opt), major (opt), grade (opt), created_at, updated_at |
-| **Skill** | Normalized skill tag used for profiles and matching. | **skill_id (PK)**, name (unique), category (opt), created_at |
-| **UserSkill** | Junction for User ↔ Skill with optional proficiency. | **user_id (FK)**, **skill_id (FK)**, level (opt), created_at |
-| **Post** | Teammate-seeking post tied to term/course/(optional section). | **post_id (PK)**, **user_id (FK)**, **term_id (FK)**, **course_id (FK)**, **section_id (FK, opt)**, **team_id (FK, opt)**, title, content, status, created_at, updated_at |
-| **Team** | Project team with capacity/status under a course/(optional section). | **team_id (PK)**, **owner_user_id (FK)**, **term_id (FK)**, **course_id (FK)**, **section_id (FK, opt)**, target_size, notes (opt), status, created_at, updated_at |
-| **TeamMember** | Junction for membership of users in teams, with roles. | **team_id (FK)**, **user_id (FK)**, role (opt), joined_at |
-| **MatchRequest** | Join/contact request between users or user↔team (XOR target). | **request_id (PK)**, **from_user_id (FK)**, **to_user_id (FK, opt)**, **to_team_id (FK, opt)**, **post_id (FK, opt)**, message (opt), status, created_at, decision_at (opt), expires_at (opt) |
-| **Comment** | Threaded comments under posts (optional nesting). | **comment_id (PK)**, **post_id (FK)**, **user_id (FK)**, parent_comment_id (FK self, opt), content, status, created_at, updated_at |
+---
 
+### **Term**
 
-### 1.2 Relationships & Cardinalities
+**Assumptions & Rationale**  
+Represents an academic term (e.g., *Spring 2025*). It serves as the top-level grouping for all courses, sections, posts, and teams, providing a consistent temporal scope for filtering and organization.
 
+**Attributes**
+- **term_id (PK)** — Unique identifier for a term.
+- **name** — Human-readable label (e.g., “Spring 2025”).
+- **start_date** — Beginning date of the term.
+- **end_date** — Ending date of the term.
 
-### A) Academic Structure
-- **Term → Course** — *1-to-N* — **Term (mandatory), Course (mandatory)** — Each course belongs to exactly one term; a term has many courses.  
-- **Course → Section** — *1-to-N* — **Course (mandatory), Section (mandatory)** — A section belongs to one course; a course has many sections.
+---
 
-### B) Content & Communication
-- **User (author) → Post** — *1-to-N* — **User (mandatory), Post (mandatory)** — One user authors many posts; each post has exactly one author.  
-- **Post → Comment** — *1-to-N* — **Post (mandatory), Comment (mandatory)** — A post can have many comments.  
-- **User (author) → Comment** — *1-to-N* — **User (mandatory), Comment (mandatory)** — A user can write many comments.  
-- **Comment (parent) → Comment (reply)** — *1-to-N (optional)* — **Parent optional, Reply optional** — Nested threads via `parent_comment_id`; top-level comments have `NULL` parent.
+### **Course**
 
-### C) Teaming & Membership
-- **User (owner) → Team** — *1-to-N* — **User (mandatory), Team (mandatory)** — A team has exactly one owner; a user may own many teams.  
-- **Course → Team** — *1-to-N* — **Course (mandatory), Team (mandatory)** — Team is scoped to a course.  
-- **Section → Team** — *1-to-N (optional on Team)* — **Section (optional), Team (optional)** — Teams may optionally be tied to a specific section.  
-- **User ↔ Team (via TeamMember)** — *N-to-M* — **Both sides optional per row** — Implemented by `TeamMember(team_id, user_id)`; `(team_id, user_id)` unique; capacity/full logic at app layer.
+**Assumptions & Rationale**  
+Represents a specific course offered within a term (e.g., *sp25CS411*). The `course_id` encodes both the subject and term for uniqueness, while `term_id (FK)` keeps an explicit relational link for joins and normalization.
 
-### D) Skills & Profiles
-- **User ↔ Skill (via UserSkill)** — *N-to-M* — **Both sides optional per row** — Implemented by `UserSkill(user_id, skill_id)`; `(user_id, skill_id)` unique.  
-- *(If you later model post-required skills as a junction)* **Post ↔ Skill (via PostSkill)** — *N-to-M* — Enables multi-skill requirements per post.
+**Attributes**
+- **course_id (PK)** — Unique course key including term information (e.g., “sp25CS411”).
+- **term_id (FK)** — References the term the course belongs to.
+- **subject** — Department or subject code (e.g., “CS”).
+- **number** — Course number (e.g., 411).
+- **title** — Official course title.
+- **credits** — Credit hours assigned to the course.
 
-### E) Matching Workflow
-- **User (sender) → MatchRequest** — *1-to-N* — **User (mandatory), MatchRequest (mandatory)** — Each request has exactly one sender.  
-- **User (target) → MatchRequest** — *1-to-N (optional on request)* — **User (optional), MatchRequest (optional)** — Request may target a user.  
-- **Team (target) → MatchRequest** — *1-to-N (optional on request)* — **Team (optional), MatchRequest (optional)** — Request may target a team.  
-  - **XOR constraint:** exactly one of `to_user_id` or `to_team_id` is non-null per request.  
-- **Post (source) → MatchRequest** — *1-to-N (optional on request)* — **Post (optional), MatchRequest (optional)** — A request may reference its source post (audit/context).
+---
 
-### F) Optional Cross-Scoping (if retained in your design)
-- **Term → Post** — *1-to-N* — Post scoped by term (redundant if term is derivable via course; keep only if you choose denormalized convenience).  
-- **Term → Team** — *1-to-N* — Same note as above.
+### **Section** *(Weak Entity)*
+
+**Assumptions & Rationale**  
+Represents a specific section of a course, including its instructor, time, and meeting location. It is modeled as a weak entity since its identity depends on the parent `Course`.
+
+**Attributes**
+- **CRN (PK)** — Course Registration Number (section identifier).
+- **course_id (FK, PK)** — References the parent course; part of the composite key.
+- **instructor** — Instructor name(s).
+- **meeting_time** — Time schedule string (e.g., “MWF 10:00–10:50 AM”).
+- **location** — Meeting place (building, room, or online).
+- **delivery_mode** — Instruction mode (In-person / Online / Hybrid).
+
+---
+
+### **User**
+
+**Assumptions & Rationale**  
+Represents an authenticated student with a UIUC NetID and editable public profile. Users can author posts, join teams, and manage their skills.
+
+**Attributes**
+- **user_id (PK)** — Unique user identifier.
+- **netid** — Campus NetID for authentication.
+- **email** — Email contact.
+- **phone_number** — Optional phone contact.
+- **display_name** — User’s chosen display name.
+- **avatar_url** — URL to the profile image.
+- **bio** — Short personal introduction.
+- **score** — Reputation or participation score.
+- **major** — Academic major.
+- **grade** — Academic level or year.
+
+---
+
+### **Team**
+
+**Assumptions & Rationale**  
+Represents a project or study group created within a course or section. Teams maintain size limits, status, and membership, enabling structured team management.
+
+**Attributes**
+- **team_id (PK)** — Unique team identifier.
+- **course_id (FK)** — Related course context.
+- **section_id (FK)** — Related section context, optional.
+- **team_name** — Display name of the team.
+- **target_size** — Intended maximum number of members.
+- **notes** — Free-form team description or notes.
+- **status** — Team’s lifecycle state (e.g., open, locked, full, closed).
+- **created_at** — Creation timestamp.
+- **updated_at** — Last modification timestamp.
+
+---
+
+### **Skill**
+
+**Assumptions & Rationale**  
+Defines a normalized vocabulary of skills that users can claim or that posts can require. Having skills as an entity ensures consistency and supports filtering/matching.
+
+**Attributes**
+- **skill_id (PK)** — Unique skill identifier.
+- **name** — Name of the skill (unique).
+- **category** — Optional category or classification.
+
+---
+
+### **Post**
+
+**Assumptions & Rationale**  
+Represents a public teammate-seeking post created by a user, optionally linked to a team or section. Posts are searchable and serve as the main interaction unit.
+
+**Attributes**
+- **post_id (PK)** — Unique identifier for the post.
+- **user_id (FK)** — Authoring user.
+- **team_id (FK)** — Linked team (optional).
+- **title** — Title of the post.
+- **content** — Detailed description or requirements.
+- **created_at** — Creation timestamp.
+- **updated_at** — Last modification timestamp.
+
+---
+
+### **Comment**
+
+**Assumptions & Rationale**  
+Represents threaded discussions under posts. A self-referencing `parent_comment_id` supports nested comment hierarchies and moderation.
+
+**Attributes**
+- **comment_id (PK)** — Unique identifier for the comment.
+- **post_id (FK)** — Associated post.
+- **user_id (FK)** — Comment author.
+- **parent_comment_id (FK self)** — Parent comment reference for nesting (nullable).
+- **content** — Comment text.
+- **status** — Visibility status (visible, hidden, deleted).
+- **created_at** — Creation timestamp.
+- **updated_at** — Last modification timestamp.
+
+---
+
+### **Match_request**
+
+**Assumptions & Rationale**  
+Represents a join or contact request from a user to a team, optionally referencing a related post. Although conceptually a relationship, it is modeled as an entity to store its own attributes (status, message, timestamps).
+
+**Attributes**
+- **request_id (PK)** — Unique request identifier.
+- **from_user_id (FK)** — Sender of the request.
+- **to_team_id (FK)** — Target team.
+- **post_id (FK)** — Source post context (optional).
+- **status** — Request state (pending, accepted, rejected, withdrawn).
+- **message** — Optional message body.
+- **created_at** — Creation timestamp.
+
+---
+
+## 1.2 Relationships & Cardinalities
+
 
 
 ### 1.3 ER diagram
 
 ## 2. Normalization (3NF / BCNF)
-- Functional dependencies & keys: give for 4–6 core tables
-- Decomposition steps (if any) and why
-- Proof or argument each table is in 3NF/BCNF (or justified denormalization)
-- Summary table: which NF each table satisfies
 
-## 3. Logical Design — Relational Schema (not SQL)
-- One line per table using: Table(col:Domain [PK], col:Domain [FK to t.c], ...)
-- Cover all tables present in ERD
+
+## 3. Logical Design — Relational Schema
+
 
 ## 4. Appendix
-- Mapping notes (ER→Relational)
-- Terminology (ENUM domain values)
+
