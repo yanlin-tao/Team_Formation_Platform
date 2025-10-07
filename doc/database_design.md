@@ -13,7 +13,6 @@
 
 ### **Term**
 
-**Assumptions & Rationale**  
 Represents an academic term (e.g., *Spring 2025*). It serves as the top-level grouping for all courses, sections, posts, and teams, providing a consistent temporal scope for filtering and organization.
 
 **Attributes**
@@ -26,7 +25,6 @@ Represents an academic term (e.g., *Spring 2025*). It serves as the top-level gr
 
 ### **Course**
 
-**Assumptions & Rationale**  
 Represents a specific course offered within a term (e.g., *sp25CS411*). The `course_id` encodes both the subject and term for uniqueness, while `term_id (FK)` keeps an explicit relational link for joins and normalization.
 
 **Attributes**
@@ -41,7 +39,6 @@ Represents a specific course offered within a term (e.g., *sp25CS411*). The `cou
 
 ### **Section** *(Weak Entity)*
 
-**Assumptions & Rationale**  
 Represents a specific section of a course, including its instructor, time, and meeting location. It is modeled as a weak entity since its identity depends on the parent `Course`.
 
 **Attributes**
@@ -56,7 +53,6 @@ Represents a specific section of a course, including its instructor, time, and m
 
 ### **User**
 
-**Assumptions & Rationale**  
 Represents an authenticated student with a UIUC NetID and editable public profile. Users can author posts, join teams, and manage their skills.
 
 **Attributes**
@@ -75,7 +71,6 @@ Represents an authenticated student with a UIUC NetID and editable public profil
 
 ### **Team**
 
-**Assumptions & Rationale**  
 Represents a project or study group created within a course or section. Teams maintain size limits, status, and membership, enabling structured team management.
 
 **Attributes**
@@ -93,7 +88,6 @@ Represents a project or study group created within a course or section. Teams ma
 
 ### **Skill**
 
-**Assumptions & Rationale**  
 Defines a normalized vocabulary of skills that users can claim or that posts can require. Having skills as an entity ensures consistency and supports filtering/matching.
 
 **Attributes**
@@ -105,7 +99,6 @@ Defines a normalized vocabulary of skills that users can claim or that posts can
 
 ### **Post**
 
-**Assumptions & Rationale**  
 Represents a public teammate-seeking post created by a user, optionally linked to a team or section. Posts are searchable and serve as the main interaction unit.
 
 **Attributes**
@@ -121,7 +114,6 @@ Represents a public teammate-seeking post created by a user, optionally linked t
 
 ### **Comment**
 
-**Assumptions & Rationale**  
 Represents threaded discussions under posts. A self-referencing `parent_comment_id` supports nested comment hierarchies and moderation.
 
 **Attributes**
@@ -138,7 +130,6 @@ Represents threaded discussions under posts. A self-referencing `parent_comment_
 
 ### **Match_request**
 
-**Assumptions & Rationale**  
 Represents a join or contact request from a user to a team, optionally referencing a related post. Although conceptually a relationship, it is modeled as an entity to store its own attributes (status, message, timestamps).
 
 **Attributes**
