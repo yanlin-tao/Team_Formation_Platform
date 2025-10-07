@@ -434,6 +434,7 @@ We can verify this by checking each table individually as follows:
 Relational Schema:
 
 *Term*  
+
 Term(term_id: INT [PK], name: VARCHAR(64), start_date: DATE, end_date: DATE)
 
 | Column | Domain | Key | Description |
@@ -443,7 +444,10 @@ Term(term_id: INT [PK], name: VARCHAR(64), start_date: DATE, end_date: DATE)
 | start_date | DATE |  | Term start date |
 | end_date | DATE |  | Term end date |
 
+---
+
 *Course*  
+
 Course(course_id: INT [PK], term_id: INT [FK to Term.term_id], subject: VARCHAR(16), number: VARCHAR(16), title: VARCHAR(128), credits: DECIMAL(3,1), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -457,7 +461,10 @@ Course(course_id: INT [PK], term_id: INT [FK to Term.term_id], subject: VARCHAR(
 | created_at | TIMESTAMP |  | Record creation time |
 | updated_at | TIMESTAMP |  | Last update time |
 
+---
+
 *Section*  
+
 Section(section_id: INT [PK], course_id: INT [FK to Course.course_id], term_id: INT [FK to Term.term_id], crn: VARCHAR(16), section_code: VARCHAR(16), instructor: VARCHAR(128), meeting_time: VARCHAR(128), location: VARCHAR(128), delivery_mode: VARCHAR(32), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -474,7 +481,10 @@ Section(section_id: INT [PK], course_id: INT [FK to Course.course_id], term_id: 
 | created_at | TIMESTAMP |  | Record creation time |
 | updated_at | TIMESTAMP |  | Last update time |
 
+---
+
 *User*  
+
 User(user_id: INT [PK], netid: VARCHAR(64), email: VARCHAR(128), phone_number: VARCHAR(32), display_name: VARCHAR(128), avatar_url: VARCHAR(256), bio: VARCHAR(1024), score: DECIMAL(4,1), major: VARCHAR(64), grade: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -492,7 +502,10 @@ User(user_id: INT [PK], netid: VARCHAR(64), email: VARCHAR(128), phone_number: V
 | created_at | TIMESTAMP |  | Record creation time |
 | updated_at | TIMESTAMP |  | Last update time |
 
+---
+
 *Skill*  
+
 Skill(skill_id: INT [PK], name: VARCHAR(64), category: VARCHAR(64), created_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -502,7 +515,10 @@ Skill(skill_id: INT [PK], name: VARCHAR(64), category: VARCHAR(64), created_at: 
 | category | VARCHAR(64) |  | Skill category |
 | created_at | TIMESTAMP |  | Record creation time |
 
+---
+
 *UserSkill*  
+
 UserSkill(user_id: INT [PK, FK to User.user_id], skill_id: INT [PK, FK to Skill.skill_id], level: VARCHAR(16), created_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -512,7 +528,10 @@ UserSkill(user_id: INT [PK, FK to User.user_id], skill_id: INT [PK, FK to Skill.
 | level | VARCHAR(16) |  | Skill proficiency |
 | created_at | TIMESTAMP |  | Record creation time |
 
+---
+
 *Team*  
+
 Team(team_id: INT [PK], owner_user_id: INT [FK to User.user_id], course_id: INT [FK to Course.course_id], section_id: INT [FK to Section.section_id], target_size: INT, notes: VARCHAR(1024), status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -527,7 +546,10 @@ Team(team_id: INT [PK], owner_user_id: INT [FK to User.user_id], course_id: INT 
 | created_at | TIMESTAMP |  | Record creation time |
 | updated_at | TIMESTAMP |  | Last update time |
 
+---
+
 *TeamMember*  
+
 TeamMember(team_id: INT [PK, FK to Team.team_id], user_id: INT [PK, FK to User.user_id], role: VARCHAR(32), joined_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -537,7 +559,10 @@ TeamMember(team_id: INT [PK, FK to Team.team_id], user_id: INT [PK, FK to User.u
 | role | VARCHAR(32) |  | Role inside the team |
 | joined_at | TIMESTAMP |  | Join date |
 
+---
+
 *Post*  
+
 Post(post_id: INT [PK], user_id: INT [FK to User.user_id], course_id: INT [FK to Course.course_id], section_id: INT [FK to Section.section_id], team_id: INT [FK to Team.team_id], title: VARCHAR(128), content: VARCHAR(4000), status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -553,7 +578,10 @@ Post(post_id: INT [PK], user_id: INT [FK to User.user_id], course_id: INT [FK to
 | created_at | TIMESTAMP |  | Creation time |
 | updated_at | TIMESTAMP |  | Update time |
 
+---
+
 *Comment*  
+
 Comment(comment_id: INT [PK], post_id: INT [FK to Post.post_id], user_id: INT [FK to User.user_id], parent_comment_id: INT [FK to Comment.comment_id], content: VARCHAR(2000), status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -567,7 +595,10 @@ Comment(comment_id: INT [PK], post_id: INT [FK to Post.post_id], user_id: INT [F
 | created_at | TIMESTAMP |  | Creation time |
 | updated_at | TIMESTAMP |  | Update time |
 
+---
+
 *MatchRequest*  
+
 MatchRequest(request_id: INT [PK], from_user_id: INT [FK to User.user_id], to_user_id: INT [FK to User.user_id], to_team_id: INT [FK to Team.team_id], post_id: INT [FK to Post.post_id], message: VARCHAR(1024), status: VARCHAR(16), created_at: TIMESTAMP, decision_at: TIMESTAMP, expires_at: TIMESTAMP)
 
 | Column | Domain | Key | Description |
@@ -583,6 +614,7 @@ MatchRequest(request_id: INT [PK], from_user_id: INT [FK to User.user_id], to_us
 | decision_at | TIMESTAMP |  | Decision timestamp |
 | expires_at | TIMESTAMP |  | Expiry time |
 
+---
 *PostSkill*  
 
 PostSkill(post_id: INT [PK, FK to Post.post_id], skill_id: INT [PK, FK to Skill.skill_id])
