@@ -145,6 +145,156 @@ Represents a join or contact request from a user to a team, optionally referenci
 
 ## 1.2 Relationships & Cardinalities
 
+### A) Posts & Comments
+
+#### **User — Post (1–M)**
+**Assumptions & Rationale**  
+A user authors posts to recruit teammates. Each post has exactly one author; a user can author many posts.
+
+- **Cardinality:** 1 (User) — M (Post)
+- **Participation:** **Post** side mandatory (every post must have an author); **User** side optional per row (a user may have zero posts)
+- **Keys involved:** `Post.user_id (FK)` → `User.user_id (PK)`
+- **Notes/Constraints:** Author cannot be changed without updating the FK.
+
+#### **Team — Post (1–M)**
+**Assumptions & Rationale**  
+Every post is associated with one team (e.g., recruiting into a specific team), while a team can have multiple posts across time.
+
+- **Cardinality:** 1 (Team) — M (Post)
+- **Participation:** **Post** side mandatory; **Team** side optional per row
+- **Keys involved:** `Post.team_id (FK)` → `Team.team_id (PK)`
+- **Notes/Constraints:** Enforces single-team context per post.
+
+#### **Post — Comment (1–M)**
+**Assumptions & Rationale**  
+Comments belong to a single post; a post can have many comments.
+
+- **Cardinality:** 1 (Post) — M (Comment)
+- **Participation:** **Comment** side mandatory; **Post** side optional per row
+- **Keys involved:** `Comment.post_id (FK)` → `Post.post_id (PK)`
+- **Notes/Constraints:** Deleting/archiving a post should hide or cascade per policy.
+
+#### **User — Comment (1–M)**
+**Assumptions & Rationale**  
+A user writes comments; each comment has exactly one author.
+
+- **Cardinality:** 1 (User) — M (Comment)
+- **Participation:** **Comment** side mandatory; **User** side optional per row
+- **Keys involved:** `Comment.user_id (FK)` → `User.user_id (PK)`
+- **Notes/Constraints:** Supports moderation and audit trails.
+
+#### **Comment — Comment (1–M)**
+**Assumptions & Rationale**  
+Nested/threaded comments: a comment may reply to a single parent; a parent can have many replies.
+
+- **Cardinality:** 1 (Parent Comment) — M (Child Comments)
+- **Participation:** **Child** mandatory; **Parent** optional (top-level comments have `NULL parent_comment_id`)
+- **Keys involved:** `Comment.parent_comment_id (FK self)` → `Comment.comment_id (PK)`
+- **Notes/Constraints:** Depth constraints (if any) are handled at the application layer.
+
+---
+
+### B) University Enrollments
+
+#### **Term — Course (1–M)**
+**Assumptions & Rationale**  
+Courses are offered in specific academic terms; a term includes many courses.
+
+- **Cardinality:** 1 (Term) — M (Course)
+- **Participation:** **Course** side mandatory; **Term** side optional per row
+- **Keys involved:** `Course.term_id (FK)` → `Term.term_id (PK)`
+- **Notes/Constraints:** Matches source catalog structure.
+
+#### **Course — Section (1–M)**
+**Assumptions & Rationale**  
+A course has multiple sections; each section belongs to exactly one course.
+
+- **Cardinality:** 1 (Course) — M (Section)
+- **Participation:** **Section** side mandatory; **Course** side optional per row
+- **Keys involved:** `Section.course_id (FK, PK component)` → `Course.course_id (PK)`
+- **Notes/Constraints:** Section uses composite identity per design (`CRN` + `course_id`).
+
+#### **Section — Team (1–M)**
+**Assumptions & Rationale**  
+Teams can be tied to a specific section; a section can host many teams.
+
+- **Cardinality:** 1 (Section) — M (Team)
+- **Participation:** **Team** side mandatory; **Section** side optional per row
+- **Keys involved:** `Team.section_id (FK)` → `Section.course_id/CRN` (per entity definition `section_id/CRN+course_id`)
+- **Notes/Constraints:** Ensures team context aligns with section scheduling.
+
+#### **Course — Team (1–M)**
+**Assumptions & Rationale**  
+Each team is associated with one course; a course can have many teams.
+
+- **Cardinality:** 1 (Course) — M (Team)
+- **Participation:** **Team** side mandatory; **Course** side optional per row
+- **Keys involved:** `Team.course_id (FK)` → `Course.course_id (PK)`
+- **Notes/Constraints:** Coexists with Section–Team for finer scoping.
+
+---
+
+### C) Match Request
+
+#### **User — Match_request (1–M)**
+**Assumptions & Rationale**  
+A user can send multiple match requests; each request has exactly one sender.
+
+- **Cardinality:** 1 (User) — M (Match_request)
+- **Participation:** **Match_request** side mandatory; **User** side optional per row
+- **Keys involved:** `Match_request.from_user_id (FK)` → `User.user_id (PK)`
+- **Notes/Constraints:** Sender is immutable after creation.
+
+#### **Team — Match_request (1–M)**
+**Assumptions & Rationale**  
+Requests target a specific team; a team can receive many requests.
+
+- **Cardinality:** 1 (Team) — M (Match_request)
+- **Participation:** **Match_request** side mandatory; **Team** side optional per row
+- **Keys involved:** `Match_request.to_team_id (FK)` → `Team.team_id (PK)`
+- **Notes/Constraints:** Team inbox is derived by filtering on this FK.
+
+#### **Post — Match_request (0..1 – M)**
+**Assumptions & Rationale**  
+A request may reference the originating post for context (optional); a post can have many associated requests.
+
+- **Cardinality:** 0..1 (Post) — M (Match_request)
+- **Participation:** **Match_request** side optional (reference may be NULL); **Post** side optional per row
+- **Keys involved:** `Match_request.post_id (FK)` → `Post.post_id (PK)`
+- **Notes/Constraints:** Useful for analytics/audit; not required for workflow execution.
+
+---
+
+### D) Relationship Sets (N–M)
+
+> These are modeled conceptually as relationships with attributes (if any) and are implemented as junction tables.
+
+#### **User — Team (M–M) via `team_member`**
+**Assumptions & Rationale**  
+Users can join many teams; teams have multiple members. Membership has attributes (role, joined_at).
+
+- **Cardinality:** M (User) — M (Team)
+- **Participation:** Both sides optional per row
+- **Keys involved:** `team_member.team_id (FK)`, `team_member.user_id (FK)`; composite key `(team_id, user_id)` (implied)
+- **Notes/Constraints:** `roles`, `joined_at` belong to the relationship.
+
+#### **User — Skill (M–M) via `user_skill`**
+**Assumptions & Rationale**  
+A user can hold multiple skills; a skill can be held by many users.
+
+- **Cardinality:** M (User) — M (Skill)
+- **Participation:** Both sides optional per row
+- **Keys involved:** `user_skill.user_id (FK)`, `user_skill.skill_id (FK)`; composite key `(user_id, skill_id)` (implied)
+- **Notes/Constraints:** `level` is an attribute of the relationship.
+
+#### **Post — Skill (M–M) via `post_skill`**
+**Assumptions & Rationale**  
+A post can require multiple skills; a skill can be required by many posts.
+
+- **Cardinality:** M (Post) — M (Skill)
+- **Participation:** Both sides optional per row
+- **Keys involved:** `post_skill.post_id (FK)`, `post_skill.skill_id (FK)`; composite key `(post_id, skill_id)` (implied)
+- **Notes/Constraints:** Keeps `Post` in 1NF; supports filtering and matching.
 
 
 ### 1.3 ER diagram
