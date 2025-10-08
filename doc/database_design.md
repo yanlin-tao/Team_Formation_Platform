@@ -37,7 +37,7 @@ Represents a specific course offered within a term (e.g., *sp25CS411*). The `cou
 
 ---
 
-### **Section** *(Weak Entity)*
+### **Section**
 
 Represents a specific section of a course, including its instructor, time, and meeting location. It is modeled as a weak entity since its identity depends on the parent `Course`.
 
@@ -104,7 +104,7 @@ Represents a public teammate-seeking post created by a user, optionally linked t
 **Attributes**
 - **post_id (PK)** — Unique identifier for the post.
 - **user_id (FK)** — Authoring user.
-- **team_id (FK)** — Linked team (optional).
+- **team_id (FK)** — Linked team.
 - **title** — Title of the post.
 - **content** — Detailed description or requirements.
 - **created_at** — Creation timestamp.
@@ -274,7 +274,7 @@ Users can join many teams; teams have multiple members. Membership has attribute
 - **Cardinality:** M (User) — M (Team)
 - **Participation:** Both sides optional per row
 - **Keys involved:** `team_member.team_id (FK)`, `team_member.user_id (FK)`; composite key `(team_id, user_id)` (implied)
-- **Notes/Constraints:** `roles`, `joined_at` belong to the relationship.
+- **Notes/Constraints:** `role`, `joined_at` belong to the relationship.
 
 #### **User — Skill (M–M) via `user_skill`**
 
@@ -416,7 +416,7 @@ We can verify this by checking each table individually as follows:
 
 ### **team_member**
 **Functional dependencies:**
-- (team_id, user_id) → roles, joined_at  
+- (team_id, user_id) → role, joined_at  
 
 **Justification:**  
 - The composite key (team_id, user_id) is a superkey.  
@@ -532,7 +532,7 @@ UserSkill(user_id: INT [FK to User.user_id], skill_id: INT [FK to Skill.skill_id
 |----------|--------|-----------------------------|--------------------------|
 | user_id  | INT    | FK → User.user_id           | References user          |
 | skill_id | INT    | FK → Skill.skill_id         | References skill         |
-| level    | VARCHAR(16) |                         | Skill proficiency level  |
+| level    | VARCHAR(16) |                        | Skill proficiency level  |
 
 ---
 
