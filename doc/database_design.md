@@ -313,7 +313,7 @@ A post can require multiple skills; a skill can be required by many posts.
 
 ---
 
-## II. Normalization (BCNF)
+# II. Normalization (BCNF)
 
 A database schema is in **Boyce–Codd Normal Form (BCNF)** if, for every nontrivial functional dependency (X → Y),  
 X must be a **superkey** for the relation.  
@@ -445,7 +445,7 @@ We can verify this by checking each table individually as follows:
 
 ---
 
-## III. Logical Design — Relational Schema
+# III. Logical Design — Relational Schema
 
 *Term*  
 
@@ -630,5 +630,64 @@ PostSkill(post_id: INT [PK, FK to Post.post_id], skill_id: INT [PK, FK to Skill.
 | post_id | INT    | PK, FK → Post.post_id             | References post             |
 | skill_id| INT    | PK, FK → Skill.skill_id           | References required skill   |
 
+
+---
+
+---
+
+# IV. Assumptions Summary
+
+This section summarizes all key modeling assumptions and design decisions described in Sections I and II.  
+They are consolidated here for clarity and grading reference.
+
+### **Entity-level assumptions**
+
+- **Term** – Each term has a unique `term_id`. Term names such as *Spring 2025* are unique within the database and represent the top-level temporal grouping for all courses and sections.  
+- **Course** – `course_id` encodes both the term and subject for uniqueness (e.g., `sp25CS411`). The same subject/number may reappear in different terms.  
+- **Section** – Each section belongs to exactly one course. Its identity depends on the parent course (weak entity).  
+  - *If using single-key design (section_id)* : each `section_id` uniquely identifies a section; `(course_id, crn)` is unique per term.  
+  - *If using composite-key design (course_id + crn)* : `(course_id, crn)` forms the primary key and is unique within a term.  
+- **User** – Each user has a unique `user_id` (UUID or integer). Email and NetID are unique. Users can create posts, join teams, and list skills.  
+- **Team** – Each team is created within a course or section context. A team has a lifecycle state (`open / full / closed`) and an intended maximum size.  
+- **Skill** – Skill names are globally unique; `category` is optional for grouping.  
+- **Post** – Each post is authored by one user. `team_id` is optional (`0..1–M` relationship to Team) to allow both general and team-specific recruiting posts.  
+- **Comment** – Each comment belongs to one post and one author, and may reference a parent comment (`parent_comment_id`) to form nested threads.  
+- **MatchRequest** – Stored as an entity to track its own `status`, `message`, and `timestamps`, even though conceptually it represents a relationship (User → Team).  
+- **TeamMember** – Bridge table for the M–M relationship between User and Team, with attributes `role` and `joined_at`.  
+- **UserSkill** – Bridge table for the M–M relationship between User and Skill, with attribute `level` indicating proficiency.  
+- **PostSkill** – Bridge table for the M–M relationship between Post and Skill, allowing posts to specify multiple required skills.
+
+---
+
+### **Relationship-level assumptions**
+
+- **Term → Course (1–M)** – Each course is offered in one term; a term can contain multiple courses.  
+- **Course → Section (1–M)** – A course may have multiple sections; each section belongs to one course.  
+- **Section → Team (1–M)** – Teams operate within one section; a section can host multiple teams.  
+- **Course → Team (1–M)** – Each team belongs to one course; a course can have many teams.  
+- **User → Post (1–M)** – A user may author many posts; each post has exactly one author.  
+- **Team → Post (0..1–M)** – A post may or may not belong to a team (optional FK `team_id`).  
+- **Post → Comment (1–M)** – A post can have multiple comments; each comment references one post.  
+- **User → Comment (1–M)** – Each comment is written by one user.  
+- **Comment → Comment (1–M)** – Nested comments form a hierarchy; top-level comments have `NULL parent_comment_id`.  
+- **User ↔ Team (M–M via TeamMember)** – Many users can join many teams.  
+- **User ↔ Skill (M–M via UserSkill)** – Many users can possess many skills.  
+- **Post ↔ Skill (M–M via PostSkill)** – A post can list multiple required skills.  
+- **User → MatchRequest (1–M)** – One user can send multiple requests.  
+- **Team → MatchRequest (1–M)** – One team can receive multiple requests.  
+- **Post → MatchRequest (0..1–M)** – A request may link to one post for context.
+
+---
+
+### **General assumptions**
+
+- All IDs (`*_id`) are globally unique and used as primary keys.  
+- Foreign keys are optional only when the business rule allows (e.g., `Post.team_id`).  
+- All timestamps (`created_at`, `updated_at`) are system-generated for record history.  
+- `status` fields use enumerated values validated at the application level.  
+- Deletions are *soft* (flag or status change) to preserve history.  
+- All tables are normalized to BCNF; no redundant non-key attributes.  
+
+---
 
 
