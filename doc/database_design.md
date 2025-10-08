@@ -632,5 +632,3 @@ PostSkill(post_id: INT [PK, FK to Post.post_id], skill_id: INT [PK, FK to Skill.
 
 
 
-## IV. Appendix
-
