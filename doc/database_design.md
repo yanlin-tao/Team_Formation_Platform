@@ -637,9 +637,6 @@ PostSkill(post_id: INT [PK, FK to Post.post_id], skill_id: INT [PK, FK to Skill.
 
 # IV. Assumptions Summary
 
-This section summarizes all key modeling assumptions and design decisions described in Sections I and II.  
-They are consolidated here for clarity and grading reference.
-
 ### **Entity-level assumptions**
 
 - **Term** – Each term has a unique `term_id`. Term names such as *Spring 2025* are unique within the database and represent the top-level temporal grouping for all courses and sections.  
