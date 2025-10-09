@@ -300,7 +300,7 @@ A post can require multiple skills; a skill can be required by many posts.
 <p align="center">
     <img src="./img_src/ER_diagram.png" alt="ER Diagram"
         style="width:100%; height:auto; max-width:100%;">
-  <br><em>Figure 1. ER Diagram</em>
+  <br><em>Figure 1. UML Diagram</em>
 </p>
 
 ---
@@ -308,7 +308,7 @@ A post can require multiple skills; a skill can be required by many posts.
 <p align="center">
     <img src="./img_src/State_diagram.png" alt="ER Diagram"
         style="width:100%; height:auto; max-width:100%;">
-  <br><em>Figure 2. State Diagram</em>
+  <br><em>Figure 2. ER Diagram</em>
 </p>
 
 ---
