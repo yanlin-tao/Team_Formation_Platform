@@ -45,7 +45,6 @@ CREATE TABLE Skill (
     skill_id   INT PRIMARY KEY,
     name       VARCHAR(64) UNIQUE NOT NULL,
     category   VARCHAR(64),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE UserSkill (
@@ -61,12 +60,10 @@ CREATE TABLE Team (
     team_id      INT PRIMARY KEY,
     course_id    VARCHAR(32) NOT NULL,
     section_id   VARCHAR(16) NOT NULL,
-    team_name    VARCHAR(128),
+    team_name    VARCHAR(128) UNIQUE NOT NULL,
     target_size  INT,
     notes        VARCHAR(1024),
     status       VARCHAR(16),
-    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (course_id, section_id) REFERENCES Section(course_id, crn)
 );
 
@@ -83,9 +80,9 @@ CREATE TABLE TeamMember (
 CREATE TABLE Post (
     post_id     INT PRIMARY KEY,
     user_id     INT NOT NULL,
-    team_id     INT,
+    team_id     INT NOT NULL,
     title       VARCHAR(128) NOT NULL,
-    content     VARCHAR(4000),
+    content     VARCHAR(4000) NOT NULL,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES User(user_id),
