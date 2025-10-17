@@ -513,20 +513,19 @@ User(user_id: INT [PK], netid: VARCHAR(64), email: VARCHAR(128), phone_number: V
 
 *Skill*  
 
-Skill(skill_id: INT [PK], name: VARCHAR(64), category: VARCHAR(64), created_at: TIMESTAMP)
+Skill(skill_id: INT [PK], name: VARCHAR(64), category: VARCHAR(64))
 
 | Column    | Domain       | Key | Description           |
 |-----------|--------------|-----|-----------------------|
 | skill_id  | INT          | PK  | Unique skill ID       |
 | name      | VARCHAR(64)  |     | Skill name            |
 | category  | VARCHAR(64)  |     | Skill category        |
-| created_at| TIMESTAMP    |     | Record creation time  |
 
 ---
 
 *UserSkill*  
 
-UserSkill(user_id: INT [FK to User.user_id], skill_id: INT [FK to Skill.skill_id], level: VARCHAR(16))
+UserSkill(user_id: INT [PK, FK to User.user_id], skill_id: INT [PK, FK to Skill.skill_id], level: VARCHAR(16))
 
 | Column   | Domain | Key                         | Description              |
 |----------|--------|-----------------------------|--------------------------|
@@ -538,7 +537,7 @@ UserSkill(user_id: INT [FK to User.user_id], skill_id: INT [FK to Skill.skill_id
 
 *Team*  
 
-Team(team_id: INT [PK],  course_id: VARCHAR(32) [FK to Section.course_id], section_id: VARCHAR(16) [FK to Section.crn], team_name: VARCHAR(128), target_size: INT,  notes: VARCHAR(1024),  status: VARCHAR(16), created_at: TIMESTAMP, updated_at: TIMESTAMP)
+Team(team_id: INT [PK],  course_id: VARCHAR(32) [FK to Section.course_id], section_id: VARCHAR(16) [FK to Section.crn], team_name: VARCHAR(128), target_size: INT,  notes: VARCHAR(1024),  status: VARCHAR(16))
 
 | Column     | Domain       | Key                              | Description                |
 |------------|--------------|----------------------------------|----------------------------|
@@ -549,8 +548,6 @@ Team(team_id: INT [PK],  course_id: VARCHAR(32) [FK to Section.course_id], secti
 | target_size| INT          |                                  | Expected team size         |
 | notes      | VARCHAR(1024)|                                  | Additional information     |
 | status     | VARCHAR(16)  |                                  | Open / Full / Closed       |
-| created_at | TIMESTAMP    |                                  | Record creation time       |
-| updated_at | TIMESTAMP    |                                  | Last update time           |
 
 ---
 
