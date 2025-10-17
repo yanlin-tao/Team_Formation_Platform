@@ -530,8 +530,8 @@ UserSkill(user_id: INT [FK to User.user_id], skill_id: INT [FK to Skill.skill_id
 
 | Column   | Domain | Key                         | Description              |
 |----------|--------|-----------------------------|--------------------------|
-| user_id  | INT    | FK → User.user_id           | References user          |
-| skill_id | INT    | FK → Skill.skill_id         | References skill         |
+| user_id  | INT    | PK, FK → User.user_id           | References user          |
+| skill_id | INT    | PK, FK → Skill.skill_id         | References skill         |
 | level    | VARCHAR(16) |                        | Skill proficiency level  |
 
 ---
