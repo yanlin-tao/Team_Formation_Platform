@@ -1,1 +1,1001 @@
 team_id,course_id,section_id,team_name,target_size,notes,status
+1,sp25AAS100,69781,AAS100-AB-Progressive,6,Progressive team collaborating on team availability dashboards. Documenting architectural decisions while engaging classmates in Intro Asian American Studies.,open
+2,sp25AAS100,30107,AAS100-AD1-Energetic,4,Energetic team collaborating on team availability dashboards. Delivering polished project demos while engaging classmates in Intro Asian American Studies.,closed
+3,sp25AAS100,41729,AAS100-AD2-Agile,5,Agile team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Intro Asian American Studies.,locked
+4,sp25AAS100,43832,AAS100-AD3-Jovial,6,Jovial team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Intro Asian American Studies.,open
+5,sp25AAS100,48232,AAS100-AD4-Agile,5,Agile team collaborating on team communication. Documenting architectural decisions while engaging classmates in Intro Asian American Studies.,closed
+6,sp25AAS100,48234,AAS100-AD5-Reliable,5,Reliable team collaborating on role assignment tooling. Iterating on prototype milestones while engaging classmates in Intro Asian American Studies.,locked
+7,sp25AAS100,50105,AAS100-AD6-Reliable,4,Reliable team collaborating on search relevance tuning. Supporting inclusive brainstorming while engaging classmates in Intro Asian American Studies.,open
+8,sp25AAS100,54572,AAS100-AD7-Zealous,3,Zealous team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Intro Asian American Studies.,open
+9,sp25AAS100,51886,AAS100-AD8-Jovial,4,Jovial team collaborating on matching algorithms. Sharing knowledge across subteams while engaging classmates in Intro Asian American Studies.,open
+10,sp25AAS100,70761,AAS100-AD9-Quick,3,Quick team collaborating on profile reputation systems. Organizing collaborative study sessions while engaging classmates in Intro Asian American Studies.,full
+11,sp25AAS100,70762,AAS100-ADA-Dynamic,5,Dynamic team collaborating on team availability dashboards. Tracking action items transparently while engaging classmates in Intro Asian American Studies.,open
+12,sp25AAS100,30106,AAS100-AL1-Progressive,5,Progressive team collaborating on team communication. Sharing knowledge across subteams while engaging classmates in Intro Asian American Studies.,open
+13,sp25AAS200,64396,AAS200-A-Youthful,3,Youthful team collaborating on project scheduling. Tracking action items transparently while engaging classmates in U.S. Race and Empire.,open
+14,sp25AAS201,66639,AAS201-OL1-Agile,3,Agile team collaborating on skills matching workflow. Organizing collaborative study sessions while engaging classmates in US Racial &amp; Ethnic Politics.,full
+15,sp25AAS201,66638,AAS201-OL2-Wise,5,Wise team collaborating on profile reputation systems. Tracking action items transparently while engaging classmates in US Racial &amp; Ethnic Politics.,full
+16,sp25AAS211,54575,AAS211-A-Lively,6,Lively team collaborating on course section insights. Sharing knowledge across subteams while engaging classmates in Asian Americans and the Arts.,locked
+17,sp25AAS215,52317,AAS215-A-Vibrant,5,Vibrant team collaborating on data-driven recommendations. Delivering polished project demos while engaging classmates in US Citizenship Comparatively.,locked
+18,sp25AAS275,75611,AAS275-AL1-Energetic,3,Energetic team collaborating on team communication. Iterating on prototype milestones while engaging classmates in The Politics of Fashion.,closed
+19,sp25AAS281,40114,AAS281-A-Xenial,6,Xenial team collaborating on visual analytics. Organizing collaborative study sessions while engaging classmates in Constructing Race in America.,open
+20,sp25AAS283,34129,AAS283-A-Vibrant,3,Vibrant team collaborating on course analytics. Sharing knowledge across subteams while engaging classmates in Asian American History.,open
+21,sp25AAS286,32112,AAS286-P-Progressive,6,Progressive team collaborating on notification customization. Tracking action items transparently while engaging classmates in Asian American Literature.,open
+22,sp25AAS287,77094,AAS287-B-Reliable,4,Reliable team collaborating on data-driven recommendations. Tracking action items transparently while engaging classmates in Food and Asian Americans.,open
+23,sp25AAS288,77360,AAS288-MKH-Tenacious,3,Tenacious team collaborating on database optimizations. Iterating on prototype milestones while engaging classmates in Global Islam and Feminisms.,locked
+24,sp25AAS297,62166,AAS297-A-Xenial,6,Xenial team collaborating on teammate onboarding. Iterating on prototype milestones while engaging classmates in Asian Families in America.,full
+25,sp25AAS299,48455,AAS299-A-Jovial,3,Jovial team collaborating on UI accessibility improvements. Delivering polished project demos while engaging classmates in Begin Topics Asian Am Studies.,open
+26,sp25AAS300,69047,AAS300-B-Lively,4,"Lively team collaborating on role assignment tooling. Documenting architectural decisions while engaging classmates in Theories of Race, Gender, and Sexuality.",closed
+27,sp25AAS310,33071,AAS310-D1-Honest,4,Honest team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in Race and Cultural Diversity.,open
+28,sp25AAS310,45579,AAS310-D2-Xenial,4,Xenial team collaborating on search relevance tuning. Sharing knowledge across subteams while engaging classmates in Race and Cultural Diversity.,open
+29,sp25AAS310,45586,AAS310-D3-Motivated,6,Motivated team collaborating on data-driven recommendations. Documenting architectural decisions while engaging classmates in Race and Cultural Diversity.,open
+30,sp25AAS310,76829,AAS310-D4-Skilled,3,Skilled team collaborating on profile enrichment. Supporting inclusive brainstorming while engaging classmates in Race and Cultural Diversity.,open
+31,sp25AAS310,76830,AAS310-D5-Reliable,3,Reliable team collaborating on UI accessibility improvements. Sharing knowledge across subteams while engaging classmates in Race and Cultural Diversity.,locked
+32,sp25AAS310,33069,AAS310-L-Focused,5,Focused team collaborating on profile enrichment. Iterating on prototype milestones while engaging classmates in Race and Cultural Diversity.,closed
+33,sp25AAS315,55769,AAS315-A-Bold,5,"Bold team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in War, Memory, and Cinema.",open
+34,sp25AAS355,57160,AAS355-A-Xenial,6,Xenial team collaborating on profile enrichment. Running lightweight usability tests while engaging classmates in Race and Mixed Race.,open
+35,sp25AAS357,70259,AAS357-A-Jovial,6,Jovial team collaborating on notification customization. Supporting inclusive brainstorming while engaging classmates in Literatures of the Displaced.,open
+36,sp25AAS370,77066,AAS370-A-Innovative,6,"Innovative team collaborating on matching algorithms. Organizing collaborative study sessions while engaging classmates in Immigration, Law, and Rights.",locked
+37,sp25AAS495,77031,AAS495-A-Agile,3,Agile team collaborating on performance snapshots. Organizing collaborative study sessions while engaging classmates in Minoritarian Aesthetics Practicum.,full
+38,sp25AAS539,65078,AAS539-A-Quick,5,"Quick team collaborating on role assignment tooling. Iterating on prototype milestones while engaging classmates in Youth, Culture and Society.",open
+39,sp25AAS589,73909,AAS589-A-Innovative,4,Innovative team collaborating on profile reputation systems. Planning weekly sprint reviews while engaging classmates in Readings in Asian Am Studies.,open
+40,sp25ABE128,75643,ABE128-LB1-Energetic,4,Energetic team collaborating on notification customization. Iterating on prototype milestones while engaging classmates in Applied Biology for Agricultural and Biological Engineers.,open
+41,sp25ABE128,75846,ABE128-LB2-Agile,6,Agile team collaborating on data-driven recommendations. Running lightweight usability tests while engaging classmates in Applied Biology for Agricultural and Biological Engineers.,open
+42,sp25ABE128,77383,ABE128-LB3-Lively,6,Lively team collaborating on role assignment tooling. Planning weekly sprint reviews while engaging classmates in Applied Biology for Agricultural and Biological Engineers.,open
+43,sp25ABE152,73114,ABE152-WGE-Global,4,Global team collaborating on data-driven recommendations. Delivering polished project demos while engaging classmates in Water in the Global Environment.,open
+44,sp25ABE199,68015,ABE199-AMB-Progressive,5,Progressive team collaborating on performance snapshots. Documenting architectural decisions while engaging classmates in Undergraduate Open Seminar.,locked
+45,sp25ABE228,76947,ABE228-LB1-Bold,6,Bold team collaborating on course section insights. Documenting architectural decisions while engaging classmates in Computer-Aided Problem-Solving for ABE II.,open
+46,sp25ABE228,76948,ABE228-LB2-Lively,5,Lively team collaborating on feedback collection. Tracking action items transparently while engaging classmates in Computer-Aided Problem-Solving for ABE II.,open
+47,sp25ABE232,76255,ABE232-AW-Lively,4,Lively team collaborating on role assignment tooling. Iterating on prototype milestones while engaging classmates in Context in International Interventions.,full
+48,sp25ABE341,74560,ABE341-KDR-Lively,6,Lively team collaborating on profile reputation systems. Organizing collaborative study sessions while engaging classmates in Transport Processes in ABE.,open
+49,sp25ABE425,39995,ABE425-AB1-Bold,3,Bold team collaborating on notification customization. Sharing knowledge across subteams while engaging classmates in Engrg Measurement Systems.,open
+50,sp25ABE425,56252,ABE425-AB2-United,6,United team collaborating on database optimizations. Organizing collaborative study sessions while engaging classmates in Engrg Measurement Systems.,open
+51,sp25ABE425,39997,ABE425-AE1-Jovial,6,Jovial team collaborating on profile enrichment. Delivering polished project demos while engaging classmates in Engrg Measurement Systems.,closed
+52,sp25ABE457,51989,ABE457-RBH-Keen,3,Keen team collaborating on feedback collection. Running lightweight usability tests while engaging classmates in NPS Pollution Processes.,locked
+53,sp25ABE458,62504,ABE458-MCC-Energetic,3,Energetic team collaborating on performance snapshots. Iterating on prototype milestones while engaging classmates in NPS Pollution Modeling.,open
+54,sp25ABE469,70549,ABE469-APW-Global,4,Global team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Capstone Design Experience.,full
+55,sp25ABE483,74549,ABE483-AL1-Vibrant,4,Vibrant team collaborating on real-time notifications. Supporting inclusive brainstorming while engaging classmates in Engineering Properties of Food Materials.,open
+56,sp25ABE498,76139,ABE498-CHT-Youthful,5,Youthful team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in Special Topics.,closed
+57,sp25ABE498,75684,ABE498-JG1-Zealous,4,Zealous team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Special Topics.,locked
+58,sp25ABE498,76008,ABE498-SFI-Xenial,3,Xenial team collaborating on teammate onboarding. Supporting inclusive brainstorming while engaging classmates in Special Topics.,open
+59,sp25ABE498,69694,ABE498-XW3-Xenial,3,Xenial team collaborating on search relevance tuning. Sharing knowledge across subteams while engaging classmates in Special Topics.,open
+60,sp25ABE502,77151,ABE502-AE1-Energetic,6,Energetic team collaborating on UI accessibility improvements. Running lightweight usability tests while engaging classmates in Graduate Seminar: Advanced Career Skills.,open
+61,sp25ABE532,76256,ABE532-AW-Progressive,3,Progressive team collaborating on matching algorithms. Sharing knowledge across subteams while engaging classmates in Advanced Contextual Design.,open
+62,sp25ACCY200,56973,ACCY200-BM-Energetic,3,Energetic team collaborating on performance snapshots. Iterating on prototype milestones while engaging classmates in Fundamentals of Accounting.,open
+63,sp25ACCY200,45418,ACCY200-OL-Vibrant,4,Vibrant team collaborating on profile reputation systems. Planning weekly sprint reviews while engaging classmates in Fundamentals of Accounting.,open
+64,sp25ACCY200,30111,ACCY200-TM-Skilled,6,Skilled team collaborating on matching algorithms. Tracking action items transparently while engaging classmates in Fundamentals of Accounting.,locked
+65,sp25ACCY201,30112,ACCY201-AD1-Innovative,6,Innovative team collaborating on teammate onboarding. Tracking action items transparently while engaging classmates in Accounting and Accountancy I.,locked
+66,sp25ACCY201,30113,ACCY201-AD2-Vibrant,5,Vibrant team collaborating on performance snapshots. Iterating on prototype milestones while engaging classmates in Accounting and Accountancy I.,open
+67,sp25ACCY201,30114,ACCY201-AD3-Innovative,4,Innovative team collaborating on skills matching workflow. Documenting architectural decisions while engaging classmates in Accounting and Accountancy I.,open
+68,sp25ACCY201,30115,ACCY201-AD4-Agile,3,Agile team collaborating on database optimizations. Supporting inclusive brainstorming while engaging classmates in Accounting and Accountancy I.,open
+69,sp25ACCY201,30116,ACCY201-AD5-Focused,6,Focused team collaborating on visual analytics. Running lightweight usability tests while engaging classmates in Accounting and Accountancy I.,open
+70,sp25ACCY201,30117,ACCY201-AD6-United,3,United team collaborating on course analytics. Organizing collaborative study sessions while engaging classmates in Accounting and Accountancy I.,open
+71,sp25ACCY201,45631,ACCY201-AD7-Progressive,4,Progressive team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in Accounting and Accountancy I.,open
+72,sp25ACCY201,68828,ACCY201-AD8-Lively,3,Lively team collaborating on data-driven recommendations. Tracking action items transparently while engaging classmates in Accounting and Accountancy I.,full
+73,sp25ACCY201,68829,ACCY201-AD9-Optimistic,4,Optimistic team collaborating on visual analytics. Maintaining tight feedback loops while engaging classmates in Accounting and Accountancy I.,open
+74,sp25ACCY201,68830,ACCY201-ADA-Dynamic,4,Dynamic team collaborating on course analytics. Running lightweight usability tests while engaging classmates in Accounting and Accountancy I.,open
+75,sp25ACCY201,68831,ACCY201-ADB-Optimistic,5,Optimistic team collaborating on feedback collection. Planning weekly sprint reviews while engaging classmates in Accounting and Accountancy I.,open
+76,sp25ACCY201,70222,ACCY201-ADC-Honest,5,Honest team collaborating on data-driven recommendations. Delivering polished project demos while engaging classmates in Accounting and Accountancy I.,open
+77,sp25ACCY201,30118,ACCY201-AL1-Optimistic,3,Optimistic team collaborating on real-time notifications. Maintaining tight feedback loops while engaging classmates in Accounting and Accountancy I.,full
+78,sp25ACCY201,68539,ACCY201-AL2-Jovial,4,Jovial team collaborating on real-time notifications. Sharing knowledge across subteams while engaging classmates in Accounting and Accountancy I.,closed
+79,sp25ACCY201,51202,ACCY201-AL3-Innovative,4,Innovative team collaborating on team availability dashboards. Organizing collaborative study sessions while engaging classmates in Accounting and Accountancy I.,open
+80,sp25ACCY202,30147,ACCY202-AD1-Dynamic,6,Dynamic team collaborating on notification customization. Supporting inclusive brainstorming while engaging classmates in Accounting and Accountancy II.,open
+81,sp25ACCY202,30121,ACCY202-ADA-Skilled,3,Skilled team collaborating on course section insights. Supporting inclusive brainstorming while engaging classmates in Accounting and Accountancy II.,open
+82,sp25ACCY202,30123,ACCY202-ADC-Agile,4,Agile team collaborating on UI accessibility improvements. Documenting architectural decisions while engaging classmates in Accounting and Accountancy II.,open
+83,sp25ACCY202,30134,ACCY202-ADE-Dynamic,4,Dynamic team collaborating on teammate onboarding. Tracking action items transparently while engaging classmates in Accounting and Accountancy II.,full
+84,sp25ACCY202,30138,ACCY202-ADF-Progressive,5,Progressive team collaborating on notification customization. Supporting inclusive brainstorming while engaging classmates in Accounting and Accountancy II.,open
+85,sp25ACCY202,30140,ACCY202-ADG-Innovative,3,Innovative team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in Accounting and Accountancy II.,full
+86,sp25ACCY202,30143,ACCY202-ADH-Reliable,3,Reliable team collaborating on course section insights. Iterating on prototype milestones while engaging classmates in Accounting and Accountancy II.,locked
+87,sp25ACCY202,30151,ACCY202-ADJ-Wise,3,Wise team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Accounting and Accountancy II.,open
+88,sp25ACCY202,30159,ACCY202-ADL-Reliable,6,Reliable team collaborating on UI accessibility improvements. Running lightweight usability tests while engaging classmates in Accounting and Accountancy II.,locked
+89,sp25ACCY202,30161,ACCY202-ADM-Energetic,3,Energetic team collaborating on team communication. Running lightweight usability tests while engaging classmates in Accounting and Accountancy II.,open
+90,sp25ACCY202,30168,ACCY202-ADO-Zealous,5,Zealous team collaborating on feedback collection. Delivering polished project demos while engaging classmates in Accounting and Accountancy II.,full
+91,sp25ACCY202,30171,ACCY202-ADP-Jovial,3,Jovial team collaborating on team availability dashboards. Sharing knowledge across subteams while engaging classmates in Accounting and Accountancy II.,open
+92,sp25ACCY202,30176,ACCY202-ADQ-Progressive,5,Progressive team collaborating on data-driven recommendations. Running lightweight usability tests while engaging classmates in Accounting and Accountancy II.,closed
+93,sp25ACCY202,30179,ACCY202-ADR-Bold,4,Bold team collaborating on course analytics. Planning weekly sprint reviews while engaging classmates in Accounting and Accountancy II.,full
+94,sp25ACCY202,30182,ACCY202-ADS-Creative,4,Creative team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Accounting and Accountancy II.,full
+95,sp25ACCY202,30186,ACCY202-ADT-Lively,5,Lively team collaborating on teammate onboarding. Documenting architectural decisions while engaging classmates in Accounting and Accountancy II.,open
+96,sp25ACCY202,30119,ACCY202-AL1-Youthful,4,Youthful team collaborating on course analytics. Documenting architectural decisions while engaging classmates in Accounting and Accountancy II.,open
+97,sp25ACCY202,30120,ACCY202-AL2-Vibrant,3,Vibrant team collaborating on role assignment tooling. Sharing knowledge across subteams while engaging classmates in Accounting and Accountancy II.,full
+98,sp25ACCY202,69229,ACCY202-AL3-Vibrant,6,Vibrant team collaborating on teammate onboarding. Iterating on prototype milestones while engaging classmates in Accounting and Accountancy II.,locked
+99,sp25ACCY290,47685,ACCY290-O-Motivated,4,Motivated team collaborating on visual analytics. Iterating on prototype milestones while engaging classmates in Prof Internship in Accountancy.,closed
+100,sp25ACCY301,30192,ACCY301-AE1-United,4,United team collaborating on course section insights. Delivering polished project demos while engaging classmates in Atg Measurement &amp; Disclosure.,open
+101,sp25ACCY301,30197,ACCY301-AE3-United,3,United team collaborating on project scheduling. Documenting architectural decisions while engaging classmates in Atg Measurement &amp; Disclosure.,open
+102,sp25ACCY301,30200,ACCY301-AE4-Quick,6,Quick team collaborating on visual analytics. Sharing knowledge across subteams while engaging classmates in Atg Measurement &amp; Disclosure.,closed
+103,sp25ACCY301,30201,ACCY301-AE5-Jovial,5,Jovial team collaborating on team availability dashboards. Delivering polished project demos while engaging classmates in Atg Measurement &amp; Disclosure.,closed
+104,sp25ACCY301,30203,ACCY301-AE6-Bold,6,Bold team collaborating on matching algorithms. Iterating on prototype milestones while engaging classmates in Atg Measurement &amp; Disclosure.,locked
+105,sp25ACCY301,50319,ACCY301-AE7-Zealous,3,Zealous team collaborating on search relevance tuning. Delivering polished project demos while engaging classmates in Atg Measurement &amp; Disclosure.,open
+106,sp25ACCY302,60043,ACCY302-AE1-Dynamic,5,Dynamic team collaborating on team communication. Documenting architectural decisions while engaging classmates in Decision Making for Atg.,open
+107,sp25ACCY302,30211,ACCY302-AE2-Tenacious,6,Tenacious team collaborating on project scheduling. Tracking action items transparently while engaging classmates in Decision Making for Atg.,open
+108,sp25ACCY302,30212,ACCY302-AE3-Bold,5,Bold team collaborating on data-driven recommendations. Sharing knowledge across subteams while engaging classmates in Decision Making for Atg.,open
+109,sp25ACCY302,30228,ACCY302-AE5-Progressive,4,Progressive team collaborating on performance snapshots. Tracking action items transparently while engaging classmates in Decision Making for Atg.,open
+110,sp25ACCY302,30232,ACCY302-AE6-United,4,United team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Decision Making for Atg.,open
+111,sp25ACCY302,30255,ACCY302-AE7-United,3,United team collaborating on data-driven recommendations. Tracking action items transparently while engaging classmates in Decision Making for Atg.,open
+112,sp25ACCY302,30260,ACCY302-AY1-Youthful,5,Youthful team collaborating on matching algorithms. Iterating on prototype milestones while engaging classmates in Decision Making for Atg.,open
+113,sp25ACCY303,30267,ACCY303-AE2-Global,6,Global team collaborating on real-time notifications. Running lightweight usability tests while engaging classmates in Accounting Institutions and Regulation.,open
+114,sp25ACCY303,30271,ACCY303-AE3-Innovative,3,Innovative team collaborating on teammate onboarding. Delivering polished project demos while engaging classmates in Accounting Institutions and Regulation.,closed
+115,sp25ACCY303,30274,ACCY303-AE4-Vibrant,5,Vibrant team collaborating on search relevance tuning. Supporting inclusive brainstorming while engaging classmates in Accounting Institutions and Regulation.,open
+116,sp25ACCY303,30276,ACCY303-AE5-Agile,3,Agile team collaborating on feedback collection. Planning weekly sprint reviews while engaging classmates in Accounting Institutions and Regulation.,open
+117,sp25ACCY303,30278,ACCY303-AE6-Tenacious,3,Tenacious team collaborating on search relevance tuning. Supporting inclusive brainstorming while engaging classmates in Accounting Institutions and Regulation.,open
+118,sp25ACCY303,46358,ACCY303-AE7-Creative,5,Creative team collaborating on project scheduling. Iterating on prototype milestones while engaging classmates in Accounting Institutions and Regulation.,closed
+119,sp25ACCY304,30288,ACCY304-AE2-Global,6,Global team collaborating on data-driven recommendations. Documenting architectural decisions while engaging classmates in Accounting Control Systems.,full
+120,sp25ACCY304,30291,ACCY304-AE3-Zealous,4,Zealous team collaborating on visual analytics. Documenting architectural decisions while engaging classmates in Accounting Control Systems.,full
+121,sp25ACCY304,30294,ACCY304-AE4-Innovative,5,Innovative team collaborating on team communication. Delivering polished project demos while engaging classmates in Accounting Control Systems.,full
+122,sp25ACCY304,30299,ACCY304-AE6-Wise,3,Wise team collaborating on matching algorithms. Documenting architectural decisions while engaging classmates in Accounting Control Systems.,open
+123,sp25ACCY304,48420,ACCY304-AE7-Bold,4,Bold team collaborating on notification customization. Organizing collaborative study sessions while engaging classmates in Accounting Control Systems.,open
+124,sp25ACCY304,48421,ACCY304-AE8-Motivated,3,Motivated team collaborating on data-driven recommendations. Tracking action items transparently while engaging classmates in Accounting Control Systems.,locked
+125,sp25ACCY312,30334,ACCY312-A-Wise,5,Wise team collaborating on feedback collection. Iterating on prototype milestones while engaging classmates in Principles of Taxation.,locked
+126,sp25ACCY312,30335,ACCY312-B-Dynamic,5,Dynamic team collaborating on profile reputation systems. Supporting inclusive brainstorming while engaging classmates in Principles of Taxation.,full
+127,sp25ACCY312,30336,ACCY312-C-Honest,3,Honest team collaborating on teammate onboarding. Sharing knowledge across subteams while engaging classmates in Principles of Taxation.,open
+128,sp25ACCY312,39460,ACCY312-D-Global,5,Global team collaborating on real-time notifications. Planning weekly sprint reviews while engaging classmates in Principles of Taxation.,locked
+129,sp25ACCY312,48959,ACCY312-E-Bold,3,Bold team collaborating on database optimizations. Sharing knowledge across subteams while engaging classmates in Principles of Taxation.,open
+130,sp25ACCY312,56978,ACCY312-F-Vibrant,5,Vibrant team collaborating on course section insights. Planning weekly sprint reviews while engaging classmates in Principles of Taxation.,open
+131,sp25ACCY321,58331,ACCY321-WA-Global,4,Global team collaborating on team communication. Documenting architectural decisions while engaging classmates in Principles of Public Policy.,full
+132,sp25ACCY375,76009,ACCY375-CPA-Focused,3,Focused team collaborating on skills matching workflow. Documenting architectural decisions while engaging classmates in Career Pathways in Accountancy.,locked
+133,sp25ACCY398,30412,ACCY398-A-Keen,5,Keen team collaborating on matching algorithms. Tracking action items transparently while engaging classmates in Practical Problems in Atg.,open
+134,sp25ACCY398,63823,ACCY398-B-Wise,3,Wise team collaborating on matching algorithms. Tracking action items transparently while engaging classmates in Practical Problems in Atg.,open
+135,sp25ACCY398,63824,ACCY398-C-Lively,3,Lively team collaborating on project scheduling. Documenting architectural decisions while engaging classmates in Practical Problems in Atg.,locked
+136,sp25ACCY398,63825,ACCY398-D-Nimble,4,Nimble team collaborating on visual analytics. Running lightweight usability tests while engaging classmates in Practical Problems in Atg.,open
+137,sp25ACCY398,30415,ACCY398-Z-Lively,6,Lively team collaborating on course section insights. Iterating on prototype milestones while engaging classmates in Practical Problems in Atg.,open
+138,sp25ACCY405,30311,ACCY405-AE1-Agile,6,Agile team collaborating on profile enrichment. Planning weekly sprint reviews while engaging classmates in Assurance and Attestation.,open
+139,sp25ACCY405,30315,ACCY405-AE2-Nimble,3,Nimble team collaborating on database optimizations. Organizing collaborative study sessions while engaging classmates in Assurance and Attestation.,closed
+140,sp25ACCY405,30324,ACCY405-AE3-Global,6,Global team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in Assurance and Attestation.,open
+141,sp25ACCY405,52616,ACCY405-AE5-Lively,4,Lively team collaborating on profile reputation systems. Planning weekly sprint reviews while engaging classmates in Assurance and Attestation.,closed
+142,sp25ACCY405,60014,ACCY405-AE6-Reliable,5,Reliable team collaborating on project scheduling. Documenting architectural decisions while engaging classmates in Assurance and Attestation.,full
+143,sp25ACCY405,71388,ACCY405-AE7-Xenial,4,Xenial team collaborating on real-time notifications. Documenting architectural decisions while engaging classmates in Assurance and Attestation.,open
+144,sp25ACCY405,30328,ACCY405-AY1-Xenial,5,Xenial team collaborating on notification customization. Sharing knowledge across subteams while engaging classmates in Assurance and Attestation.,open
+145,sp25ACCY410,60044,ACCY410-A3-Keen,4,Keen team collaborating on feedback collection. Iterating on prototype milestones while engaging classmates in Advanced Financial Reporting.,open
+146,sp25ACCY410,65522,ACCY410-A4-Creative,6,Creative team collaborating on team availability dashboards. Sharing knowledge across subteams while engaging classmates in Advanced Financial Reporting.,locked
+147,sp25ACCY410,60045,ACCY410-B3-United,3,United team collaborating on data-driven recommendations. Sharing knowledge across subteams while engaging classmates in Advanced Financial Reporting.,open
+148,sp25ACCY410,66490,ACCY410-B4-Motivated,4,Motivated team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in Advanced Financial Reporting.,full
+149,sp25ACCY410,61733,ACCY410-C3-Dynamic,5,Dynamic team collaborating on skills matching workflow. Running lightweight usability tests while engaging classmates in Advanced Financial Reporting.,open
+150,sp25ACCY410,65523,ACCY410-C4-Xenial,3,Xenial team collaborating on profile enrichment. Supporting inclusive brainstorming while engaging classmates in Advanced Financial Reporting.,open
+151,sp25ACCY410,61734,ACCY410-D3-Vibrant,3,Vibrant team collaborating on data-driven recommendations. Running lightweight usability tests while engaging classmates in Advanced Financial Reporting.,full
+152,sp25ACCY410,65524,ACCY410-D4-Creative,3,Creative team collaborating on data-driven recommendations. Documenting architectural decisions while engaging classmates in Advanced Financial Reporting.,locked
+153,sp25ACCY410,61745,ACCY410-E3-Keen,6,Keen team collaborating on visual analytics. Maintaining tight feedback loops while engaging classmates in Advanced Financial Reporting.,closed
+154,sp25ACCY410,65525,ACCY410-E4-Quick,3,Quick team collaborating on feedback collection. Supporting inclusive brainstorming while engaging classmates in Advanced Financial Reporting.,full
+155,sp25ACCY410,61758,ACCY410-F3-Lively,5,Lively team collaborating on notification customization. Documenting architectural decisions while engaging classmates in Advanced Financial Reporting.,locked
+156,sp25ACCY410,65526,ACCY410-F4-Youthful,6,Youthful team collaborating on visual analytics. Planning weekly sprint reviews while engaging classmates in Advanced Financial Reporting.,open
+157,sp25ACCY410,61759,ACCY410-G3-Focused,6,Focused team collaborating on performance snapshots. Organizing collaborative study sessions while engaging classmates in Advanced Financial Reporting.,locked
+158,sp25ACCY410,65527,ACCY410-G4-Global,5,Global team collaborating on profile enrichment. Planning weekly sprint reviews while engaging classmates in Advanced Financial Reporting.,closed
+159,sp25ACCY419,77040,ACCY419-A3-Vibrant,6,Vibrant team collaborating on feedback collection. Maintaining tight feedback loops while engaging classmates in Financial Accounting for Governmental and Nonprofit Entities.,full
+160,sp25ACCY419,77041,ACCY419-A4-Vibrant,5,Vibrant team collaborating on project scheduling. Organizing collaborative study sessions while engaging classmates in Financial Accounting for Governmental and Nonprofit Entities.,full
+161,sp25ACCY449,76063,ACCY449-A-Energetic,5,Energetic team collaborating on course section insights. Supporting inclusive brainstorming while engaging classmates in Tax in Action - VITA.,open
+162,sp25ACCY449,76065,ACCY449-B-Youthful,5,Youthful team collaborating on course analytics. Supporting inclusive brainstorming while engaging classmates in Tax in Action - VITA.,locked
+163,sp25ACCY451,61737,ACCY451-A3-Reliable,3,Reliable team collaborating on teammate onboarding. Documenting architectural decisions while engaging classmates in Advanced Income Tax Problems.,open
+164,sp25ACCY451,61738,ACCY451-A4-Lively,3,Lively team collaborating on notification customization. Iterating on prototype milestones while engaging classmates in Advanced Income Tax Problems.,locked
+165,sp25ACCY451,61739,ACCY451-B3-Keen,3,Keen team collaborating on course section insights. Organizing collaborative study sessions while engaging classmates in Advanced Income Tax Problems.,closed
+166,sp25ACCY451,61740,ACCY451-B4-Vibrant,6,Vibrant team collaborating on course section insights. Maintaining tight feedback loops while engaging classmates in Advanced Income Tax Problems.,full
+167,sp25ACCY451,61741,ACCY451-C3-Skilled,6,Skilled team collaborating on profile reputation systems. Supporting inclusive brainstorming while engaging classmates in Advanced Income Tax Problems.,open
+168,sp25ACCY451,61742,ACCY451-C4-Creative,6,Creative team collaborating on data-driven recommendations. Planning weekly sprint reviews while engaging classmates in Advanced Income Tax Problems.,open
+169,sp25ACCY451,61743,ACCY451-D3-Lively,5,Lively team collaborating on skills matching workflow. Organizing collaborative study sessions while engaging classmates in Advanced Income Tax Problems.,open
+170,sp25ACCY451,61744,ACCY451-D4-Bold,6,Bold team collaborating on project scheduling. Tracking action items transparently while engaging classmates in Advanced Income Tax Problems.,locked
+171,sp25ACCY451,65160,ACCY451-E3-Progressive,4,Progressive team collaborating on team availability dashboards. Iterating on prototype milestones while engaging classmates in Advanced Income Tax Problems.,full
+172,sp25ACCY451,65161,ACCY451-E4-Tenacious,6,Tenacious team collaborating on teammate onboarding. Organizing collaborative study sessions while engaging classmates in Advanced Income Tax Problems.,closed
+173,sp25ACCY500,67786,ACCY500-IMB-Global,3,"Global team collaborating on visual analytics. Delivering polished project demos while engaging classmates in Accounting Measurement, Reporting, and Control.",open
+174,sp25ACCY500,67787,ACCY500-ONL-Tenacious,6,"Tenacious team collaborating on database optimizations. Running lightweight usability tests while engaging classmates in Accounting Measurement, Reporting, and Control.",open
+175,sp25ACCY501,68872,ACCY501-DA1-Nimble,5,Nimble team collaborating on team availability dashboards. Running lightweight usability tests while engaging classmates in Accounting Analysis I.,open
+176,sp25ACCY501,68873,ACCY501-DB1-Honest,3,Honest team collaborating on real-time notifications. Planning weekly sprint reviews while engaging classmates in Accounting Analysis I.,open
+177,sp25ACCY501,68874,ACCY501-NA1-Tenacious,5,Tenacious team collaborating on visual analytics. Organizing collaborative study sessions while engaging classmates in Accounting Analysis I.,closed
+178,sp25ACCY501,68876,ACCY501-NB1-Focused,5,Focused team collaborating on search relevance tuning. Planning weekly sprint reviews while engaging classmates in Accounting Analysis I.,locked
+179,sp25ACCY502,67590,ACCY502-DA1-Creative,6,Creative team collaborating on team communication. Organizing collaborative study sessions while engaging classmates in Accounting Analysis II.,full
+180,sp25ACCY502,67591,ACCY502-DB1-Nimble,4,Nimble team collaborating on profile reputation systems. Supporting inclusive brainstorming while engaging classmates in Accounting Analysis II.,open
+181,sp25ACCY502,67594,ACCY502-NA1-Focused,4,Focused team collaborating on visual analytics. Planning weekly sprint reviews while engaging classmates in Accounting Analysis II.,open
+182,sp25ACCY502,67595,ACCY502-NB1-Global,5,Global team collaborating on team availability dashboards. Documenting architectural decisions while engaging classmates in Accounting Analysis II.,open
+183,sp25ACCY503,44637,ACCY503-A4-Progressive,3,Progressive team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Managerial Accounting.,open
+184,sp25ACCY503,67610,ACCY503-DA1-Skilled,5,Skilled team collaborating on course section insights. Supporting inclusive brainstorming while engaging classmates in Managerial Accounting.,locked
+185,sp25ACCY503,67611,ACCY503-DB1-Progressive,5,Progressive team collaborating on feedback collection. Organizing collaborative study sessions while engaging classmates in Managerial Accounting.,locked
+186,sp25ACCY503,69063,ACCY503-IMB-Wise,5,Wise team collaborating on teammate onboarding. Iterating on prototype milestones while engaging classmates in Managerial Accounting.,open
+187,sp25ACCY503,67612,ACCY503-NA1-Bold,5,Bold team collaborating on notification customization. Running lightweight usability tests while engaging classmates in Managerial Accounting.,open
+188,sp25ACCY503,67613,ACCY503-NB1-Quick,5,Quick team collaborating on visual analytics. Documenting architectural decisions while engaging classmates in Managerial Accounting.,open
+189,sp25ACCY503,69208,ACCY503-ONL-United,3,United team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Managerial Accounting.,closed
+190,sp25ACCY506,66494,ACCY506-A4-Dynamic,5,Dynamic team collaborating on search relevance tuning. Sharing knowledge across subteams while engaging classmates in Advanced Topics in Accounting.,open
+191,sp25ACCY507,67722,ACCY507-DA1-Xenial,4,Xenial team collaborating on feedback collection. Documenting architectural decisions while engaging classmates in Taxation of Business Entities.,locked
+192,sp25ACCY507,67725,ACCY507-DB1-Dynamic,4,Dynamic team collaborating on database optimizations. Planning weekly sprint reviews while engaging classmates in Taxation of Business Entities.,open
+193,sp25ACCY507,67723,ACCY507-NA1-Energetic,6,Energetic team collaborating on profile enrichment. Sharing knowledge across subteams while engaging classmates in Taxation of Business Entities.,open
+194,sp25ACCY507,67728,ACCY507-NB1-Global,6,Global team collaborating on profile enrichment. Maintaining tight feedback loops while engaging classmates in Taxation of Business Entities.,open
+195,sp25ACCY510,46889,ACCY510-C-Dynamic,6,Dynamic team collaborating on profile reputation systems. Running lightweight usability tests while engaging classmates in Financial Reporting Standards.,full
+196,sp25ACCY510,46890,ACCY510-D-Innovative,3,Innovative team collaborating on database optimizations. Running lightweight usability tests while engaging classmates in Financial Reporting Standards.,open
+197,sp25ACCY510,68841,ACCY510-E-Focused,6,Focused team collaborating on visual analytics. Sharing knowledge across subteams while engaging classmates in Financial Reporting Standards.,open
+198,sp25ACCY512,30434,ACCY512-A-Dynamic,4,Dynamic team collaborating on search relevance tuning. Delivering polished project demos while engaging classmates in Data Analytics for Management Accounting.,open
+199,sp25ACCY512,30436,ACCY512-B-Keen,3,Keen team collaborating on search relevance tuning. Supporting inclusive brainstorming while engaging classmates in Data Analytics for Management Accounting.,open
+200,sp25ACCY512,30437,ACCY512-C-Vibrant,3,Vibrant team collaborating on real-time notifications. Organizing collaborative study sessions while engaging classmates in Data Analytics for Management Accounting.,open
+201,sp25ACCY515,44467,ACCY515-A-Reliable,3,Reliable team collaborating on notification customization. Planning weekly sprint reviews while engaging classmates in Auditing &amp; Assurance Standards.,open
+202,sp25ACCY515,46360,ACCY515-B-United,4,United team collaborating on visual analytics. Delivering polished project demos while engaging classmates in Auditing &amp; Assurance Standards.,closed
+203,sp25ACCY515,48423,ACCY515-C-Lively,3,Lively team collaborating on course section insights. Organizing collaborative study sessions while engaging classmates in Auditing &amp; Assurance Standards.,closed
+204,sp25ACCY516,71764,ACCY516-E4-Vibrant,6,Vibrant team collaborating on project scheduling. Documenting architectural decisions while engaging classmates in Professional Responsibility and Ethics for Accountants.,open
+205,sp25ACCY517,30428,ACCY517-A4-Agile,4,Agile team collaborating on profile reputation systems. Supporting inclusive brainstorming while engaging classmates in Financial Statement Analysis and Valuation.,closed
+206,sp25ACCY517,58688,ACCY517-D4-Jovial,5,Jovial team collaborating on profile reputation systems. Iterating on prototype milestones while engaging classmates in Financial Statement Analysis and Valuation.,locked
+207,sp25ACCY517,72663,ACCY517-DB1-Skilled,5,Skilled team collaborating on visual analytics. Planning weekly sprint reviews while engaging classmates in Financial Statement Analysis and Valuation.,open
+208,sp25ACCY517,61747,ACCY517-E4-Energetic,4,Energetic team collaborating on visual analytics. Iterating on prototype milestones while engaging classmates in Financial Statement Analysis and Valuation.,closed
+209,sp25ACCY517,72666,ACCY517-NB1-Global,5,Global team collaborating on team communication. Delivering polished project demos while engaging classmates in Financial Statement Analysis and Valuation.,open
+210,sp25ACCY518,64807,ACCY518-A-Reliable,4,Reliable team collaborating on UI accessibility improvements. Running lightweight usability tests while engaging classmates in Financial Statement Fraud.,locked
+211,sp25ACCY518,64808,ACCY518-B-Zealous,3,Zealous team collaborating on performance snapshots. Tracking action items transparently while engaging classmates in Financial Statement Fraud.,open
+212,sp25ACCY518,64809,ACCY518-C-Optimistic,6,Optimistic team collaborating on matching algorithms. Organizing collaborative study sessions while engaging classmates in Financial Statement Fraud.,full
+213,sp25ACCY518,71765,ACCY518-D-Jovial,6,Jovial team collaborating on profile reputation systems. Delivering polished project demos while engaging classmates in Financial Statement Fraud.,open
+214,sp25ACCY519,76060,ACCY519-DA1-Lively,6,Lively team collaborating on feedback collection. Planning weekly sprint reviews while engaging classmates in Governmental and Nonprofit Accounting.,open
+215,sp25ACCY519,76061,ACCY519-NA1-Creative,5,Creative team collaborating on visual analytics. Planning weekly sprint reviews while engaging classmates in Governmental and Nonprofit Accounting.,open
+216,sp25ACCY550,70066,ACCY550-A4-Honest,6,Honest team collaborating on course section insights. Delivering polished project demos while engaging classmates in Multistate Taxation.,open
+217,sp25ACCY551,63205,ACCY551-A-Innovative,3,Innovative team collaborating on UI accessibility improvements. Organizing collaborative study sessions while engaging classmates in Corporate Income Taxation.,open
+218,sp25ACCY552,30438,ACCY552-A-Innovative,6,Innovative team collaborating on UI accessibility improvements. Delivering polished project demos while engaging classmates in Partnership Income Taxation.,open
+219,sp25ACCY552,30440,ACCY552-B-Optimistic,4,Optimistic team collaborating on notification customization. Running lightweight usability tests while engaging classmates in Partnership Income Taxation.,open
+220,sp25ACCY554,65171,ACCY554-A-Skilled,6,Skilled team collaborating on visual analytics. Supporting inclusive brainstorming while engaging classmates in International Taxation.,open
+221,sp25ACCY570,71766,ACCY570-D4-Honest,6,Honest team collaborating on real-time notifications. Maintaining tight feedback loops while engaging classmates in Data Analytics Foundations for Accountancy.,open
+222,sp25ACCY570,77038,ACCY570-E4-Optimistic,6,Optimistic team collaborating on search relevance tuning. Iterating on prototype milestones while engaging classmates in Data Analytics Foundations for Accountancy.,full
+223,sp25ACCY571,68538,ACCY571-A-Wise,5,Wise team collaborating on data-driven recommendations. Delivering polished project demos while engaging classmates in Statistical Analyses for Accountancy.,open
+224,sp25ACCY574,70515,ACCY574-A-Zealous,3,Zealous team collaborating on database optimizations. Sharing knowledge across subteams while engaging classmates in Risk Management and Innovation.,open
+225,sp25ACCY574,70516,ACCY574-B-Quick,5,Quick team collaborating on data-driven recommendations. Organizing collaborative study sessions while engaging classmates in Risk Management and Innovation.,closed
+226,sp25ACCY574,75525,ACCY574-C-United,5,United team collaborating on performance snapshots. Iterating on prototype milestones while engaging classmates in Risk Management and Innovation.,closed
+227,sp25ACCY574,74806,ACCY574-IMB-Bold,5,Bold team collaborating on project scheduling. Tracking action items transparently while engaging classmates in Risk Management and Innovation.,open
+228,sp25ACCY574,74805,ACCY574-ONL-Bold,4,Bold team collaborating on project scheduling. Supporting inclusive brainstorming while engaging classmates in Risk Management and Innovation.,locked
+229,sp25ACCY575,64806,ACCY575-A-Vibrant,4,Vibrant team collaborating on feedback collection. Sharing knowledge across subteams while engaging classmates in Data Analytics Applications in Accountancy.,open
+230,sp25ACCY575,67001,ACCY575-B-Innovative,4,Innovative team collaborating on profile enrichment. Organizing collaborative study sessions while engaging classmates in Data Analytics Applications in Accountancy.,open
+231,sp25ACCY575,67002,ACCY575-C-Energetic,6,Energetic team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Data Analytics Applications in Accountancy.,open
+232,sp25ACCY575,66491,ACCY575-D-Optimistic,6,Optimistic team collaborating on project scheduling. Delivering polished project demos while engaging classmates in Data Analytics Applications in Accountancy.,open
+233,sp25ACCY575,66492,ACCY575-E-Focused,4,Focused team collaborating on profile enrichment. Supporting inclusive brainstorming while engaging classmates in Data Analytics Applications in Accountancy.,open
+234,sp25ACCY575,66493,ACCY575-F-Youthful,6,Youthful team collaborating on visual analytics. Maintaining tight feedback loops while engaging classmates in Data Analytics Applications in Accountancy.,full
+235,sp25ACCY575,70106,ACCY575-G-Lively,5,Lively team collaborating on team availability dashboards. Sharing knowledge across subteams while engaging classmates in Data Analytics Applications in Accountancy.,open
+236,sp25ACCY575,70206,ACCY575-H-Agile,6,Agile team collaborating on skills matching workflow. Planning weekly sprint reviews while engaging classmates in Data Analytics Applications in Accountancy.,open
+237,sp25ACCY576,70683,ACCY576-DA1-Agile,6,Agile team collaborating on skills matching workflow. Maintaining tight feedback loops while engaging classmates in Data Preparation for Accounting.,open
+238,sp25ACCY576,70684,ACCY576-NA1-Focused,4,Focused team collaborating on teammate onboarding. Running lightweight usability tests while engaging classmates in Data Preparation for Accounting.,open
+239,sp25ACCY577,71767,ACCY577-DB1-Focused,5,Focused team collaborating on visual analytics. Organizing collaborative study sessions while engaging classmates in Machine Learning for Accounting.,open
+240,sp25ACCY577,71768,ACCY577-NB1-Motivated,6,Motivated team collaborating on role assignment tooling. Iterating on prototype milestones while engaging classmates in Machine Learning for Accounting.,open
+241,sp25ACCY578,71795,ACCY578-AA1-Skilled,3,Skilled team collaborating on database optimizations. Planning weekly sprint reviews while engaging classmates in Accounting Analytics Applications.,full
+242,sp25ACCY578,71797,ACCY578-AA2-Lively,5,Lively team collaborating on real-time notifications. Sharing knowledge across subteams while engaging classmates in Accounting Analytics Applications.,open
+243,sp25ACCY578,71796,ACCY578-NA1-Agile,3,Agile team collaborating on team communication. Sharing knowledge across subteams while engaging classmates in Accounting Analytics Applications.,open
+244,sp25ACCY578,71798,ACCY578-NA2-Jovial,4,Jovial team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Accounting Analytics Applications.,open
+245,sp25ACCY590,30446,ACCY590-A-Wise,6,Wise team collaborating on visual analytics. Maintaining tight feedback loops while engaging classmates in Adv Prof Internship in ACCY.,open
+246,sp25ACCY593,30447,ACCY593-B-Global,5,Global team collaborating on role assignment tooling. Sharing knowledge across subteams while engaging classmates in Special Research Problems.,full
+247,sp25ACCY593,30449,ACCY593-C-Tenacious,6,Tenacious team collaborating on skills matching workflow. Delivering polished project demos while engaging classmates in Special Research Problems.,open
+248,sp25ACCY593,75976,ACCY593-IMB-Agile,6,Agile team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Special Research Problems.,open
+249,sp25ACCY593,75977,ACCY593-ONL-Tenacious,6,Tenacious team collaborating on matching algorithms. Planning weekly sprint reviews while engaging classmates in Special Research Problems.,locked
+250,sp25ACCY593,73723,ACCY593-PFS-Zealous,4,Zealous team collaborating on course section insights. Delivering polished project demos while engaging classmates in Special Research Problems.,open
+251,sp25ACCY594,39471,ACCY594-A-Reliable,6,Reliable team collaborating on project scheduling. Running lightweight usability tests while engaging classmates in Doctoral Research Seminar.,full
+252,sp25ACCY599,30464,ACCY599-A-Bold,6,Bold team collaborating on visual analytics. Tracking action items transparently while engaging classmates in Thesis Research.,open
+253,sp25ACCY599,30465,ACCY599-B-Zealous,6,Zealous team collaborating on visual analytics. Planning weekly sprint reviews while engaging classmates in Thesis Research.,full
+254,sp25ACCY599,72063,ACCY599-C-Dynamic,5,Dynamic team collaborating on role assignment tooling. Delivering polished project demos while engaging classmates in Thesis Research.,open
+255,sp25ACE100,30470,ACE100-AD1-Youthful,4,Youthful team collaborating on profile enrichment. Delivering polished project demos while engaging classmates in Introduction to Applied Microeconomics.,open
+256,sp25ACE100,30473,ACE100-AD3-Creative,3,Creative team collaborating on team availability dashboards. Running lightweight usability tests while engaging classmates in Introduction to Applied Microeconomics.,open
+257,sp25ACE100,30480,ACE100-AD7-Optimistic,3,Optimistic team collaborating on profile reputation systems. Delivering polished project demos while engaging classmates in Introduction to Applied Microeconomics.,locked
+258,sp25ACE100,30484,ACE100-AL1-Skilled,5,Skilled team collaborating on matching algorithms. Documenting architectural decisions while engaging classmates in Introduction to Applied Microeconomics.,locked
+259,sp25ACE161,30504,ACE161-C2-Reliable,3,Reliable team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Microcomputer Applications.,locked
+260,sp25ACE161,30513,ACE161-N2-United,3,United team collaborating on performance snapshots. Sharing knowledge across subteams while engaging classmates in Microcomputer Applications.,closed
+261,sp25ACE161,30493,ACE161-R-Global,5,Global team collaborating on search relevance tuning. Documenting architectural decisions while engaging classmates in Microcomputer Applications.,open
+262,sp25ACE161,30494,ACE161-T-Motivated,6,Motivated team collaborating on course section insights. Sharing knowledge across subteams while engaging classmates in Microcomputer Applications.,open
+263,sp25ACE199,75952,ACE199-AS1-Global,3,Global team collaborating on project scheduling. Running lightweight usability tests while engaging classmates in Undergraduate Open Seminar.,open
+264,sp25ACE199,75953,ACE199-AS2-Honest,4,Honest team collaborating on profile enrichment. Documenting architectural decisions while engaging classmates in Undergraduate Open Seminar.,full
+265,sp25ACE199,75954,ACE199-AS3-Nimble,6,Nimble team collaborating on matching algorithms. Tracking action items transparently while engaging classmates in Undergraduate Open Seminar.,open
+266,sp25ACE199,77194,ACE199-BC1-Energetic,5,Energetic team collaborating on UI accessibility improvements. Sharing knowledge across subteams while engaging classmates in Undergraduate Open Seminar.,full
+267,sp25ACE199,77195,ACE199-BC2-Tenacious,4,Tenacious team collaborating on profile reputation systems. Iterating on prototype milestones while engaging classmates in Undergraduate Open Seminar.,full
+268,sp25ACE199,77196,ACE199-BC3-Optimistic,4,Optimistic team collaborating on real-time notifications. Supporting inclusive brainstorming while engaging classmates in Undergraduate Open Seminar.,locked
+269,sp25ACE199,48181,ACE199-C-Honest,6,Honest team collaborating on team availability dashboards. Sharing knowledge across subteams while engaging classmates in Undergraduate Open Seminar.,full
+270,sp25ACE210,30522,ACE210-AD2-Lively,6,Lively team collaborating on performance snapshots. Tracking action items transparently while engaging classmates in Environmental Economics.,open
+271,sp25ACE210,30524,ACE210-AD3-Motivated,5,Motivated team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in Environmental Economics.,open
+272,sp25ACE210,30526,ACE210-AD4-Optimistic,3,Optimistic team collaborating on profile reputation systems. Planning weekly sprint reviews while engaging classmates in Environmental Economics.,open
+273,sp25ACE210,30528,ACE210-AL1-Creative,6,Creative team collaborating on course analytics. Tracking action items transparently while engaging classmates in Environmental Economics.,open
+274,sp25ACE221,75974,ACE221-NPS-Vibrant,4,Vibrant team collaborating on project scheduling. Organizing collaborative study sessions while engaging classmates in Negotiation.,open
+275,sp25ACE231,55458,ACE231-T-Honest,4,Honest team collaborating on teammate onboarding. Supporting inclusive brainstorming while engaging classmates in Food and Agribusiness Mgt.,locked
+276,sp25ACE232,30577,ACE232-S-Global,4,Global team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Farm Management.,locked
+277,sp25ACE240,55444,ACE240-ONL-Youthful,6,Youthful team collaborating on UI accessibility improvements. Sharing knowledge across subteams while engaging classmates in Personal Financial Planning.,open
+278,sp25ACE240,55447,ACE240-PS-Wise,6,Wise team collaborating on course analytics. Supporting inclusive brainstorming while engaging classmates in Personal Financial Planning.,full
+279,sp25ACE241,77200,ACE241-APF-Youthful,6,Youthful team collaborating on database optimizations. Running lightweight usability tests while engaging classmates in Advanced Personal Finance.,open
+280,sp25ACE242,76827,ACE242-WMP-Honest,6,"Honest team collaborating on visual analytics. Organizing collaborative study sessions while engaging classmates in Women, Money, and Power.",full
+281,sp25ACE262,70716,ACE262-AS1-Energetic,6,Energetic team collaborating on skills matching workflow. Running lightweight usability tests while engaging classmates in Applied Statistical Methods and Data Analytics I.,open
+282,sp25ACE264,70717,ACE264-AS2-Reliable,5,Reliable team collaborating on visual analytics. Sharing knowledge across subteams while engaging classmates in Applied Statistical Methods &amp; Data Analytics 2.,locked
+283,sp25ACE270,30581,ACE270-E-Honest,5,Honest team collaborating on skills matching workflow. Organizing collaborative study sessions while engaging classmates in Consumer Economics.,locked
+284,sp25ACE291,63866,ACE291-DC-Innovative,4,Innovative team collaborating on project scheduling. Sharing knowledge across subteams while engaging classmates in Ag Policy &amp; Leadership.,locked
+285,sp25ACE300,70792,ACE300-AD1-Global,3,Global team collaborating on role assignment tooling. Iterating on prototype milestones while engaging classmates in Intermediate Applied Microeconomics.,open
+286,sp25ACE300,72320,ACE300-AD3-Bold,5,Bold team collaborating on course analytics. Documenting architectural decisions while engaging classmates in Intermediate Applied Microeconomics.,open
+287,sp25ACE300,72322,ACE300-AD4-Quick,5,Quick team collaborating on skills matching workflow. Maintaining tight feedback loops while engaging classmates in Intermediate Applied Microeconomics.,closed
+288,sp25ACE300,70714,ACE300-AL1-Motivated,6,Motivated team collaborating on course analytics. Planning weekly sprint reviews while engaging classmates in Intermediate Applied Microeconomics.,open
+289,sp25ACE306,71848,ACE306-P-Optimistic,4,Optimistic team collaborating on performance snapshots. Planning weekly sprint reviews while engaging classmates in Food Law.,open
+290,sp25ACE310,60463,ACE310-AD1-Energetic,5,Energetic team collaborating on role assignment tooling. Running lightweight usability tests while engaging classmates in Natural Resource Economics.,open
+291,sp25ACE310,60464,ACE310-AD2-Jovial,4,Jovial team collaborating on search relevance tuning. Supporting inclusive brainstorming while engaging classmates in Natural Resource Economics.,full
+292,sp25ACE310,60459,ACE310-AL1-Energetic,5,Energetic team collaborating on course section insights. Iterating on prototype milestones while engaging classmates in Natural Resource Economics.,open
+293,sp25ACE321,65950,ACE321-WA-Youthful,3,Youthful team collaborating on course section insights. Tracking action items transparently while engaging classmates in Principles of Public Policy.,open
+294,sp25ACE344,74133,ACE344-TCH-Honest,4,Honest team collaborating on search relevance tuning. Documenting architectural decisions while engaging classmates in FinTech in Personal Finance and Financial Planning.,open
+295,sp25ACE345,73342,ACE345-X-Skilled,5,Skilled team collaborating on performance snapshots. Delivering polished project demos while engaging classmates in Finan Decision Indiv Sm Bus.,closed
+296,sp25ACE349,74131,ACE349-RM-United,6,United team collaborating on team communication. Sharing knowledge across subteams while engaging classmates in Risk Management and Financial Planning Across the Life Cycle.,closed
+297,sp25ACE360,53547,ACE360-B-Nimble,5,Nimble team collaborating on visual analytics. Documenting architectural decisions while engaging classmates in Spreadsheet Models and Applications.,locked
+298,sp25ACE360,53546,ACE360-B1-Progressive,5,Progressive team collaborating on profile reputation systems. Planning weekly sprint reviews while engaging classmates in Spreadsheet Models and Applications.,open
+299,sp25ACE398,62419,ACE398-AE-Wise,4,Wise team collaborating on real-time notifications. Sharing knowledge across subteams while engaging classmates in Experiential Learning.,full
+300,sp25ACE398,30586,ACE398-CR-Progressive,6,Progressive team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Experiential Learning.,open
+301,sp25ACE398,58371,ACE398-DS-Innovative,5,Innovative team collaborating on real-time notifications. Supporting inclusive brainstorming while engaging classmates in Experiential Learning.,full
+302,sp25ACE398,53331,ACE398-NT-Focused,6,Focused team collaborating on profile reputation systems. Organizing collaborative study sessions while engaging classmates in Experiential Learning.,open
+303,sp25ACE403,40467,ACE403-GR-Keen,5,Keen team collaborating on role assignment tooling. Organizing collaborative study sessions while engaging classmates in Agricultural Law.,open
+304,sp25ACE403,30588,ACE403-UG-Agile,6,Agile team collaborating on teammate onboarding. Tracking action items transparently while engaging classmates in Agricultural Law.,open
+305,sp25ACE410,70335,ACE410-GR-Bold,3,Bold team collaborating on project scheduling. Running lightweight usability tests while engaging classmates in Energy Economics.,open
+306,sp25ACE410,70337,ACE410-UG-Global,3,Global team collaborating on real-time notifications. Planning weekly sprint reviews while engaging classmates in Energy Economics.,full
+307,sp25ACE427,30592,ACE427-C-Global,6,Global team collaborating on notification customization. Tracking action items transparently while engaging classmates in Commodity Price Analysis.,open
+308,sp25ACE428,57692,ACE428-E-Jovial,3,Jovial team collaborating on team communication. Running lightweight usability tests while engaging classmates in Commodity Futures and Options.,open
+309,sp25ACE428,76100,ACE428-GR-Optimistic,3,Optimistic team collaborating on teammate onboarding. Running lightweight usability tests while engaging classmates in Commodity Futures and Options.,full
+310,sp25ACE430,43567,ACE430-S-Dynamic,3,Dynamic team collaborating on project scheduling. Delivering polished project demos while engaging classmates in Food Marketing.,locked
+311,sp25ACE432,72008,ACE432-M-United,4,United team collaborating on skills matching workflow. Running lightweight usability tests while engaging classmates in Advanced Farm Management.,open
+312,sp25ACE435,58953,ACE435-GR-Reliable,5,Reliable team collaborating on matching algorithms. Maintaining tight feedback loops while engaging classmates in Global Agribusiness Management.,full
+313,sp25ACE435,58954,ACE435-UG-Progressive,3,Progressive team collaborating on profile reputation systems. Delivering polished project demos while engaging classmates in Global Agribusiness Management.,open
+314,sp25ACE436,74436,ACE436-IB-United,5,United team collaborating on course section insights. Planning weekly sprint reviews while engaging classmates in International Business Immersion.,open
+315,sp25ACE436,76252,ACE436-IBG-Skilled,4,Skilled team collaborating on UI accessibility improvements. Running lightweight usability tests while engaging classmates in International Business Immersion.,open
+316,sp25ACE436,75047,ACE436-NT-Progressive,4,Progressive team collaborating on database optimizations. Running lightweight usability tests while engaging classmates in International Business Immersion.,open
+317,sp25ACE436,76178,ACE436-NTG-Creative,3,Creative team collaborating on course section insights. Documenting architectural decisions while engaging classmates in International Business Immersion.,open
+318,sp25ACE440,55461,ACE440-GR-Quick,4,Quick team collaborating on profile enrichment. Organizing collaborative study sessions while engaging classmates in Finan Plan for Professionals.,open
+319,sp25ACE440,55460,ACE440-UG-Innovative,5,Innovative team collaborating on database optimizations. Supporting inclusive brainstorming while engaging classmates in Finan Plan for Professionals.,locked
+320,sp25ACE441,74132,ACE441-FP-Jovial,5,Jovial team collaborating on feedback collection. Iterating on prototype milestones while engaging classmates in FINRA Professional Exam Review.,closed
+321,sp25ACE444,55323,ACE444-P-Xenial,3,Xenial team collaborating on feedback collection. Documenting architectural decisions while engaging classmates in Financial Services &amp; Investing Planning.,full
+322,sp25ACE446,49906,ACE446-GR-Energetic,4,Energetic team collaborating on profile enrichment. Sharing knowledge across subteams while engaging classmates in Modeling App's Finan Plan.,open
+323,sp25ACE446,49907,ACE446-UG-Tenacious,3,Tenacious team collaborating on feedback collection. Maintaining tight feedback loops while engaging classmates in Modeling App's Finan Plan.,locked
+324,sp25ACE449,52915,ACE449-UG-Innovative,6,Innovative team collaborating on UI accessibility improvements. Documenting architectural decisions while engaging classmates in Retirement &amp; Benefit Planning.,closed
+325,sp25ACE451,49908,ACE451-GR-Lively,4,Lively team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Agriculture in Intl Dev.,open
+326,sp25ACE451,49909,ACE451-UG-Focused,5,Focused team collaborating on team communication. Tracking action items transparently while engaging classmates in Agriculture in Intl Dev.,open
+327,sp25ACE456,45927,ACE456-GR-Optimistic,5,Optimistic team collaborating on course section insights. Tracking action items transparently while engaging classmates in Agricultural and Food Policies.,open
+328,sp25ACE456,45928,ACE456-UG-Dynamic,3,Dynamic team collaborating on search relevance tuning. Delivering polished project demos while engaging classmates in Agricultural and Food Policies.,open
+329,sp25ACE474,40476,ACE474-GR-Creative,4,Creative team collaborating on feedback collection. Planning weekly sprint reviews while engaging classmates in Economics of Consumption.,open
+330,sp25ACE474,30604,ACE474-UG-Energetic,5,Energetic team collaborating on database optimizations. Maintaining tight feedback loops while engaging classmates in Economics of Consumption.,full
+331,sp25ACE476,62224,ACE476-GR-Zealous,3,Zealous team collaborating on data-driven recommendations. Tracking action items transparently while engaging classmates in Behavioral Economics and Financial Decision Making.,full
+332,sp25ACE476,62223,ACE476-UG-Zealous,5,Zealous team collaborating on course analytics. Maintaining tight feedback loops while engaging classmates in Behavioral Economics and Financial Decision Making.,open
+333,sp25ACE499,11170,ACE499-MW-Keen,4,Keen team collaborating on profile enrichment. Maintaining tight feedback loops while engaging classmates in Contemporary Topics in ACE.,open
+334,sp25ACE499,76157,ACE499-MWG-Energetic,3,Energetic team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Contemporary Topics in ACE.,closed
+335,sp25ACE503,30653,ACE503-M-Innovative,5,Innovative team collaborating on search relevance tuning. Running lightweight usability tests while engaging classmates in Equilibrium and Welfare Econ.,open
+336,sp25ACE505,76826,ACE505-EM-Energetic,6,Energetic team collaborating on course section insights. Delivering polished project demos while engaging classmates in Empirical Methods in Applied Economics.,closed
+337,sp25ACE510,56381,ACE510-B-United,3,United team collaborating on database optimizations. Iterating on prototype milestones while engaging classmates in Adv Natural Resource Economics.,closed
+338,sp25ACE530,43619,ACE530-E-Focused,3,Focused team collaborating on UI accessibility improvements. Tracking action items transparently while engaging classmates in Microeconometrics.,open
+339,sp25ACE531,63795,ACE531-IE-United,5,United team collaborating on team communication. Documenting architectural decisions while engaging classmates in Impact Evaluation.,full
+340,sp25ACE546,77345,ACE546-ONL-Energetic,4,Energetic team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Agriculture as an Asset Class.,open
+341,sp25ACE547,77346,ACE547-ONL-Optimistic,6,Optimistic team collaborating on search relevance tuning. Organizing collaborative study sessions while engaging classmates in Modern Issues in Food &amp; Agriculture.,closed
+342,sp25ACE561,30663,ACE561-PD-Zealous,6,Zealous team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in Adv Res and Scholarly Comm.,locked
+343,sp25ACE563,46171,ACE563-A-Wise,3,Wise team collaborating on notification customization. Planning weekly sprint reviews while engaging classmates in Math Program App Econ I.,open
+344,sp25ACE571,63998,ACE571-C-Progressive,5,Progressive team collaborating on performance snapshots. Sharing knowledge across subteams while engaging classmates in Household Economics.,locked
+345,sp25ACE580,77241,ACE580-ONL-Keen,6,Keen team collaborating on project scheduling. Sharing knowledge across subteams while engaging classmates in Taxation and Regulation of Alternative Investments.,open
+346,sp25ACE592,58352,ACE592-GIE-Tenacious,4,Tenacious team collaborating on skills matching workflow. Maintaining tight feedback loops while engaging classmates in Special Topics.,locked
+347,sp25ACE592,45250,ACE592-SAE-United,5,United team collaborating on data-driven recommendations. Maintaining tight feedback loops while engaging classmates in Special Topics.,open
+348,sp25ACE594,75376,ACE594-CAS-Nimble,4,Nimble team collaborating on team availability dashboards. Iterating on prototype milestones while engaging classmates in Seminars and Workshops.,closed
+349,sp25ACE594,47455,ACE594-P-Nimble,5,Nimble team collaborating on course analytics. Running lightweight usability tests while engaging classmates in Seminars and Workshops.,full
+350,sp25ACE594,30672,ACE594-R-Dynamic,6,Dynamic team collaborating on team availability dashboards. Supporting inclusive brainstorming while engaging classmates in Seminars and Workshops.,closed
+351,sp25ACES102,63906,ACES102-LR-Dynamic,5,Dynamic team collaborating on role assignment tooling. Supporting inclusive brainstorming while engaging classmates in Intro Sustainable Food Systems.,locked
+352,sp25ACES200,71417,ACES200-BJG-Youthful,4,Youthful team collaborating on notification customization. Tracking action items transparently while engaging classmates in ACES Transfer Orientation.,full
+353,sp25ACES293,76163,ACES293-AJF-Lively,5,Lively team collaborating on performance snapshots. Sharing knowledge across subteams while engaging classmates in International Internship.,open
+354,sp25ACES298,11708,ACES298-AF-Jovial,4,Jovial team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in International Experience.,open
+355,sp25ACES299,30675,ACES299-A-Lively,4,Lively team collaborating on database optimizations. Iterating on prototype milestones while engaging classmates in ACES Study Abroad.,full
+356,sp25ACES396,58043,ACES396-JS-United,4,United team collaborating on skills matching workflow. Planning weekly sprint reviews while engaging classmates in Honors Study Abroad Retrospect.,open
+357,sp25ADV150,74341,ADV150-AB1-Nimble,3,Nimble team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Introduction to Advertising.,locked
+358,sp25ADV150,74342,ADV150-AB2-Jovial,4,Jovial team collaborating on skills matching workflow. Sharing knowledge across subteams while engaging classmates in Introduction to Advertising.,open
+359,sp25ADV150,74343,ADV150-AB3-Motivated,3,Motivated team collaborating on team availability dashboards. Maintaining tight feedback loops while engaging classmates in Introduction to Advertising.,open
+360,sp25ADV150,74344,ADV150-AB4-Motivated,6,Motivated team collaborating on notification customization. Sharing knowledge across subteams while engaging classmates in Introduction to Advertising.,open
+361,sp25ADV150,74345,ADV150-AB5-Wise,4,Wise team collaborating on matching algorithms. Planning weekly sprint reviews while engaging classmates in Introduction to Advertising.,open
+362,sp25ADV150,74346,ADV150-AB6-Xenial,5,Xenial team collaborating on role assignment tooling. Sharing knowledge across subteams while engaging classmates in Introduction to Advertising.,open
+363,sp25ADV150,74347,ADV150-AB7-Reliable,3,Reliable team collaborating on course section insights. Running lightweight usability tests while engaging classmates in Introduction to Advertising.,locked
+364,sp25ADV150,74348,ADV150-AB8-Bold,5,Bold team collaborating on team availability dashboards. Maintaining tight feedback loops while engaging classmates in Introduction to Advertising.,open
+365,sp25ADV150,74350,ADV150-AB9-Innovative,4,Innovative team collaborating on visual analytics. Maintaining tight feedback loops while engaging classmates in Introduction to Advertising.,open
+366,sp25ADV150,60077,ADV150-AL1-Tenacious,3,Tenacious team collaborating on notification customization. Organizing collaborative study sessions while engaging classmates in Introduction to Advertising.,open
+367,sp25ADV175,74338,ADV175-A-Xenial,4,Xenial team collaborating on feedback collection. Running lightweight usability tests while engaging classmates in Introduction to Multicultural Advertising.,locked
+368,sp25ADV199,48769,ADV199-C-Energetic,6,Energetic team collaborating on performance snapshots. Sharing knowledge across subteams while engaging classmates in Undergraduate Seminar.,open
+369,sp25ADV200,74331,ADV200-AB1-Optimistic,4,Optimistic team collaborating on team availability dashboards. Sharing knowledge across subteams while engaging classmates in Data Literacy.,closed
+370,sp25ADV200,74332,ADV200-AB2-Focused,3,Focused team collaborating on role assignment tooling. Maintaining tight feedback loops while engaging classmates in Data Literacy.,full
+371,sp25ADV200,73628,ADV200-AL1-Nimble,6,Nimble team collaborating on skills matching workflow. Planning weekly sprint reviews while engaging classmates in Data Literacy.,closed
+372,sp25ADV201,75663,ADV201-A-Reliable,4,Reliable team collaborating on profile reputation systems. Organizing collaborative study sessions while engaging classmates in Social Media and Personal Branding.,full
+373,sp25ADV250,75527,ADV250-AB1-Agile,6,Agile team collaborating on profile reputation systems. Running lightweight usability tests while engaging classmates in Advertising and Brand Strategy.,open
+374,sp25ADV250,75528,ADV250-AB2-Innovative,3,Innovative team collaborating on course section insights. Tracking action items transparently while engaging classmates in Advertising and Brand Strategy.,open
+375,sp25ADV250,75529,ADV250-AB3-Jovial,3,Jovial team collaborating on notification customization. Tracking action items transparently while engaging classmates in Advertising and Brand Strategy.,open
+376,sp25ADV250,75530,ADV250-AB4-Reliable,3,Reliable team collaborating on skills matching workflow. Running lightweight usability tests while engaging classmates in Advertising and Brand Strategy.,closed
+377,sp25ADV250,77465,ADV250-AB5-Wise,4,Wise team collaborating on skills matching workflow. Tracking action items transparently while engaging classmates in Advertising and Brand Strategy.,open
+378,sp25ADV250,75526,ADV250-AL1-Keen,5,Keen team collaborating on search relevance tuning. Sharing knowledge across subteams while engaging classmates in Advertising and Brand Strategy.,closed
+379,sp25ADV270,70232,ADV270-A-Optimistic,6,Optimistic team collaborating on skills matching workflow. Documenting architectural decisions while engaging classmates in Principles of Sales.,open
+380,sp25ADV281,68850,ADV281-D1-Skilled,6,Skilled team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Advertising Research Methods.,open
+381,sp25ADV281,68854,ADV281-D3-Nimble,3,Nimble team collaborating on performance snapshots. Running lightweight usability tests while engaging classmates in Advertising Research Methods.,open
+382,sp25ADV281,68855,ADV281-D4-Agile,3,Agile team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in Advertising Research Methods.,open
+383,sp25ADV281,68856,ADV281-D5-Bold,6,Bold team collaborating on profile reputation systems. Running lightweight usability tests while engaging classmates in Advertising Research Methods.,open
+384,sp25ADV281,68852,ADV281-L1-Zealous,3,Zealous team collaborating on team availability dashboards. Delivering polished project demos while engaging classmates in Advertising Research Methods.,full
+385,sp25ADV284,68858,ADV284-D1-Wise,3,Wise team collaborating on data-driven recommendations. Planning weekly sprint reviews while engaging classmates in Consumer Insight.,full
+386,sp25ADV284,68859,ADV284-D2-Focused,5,Focused team collaborating on performance snapshots. Running lightweight usability tests while engaging classmates in Consumer Insight.,open
+387,sp25ADV284,68860,ADV284-D3-Innovative,5,Innovative team collaborating on matching algorithms. Supporting inclusive brainstorming while engaging classmates in Consumer Insight.,open
+388,sp25ADV284,68865,ADV284-D4-Lively,6,Lively team collaborating on database optimizations. Tracking action items transparently while engaging classmates in Consumer Insight.,open
+389,sp25ADV284,68857,ADV284-L1-Optimistic,4,Optimistic team collaborating on feedback collection. Iterating on prototype milestones while engaging classmates in Consumer Insight.,open
+390,sp25ADV290,67034,ADV290-AI-Nimble,3,Nimble team collaborating on profile reputation systems. Iterating on prototype milestones while engaging classmates in Special Topics in Advertising.,locked
+391,sp25ADV290,71951,ADV290-ART-Bold,6,Bold team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Special Topics in Advertising.,open
+392,sp25ADV301,74402,ADV301-INF-Youthful,3,Youthful team collaborating on visual analytics. Organizing collaborative study sessions while engaging classmates in Becoming an Influencer.,open
+393,sp25ADV310,54936,ADV310-A-Creative,5,Creative team collaborating on feedback collection. Planning weekly sprint reviews while engaging classmates in Intro to Public Relations.,locked
+394,sp25ADV314,73629,ADV314-SPR-Bold,5,Bold team collaborating on real-time notifications. Running lightweight usability tests while engaging classmates in Sports Public Relations.,open
+395,sp25ADV320,70233,ADV320-A-Creative,6,Creative team collaborating on course analytics. Planning weekly sprint reviews while engaging classmates in Sales Management.,open
+396,sp25ADV350,55675,ADV350-A-Optimistic,3,Optimistic team collaborating on profile enrichment. Tracking action items transparently while engaging classmates in Writing for Public Relations.,open
+397,sp25ADV360,75532,ADV360-AB1-Progressive,5,Progressive team collaborating on project scheduling. Maintaining tight feedback loops while engaging classmates in Innovations in Advertising.,open
+398,sp25ADV360,75533,ADV360-AB2-Energetic,3,Energetic team collaborating on feedback collection. Delivering polished project demos while engaging classmates in Innovations in Advertising.,open
+399,sp25ADV360,75534,ADV360-AB3-Focused,4,Focused team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in Innovations in Advertising.,full
+400,sp25ADV360,75535,ADV360-AB4-Vibrant,5,Vibrant team collaborating on team communication. Running lightweight usability tests while engaging classmates in Innovations in Advertising.,open
+401,sp25ADV360,75531,ADV360-AL1-Motivated,4,Motivated team collaborating on team availability dashboards. Maintaining tight feedback loops while engaging classmates in Innovations in Advertising.,locked
+402,sp25ADV370,70234,ADV370-A-Nimble,3,Nimble team collaborating on profile reputation systems. Iterating on prototype milestones while engaging classmates in Sales and the Consumer.,closed
+403,sp25ADV390,60085,ADV390-A-Energetic,4,Energetic team collaborating on data-driven recommendations. Delivering polished project demos while engaging classmates in Content Creation.,open
+404,sp25ADV392,73423,ADV392-AMZ-Dynamic,5,Dynamic team collaborating on real-time notifications. Delivering polished project demos while engaging classmates in Advertising Immersion.,open
+405,sp25ADV393,60086,ADV393-A-Youthful,6,Youthful team collaborating on profile reputation systems. Delivering polished project demos while engaging classmates in Advertising and Society.,locked
+406,sp25ADV399,54569,ADV399-SCN-Reliable,3,Reliable team collaborating on matching algorithms. Supporting inclusive brainstorming while engaging classmates in Advertising Study Abroad.,open
+407,sp25ADV400,30689,ADV400-DRM-Creative,4,Creative team collaborating on performance snapshots. Running lightweight usability tests while engaging classmates in Special Problems.,full
+408,sp25ADV409,68732,ADV409-A-Tenacious,4,Tenacious team collaborating on UI accessibility improvements. Organizing collaborative study sessions while engaging classmates in Media Entrepreneurship.,closed
+409,sp25ADV410,50144,ADV410-A-Tenacious,5,Tenacious team collaborating on team communication. Iterating on prototype milestones while engaging classmates in Public Relations Strategies.,open
+410,sp25ADV410,39501,ADV410-B-Keen,6,Keen team collaborating on visual analytics. Tracking action items transparently while engaging classmates in Public Relations Strategies.,full
+411,sp25ADV454,52662,ADV454-A-Dynamic,3,Dynamic team collaborating on profile reputation systems. Delivering polished project demos while engaging classmates in Creative Concepts II.,open
+412,sp25ADV461,70249,ADV461-A-Dynamic,6,Dynamic team collaborating on feedback collection. Delivering polished project demos while engaging classmates in Computational Advertising.,locked
+413,sp25ADV480,74411,ADV480-SMA-Optimistic,6,Optimistic team collaborating on UI accessibility improvements. Documenting architectural decisions while engaging classmates in Social Media Analytics.,open
+414,sp25ADV483,57841,ADV483-C-Dynamic,3,Dynamic team collaborating on project scheduling. Running lightweight usability tests while engaging classmates in Audience Analysis.,closed
+415,sp25ADV483,61524,ADV483-D-Progressive,4,Progressive team collaborating on project scheduling. Organizing collaborative study sessions while engaging classmates in Audience Analysis.,closed
+416,sp25ADV483,68912,ADV483-E-Youthful,5,Youthful team collaborating on team availability dashboards. Organizing collaborative study sessions while engaging classmates in Audience Analysis.,open
+417,sp25ADV490,58648,ADV490-AMZ-Energetic,5,Energetic team collaborating on team availability dashboards. Supporting inclusive brainstorming while engaging classmates in Advanced Special Topics in Advertising.,open
+418,sp25ADV490,58647,ADV490-DP-Quick,4,Quick team collaborating on profile reputation systems. Iterating on prototype milestones while engaging classmates in Advanced Special Topics in Advertising.,open
+419,sp25ADV490,61427,ADV490-POP-Energetic,5,Energetic team collaborating on database optimizations. Delivering polished project demos while engaging classmates in Advanced Special Topics in Advertising.,open
+420,sp25ADV490,63497,ADV490-SV-Reliable,4,Reliable team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Advanced Special Topics in Advertising.,closed
+421,sp25ADV492,64125,ADV492-U-Innovative,3,Innovative team collaborating on real-time notifications. Running lightweight usability tests while engaging classmates in Tech and Advertising Campaigns.,open
+422,sp25ADV494,30746,ADV494-A-Wise,6,Wise team collaborating on profile enrichment. Delivering polished project demos while engaging classmates in Persuasion Consumer Response.,closed
+423,sp25ADV495,49825,ADV495-MS-Motivated,6,Motivated team collaborating on profile reputation systems. Tracking action items transparently while engaging classmates in Internship Seminar.,full
+424,sp25ADV497,77049,ADV497-A-Zealous,4,Zealous team collaborating on project scheduling. Running lightweight usability tests while engaging classmates in Colloquium in Advertising.,locked
+425,sp25ADV497,77052,ADV497-ONL-Lively,6,Lively team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in Colloquium in Advertising.,open
+426,sp25ADV498,63424,ADV498-A-Nimble,4,Nimble team collaborating on data-driven recommendations. Tracking action items transparently while engaging classmates in The Sandage Project.,full
+427,sp25ADV498,63426,ADV498-C-Energetic,3,Energetic team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in The Sandage Project.,open
+428,sp25ADV498,63427,ADV498-D-Lively,5,Lively team collaborating on skills matching workflow. Sharing knowledge across subteams while engaging classmates in The Sandage Project.,full
+429,sp25ADV509,68920,ADV509-A-Nimble,6,Nimble team collaborating on profile reputation systems. Maintaining tight feedback loops while engaging classmates in Media Entrepreneurship.,full
+430,sp25ADV582,30749,ADV582-A-Creative,4,Creative team collaborating on teammate onboarding. Organizing collaborative study sessions while engaging classmates in Qualitative Rsrch in Advert.,open
+431,sp25ADV588,57001,ADV588-A-Honest,4,Honest team collaborating on team availability dashboards. Supporting inclusive brainstorming while engaging classmates in Graduate Seminar II.,closed
+432,sp25ADV590,52664,ADV590-CA-Optimistic,6,Optimistic team collaborating on skills matching workflow. Iterating on prototype milestones while engaging classmates in Special Topics in Advertising.,open
+433,sp25ADV590,30766,ADV590-DRM-Global,6,Global team collaborating on project scheduling. Delivering polished project demos while engaging classmates in Special Topics in Advertising.,open
+434,sp25ADV590,30769,ADV590-PCR-Motivated,3,Motivated team collaborating on skills matching workflow. Tracking action items transparently while engaging classmates in Special Topics in Advertising.,closed
+435,sp25ADV590,50206,ADV590-PED-Youthful,5,Youthful team collaborating on matching algorithms. Documenting architectural decisions while engaging classmates in Special Topics in Advertising.,open
+436,sp25ADV590,49538,ADV590-POP-Creative,6,Creative team collaborating on profile enrichment. Running lightweight usability tests while engaging classmates in Special Topics in Advertising.,open
+437,sp25ADV590,52661,ADV590-QRM-Nimble,5,Nimble team collaborating on search relevance tuning. Running lightweight usability tests while engaging classmates in Special Topics in Advertising.,open
+438,sp25ADV597,77050,ADV597-A-Progressive,6,Progressive team collaborating on profile reputation systems. Organizing collaborative study sessions while engaging classmates in Proseminar in Advertising.,open
+439,sp25ADV597,77053,ADV597-ONL-Nimble,6,Nimble team collaborating on UI accessibility improvements. Iterating on prototype milestones while engaging classmates in Proseminar in Advertising.,locked
+440,sp25ADV598,67375,ADV598-CDH-Zealous,4,Zealous team collaborating on profile enrichment. Supporting inclusive brainstorming while engaging classmates in Professional Project.,open
+441,sp25AE140,72380,AE140-A-Global,3,Global team collaborating on course section insights. Supporting inclusive brainstorming while engaging classmates in Aerospace Computer-Aided Design.,open
+442,sp25AE140,72381,AE140-B-Bold,3,Bold team collaborating on UI accessibility improvements. Delivering polished project demos while engaging classmates in Aerospace Computer-Aided Design.,full
+443,sp25AE140,76910,AE140-C-Innovative,6,Innovative team collaborating on data-driven recommendations. Organizing collaborative study sessions while engaging classmates in Aerospace Computer-Aided Design.,full
+444,sp25AE199,65566,AE199-DBF-Bold,5,Bold team collaborating on role assignment tooling. Planning weekly sprint reviews while engaging classmates in Undergraduate Open Seminar.,open
+445,sp25AE202,54415,AE202-A-Focused,4,Focused team collaborating on search relevance tuning. Planning weekly sprint reviews while engaging classmates in Aerospace Flight Mechanics.,full
+446,sp25AE202,75830,AE202-B-Youthful,3,Youthful team collaborating on data-driven recommendations. Supporting inclusive brainstorming while engaging classmates in Aerospace Flight Mechanics.,open
+447,sp25AE298,69796,AE298-INS-Global,6,Global team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Special Topics.,closed
+448,sp25AE298,62934,AE298-RES-Bold,4,Bold team collaborating on matching algorithms. Organizing collaborative study sessions while engaging classmates in Special Topics.,locked
+449,sp25AE311,65567,AE311-B-Wise,4,Wise team collaborating on performance snapshots. Delivering polished project demos while engaging classmates in Incompressible Flow.,open
+450,sp25AE312,29874,AE312-A-Quick,6,Quick team collaborating on visual analytics. Running lightweight usability tests while engaging classmates in Compressible Flow.,open
+451,sp25AE321,65568,AE321-B-Nimble,4,Nimble team collaborating on matching algorithms. Sharing knowledge across subteams while engaging classmates in Mechs of Aerospace Structures.,open
+452,sp25AE323,54418,AE323-A-Wise,3,Wise team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Applied Aerospace Structures.,full
+453,sp25AE352,65569,AE352-BL-Progressive,5,Progressive team collaborating on skills matching workflow. Supporting inclusive brainstorming while engaging classmates in Aerospace Dynamical Systems.,open
+454,sp25AE353,29907,AE353-A-Tenacious,5,Tenacious team collaborating on skills matching workflow. Running lightweight usability tests while engaging classmates in Aerospace Control Systems.,full
+455,sp25AE370,54470,AE370-A-Creative,6,Creative team collaborating on database optimizations. Supporting inclusive brainstorming while engaging classmates in Aerospace Numerical Methods.,open
+456,sp25AE398,73429,AE398-BRZ-Progressive,4,Progressive team collaborating on team communication. Iterating on prototype milestones while engaging classmates in Special Topics.,open
+457,sp25AE403,29973,AE403-A-Wise,4,Wise team collaborating on performance snapshots. Supporting inclusive brainstorming while engaging classmates in Spacecraft Attitude Control.,open
+458,sp25AE403,76245,AE403-ONC-Energetic,6,Energetic team collaborating on teammate onboarding. Organizing collaborative study sessions while engaging classmates in Spacecraft Attitude Control.,open
+459,sp25AE403,62470,AE403-ONL-Wise,6,Wise team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Spacecraft Attitude Control.,open
+460,sp25AE410,29954,AE410-A-Optimistic,6,Optimistic team collaborating on course section insights. Iterating on prototype milestones while engaging classmates in Computational Aerodynamics.,open
+461,sp25AE410,76085,AE410-ONC-Skilled,3,Skilled team collaborating on team availability dashboards. Delivering polished project demos while engaging classmates in Computational Aerodynamics.,open
+462,sp25AE410,62437,AE410-ONL-Keen,3,Keen team collaborating on team availability dashboards. Supporting inclusive brainstorming while engaging classmates in Computational Aerodynamics.,full
+463,sp25AE419,29960,AE419-A-Skilled,3,Skilled team collaborating on performance snapshots. Documenting architectural decisions while engaging classmates in Aircraft Flight Mechanics.,open
+464,sp25AE419,75234,AE419-ONC-Quick,5,Quick team collaborating on profile enrichment. Running lightweight usability tests while engaging classmates in Aircraft Flight Mechanics.,closed
+465,sp25AE419,62436,AE419-ONL-Skilled,5,Skilled team collaborating on skills matching workflow. Planning weekly sprint reviews while engaging classmates in Aircraft Flight Mechanics.,closed
+466,sp25AE420,37473,AE420-B3-Reliable,5,Reliable team collaborating on teammate onboarding. Iterating on prototype milestones while engaging classmates in Finite Element Analysis.,open
+467,sp25AE420,59677,AE420-B4-Keen,6,Keen team collaborating on data-driven recommendations. Sharing knowledge across subteams while engaging classmates in Finite Element Analysis.,open
+468,sp25AE434,29970,AE434-A-United,5,United team collaborating on profile reputation systems. Sharing knowledge across subteams while engaging classmates in Rocket Propulsion.,locked
+469,sp25AE434,73660,AE434-ONC-Keen,4,Keen team collaborating on course section insights. Delivering polished project demos while engaging classmates in Rocket Propulsion.,open
+470,sp25AE434,62471,AE434-ONL-Bold,6,Bold team collaborating on course analytics. Tracking action items transparently while engaging classmates in Rocket Propulsion.,open
+471,sp25AE435,29965,AE435-A-Creative,6,Creative team collaborating on performance snapshots. Iterating on prototype milestones while engaging classmates in Electric Space Propulsion.,closed
+472,sp25AE435,77411,AE435-ONC-Lively,5,Lively team collaborating on teammate onboarding. Delivering polished project demos while engaging classmates in Electric Space Propulsion.,open
+473,sp25AE435,62435,AE435-ONL-Bold,5,Bold team collaborating on teammate onboarding. Iterating on prototype milestones while engaging classmates in Electric Space Propulsion.,closed
+474,sp25AE443,56779,AE443-A1-Progressive,6,Progressive team collaborating on project scheduling. Planning weekly sprint reviews while engaging classmates in Aerospace Systems Design II.,full
+475,sp25AE443,56782,AE443-S1-Keen,4,Keen team collaborating on matching algorithms. Planning weekly sprint reviews while engaging classmates in Aerospace Systems Design II.,open
+476,sp25AE454,77239,AE454-A-Creative,6,Creative team collaborating on skills matching workflow. Delivering polished project demos while engaging classmates in Systems Dynamics &amp; Control.,full
+477,sp25AE454,77319,AE454-ONC-Energetic,4,Energetic team collaborating on role assignment tooling. Delivering polished project demos while engaging classmates in Systems Dynamics &amp; Control.,full
+478,sp25AE454,77240,AE454-ONL-Focused,4,Focused team collaborating on profile enrichment. Sharing knowledge across subteams while engaging classmates in Systems Dynamics &amp; Control.,closed
+479,sp25AE461,54459,AE461-AB1-Agile,4,Agile team collaborating on skills matching workflow. Iterating on prototype milestones while engaging classmates in Structures &amp; Control Lab.,open
+480,sp25AE461,65708,AE461-AB2-Zealous,6,Zealous team collaborating on team communication. Documenting architectural decisions while engaging classmates in Structures &amp; Control Lab.,open
+481,sp25AE461,65709,AE461-AB3-Quick,5,Quick team collaborating on search relevance tuning. Running lightweight usability tests while engaging classmates in Structures &amp; Control Lab.,open
+482,sp25AE461,65710,AE461-AB4-Optimistic,4,Optimistic team collaborating on project scheduling. Delivering polished project demos while engaging classmates in Structures &amp; Control Lab.,open
+483,sp25AE461,65711,AE461-AB5-Agile,6,Agile team collaborating on data-driven recommendations. Tracking action items transparently while engaging classmates in Structures &amp; Control Lab.,open
+484,sp25AE461,65712,AE461-AB6-Motivated,6,Motivated team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Structures &amp; Control Lab.,open
+485,sp25AE461,65713,AE461-AB7-Focused,4,Focused team collaborating on team communication. Planning weekly sprint reviews while engaging classmates in Structures &amp; Control Lab.,closed
+486,sp25AE461,66000,AE461-AB8-Focused,5,Focused team collaborating on visual analytics. Delivering polished project demos while engaging classmates in Structures &amp; Control Lab.,closed
+487,sp25AE461,76169,AE461-AB9-Focused,5,Focused team collaborating on profile enrichment. Running lightweight usability tests while engaging classmates in Structures &amp; Control Lab.,open
+488,sp25AE461,76170,AE461-ABA-Motivated,3,Motivated team collaborating on skills matching workflow. Delivering polished project demos while engaging classmates in Structures &amp; Control Lab.,full
+489,sp25AE461,77356,AE461-ABB-Keen,6,Keen team collaborating on data-driven recommendations. Supporting inclusive brainstorming while engaging classmates in Structures &amp; Control Lab.,open
+490,sp25AE461,54458,AE461-AS1-Optimistic,3,Optimistic team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Structures &amp; Control Lab.,open
+491,sp25AE482,65307,AE482-AB1-Global,6,Global team collaborating on profile enrichment. Organizing collaborative study sessions while engaging classmates in Introduction to Robotics.,closed
+492,sp25AE482,65308,AE482-AB2-Focused,6,Focused team collaborating on data-driven recommendations. Delivering polished project demos while engaging classmates in Introduction to Robotics.,open
+493,sp25AE482,65309,AE482-AB3-Global,6,Global team collaborating on teammate onboarding. Maintaining tight feedback loops while engaging classmates in Introduction to Robotics.,open
+494,sp25AE482,65310,AE482-AB4-Youthful,4,Youthful team collaborating on performance snapshots. Sharing knowledge across subteams while engaging classmates in Introduction to Robotics.,open
+495,sp25AE482,65311,AE482-AB5-Keen,3,Keen team collaborating on profile reputation systems. Planning weekly sprint reviews while engaging classmates in Introduction to Robotics.,open
+496,sp25AE482,68178,AE482-AB6-Quick,5,Quick team collaborating on matching algorithms. Supporting inclusive brainstorming while engaging classmates in Introduction to Robotics.,closed
+497,sp25AE482,68181,AE482-AB7-Zealous,4,Zealous team collaborating on role assignment tooling. Sharing knowledge across subteams while engaging classmates in Introduction to Robotics.,open
+498,sp25AE482,65306,AE482-AL-Creative,3,Creative team collaborating on UI accessibility improvements. Running lightweight usability tests while engaging classmates in Introduction to Robotics.,open
+499,sp25AE484,72384,AE484-A-Creative,6,"Creative team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in UAV Performance, Design, and Fabrication.",open
+500,sp25AE498,50863,AE498-CSE-Youthful,5,Youthful team collaborating on feedback collection. Delivering polished project demos while engaging classmates in Special Topics.,closed
+501,sp25AE498,65606,AE498-CSO-Bold,3,Bold team collaborating on real-time notifications. Delivering polished project demos while engaging classmates in Special Topics.,full
+502,sp25AE498,39826,AE498-SLO-Innovative,4,Innovative team collaborating on notification customization. Running lightweight usability tests while engaging classmates in Special Topics.,open
+503,sp25AE498,64116,AE498-SLV-Innovative,6,Innovative team collaborating on data-driven recommendations. Sharing knowledge across subteams while engaging classmates in Special Topics.,open
+504,sp25AE508,30029,AE508-A-Jovial,3,Jovial team collaborating on course section insights. Planning weekly sprint reviews while engaging classmates in Optimal Space Trajectories.,closed
+505,sp25AE508,64155,AE508-ONL-Skilled,3,Skilled team collaborating on performance snapshots. Planning weekly sprint reviews while engaging classmates in Optimal Space Trajectories.,full
+506,sp25AE510,65266,AE510-AGD-Bold,6,Bold team collaborating on team communication. Planning weekly sprint reviews while engaging classmates in Advanced Gas Dynamics.,locked
+507,sp25AE510,67991,AE510-ONL-Youthful,6,Youthful team collaborating on team communication. Organizing collaborative study sessions while engaging classmates in Advanced Gas Dynamics.,open
+508,sp25AE514,30031,AE514-A-Optimistic,4,Optimistic team collaborating on course section insights. Planning weekly sprint reviews while engaging classmates in Boundary Layer Theory.,open
+509,sp25AE514,62443,AE514-ONL-Keen,4,Keen team collaborating on matching algorithms. Running lightweight usability tests while engaging classmates in Boundary Layer Theory.,closed
+510,sp25AE515,39828,AE515-A-Youthful,3,Youthful team collaborating on team availability dashboards. Iterating on prototype milestones while engaging classmates in Wing Theory.,open
+511,sp25AE515,62444,AE515-ONL-Bold,4,Bold team collaborating on team communication. Maintaining tight feedback loops while engaging classmates in Wing Theory.,open
+512,sp25AE526,39829,AE526-A-Lively,4,Lively team collaborating on database optimizations. Sharing knowledge across subteams while engaging classmates in Composites Manufacturing.,open
+513,sp25AE538,30049,AE538-A-Progressive,6,Progressive team collaborating on course analytics. Supporting inclusive brainstorming while engaging classmates in Combustion Fundamentals.,open
+514,sp25AE538,68134,AE538-ONL-Progressive,4,Progressive team collaborating on notification customization. Documenting architectural decisions while engaging classmates in Combustion Fundamentals.,locked
+515,sp25AE543,58432,AE543-AS2-United,6,United team collaborating on team communication. Iterating on prototype milestones while engaging classmates in Aerospace Syst Engineering II.,open
+516,sp25AE543,62541,AE543-ONL-Agile,5,Agile team collaborating on search relevance tuning. Supporting inclusive brainstorming while engaging classmates in Aerospace Syst Engineering II.,locked
+517,sp25AE551,74783,AE551-G-Motivated,6,Motivated team collaborating on visual analytics. Delivering polished project demos while engaging classmates in Elastodynamics and Vibrations.,locked
+518,sp25AE551,74787,AE551-ONL-Skilled,5,Skilled team collaborating on UI accessibility improvements. Supporting inclusive brainstorming while engaging classmates in Elastodynamics and Vibrations.,open
+519,sp25AE555,62941,AE555-A-Keen,4,Keen team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Multivariable Control Design.,open
+520,sp25AE555,62542,AE555-ONL-Lively,4,Lively team collaborating on team availability dashboards. Delivering polished project demos while engaging classmates in Multivariable Control Design.,open
+521,sp25AE590,30062,AE590-A-Youthful,5,Youthful team collaborating on database optimizations. Planning weekly sprint reviews while engaging classmates in Seminar.,open
+522,sp25AE590,69196,AE590-AO-Lively,5,Lively team collaborating on visual analytics. Tracking action items transparently while engaging classmates in Seminar.,open
+523,sp25AE590,62385,AE590-ONL-United,5,United team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in Seminar.,closed
+524,sp25AE598,57732,AE598-PE-Youthful,6,Youthful team collaborating on profile enrichment. Maintaining tight feedback loops while engaging classmates in Special Topics.,open
+525,sp25AE598,39832,AE598-PO-Vibrant,3,Vibrant team collaborating on team availability dashboards. Organizing collaborative study sessions while engaging classmates in Special Topics.,open
+526,sp25AE598,49926,AE598-SR-Keen,4,Keen team collaborating on profile reputation systems. Running lightweight usability tests while engaging classmates in Special Topics.,open
+527,sp25AE598,62621,AE598-UQ1-Tenacious,6,Tenacious team collaborating on matching algorithms. Sharing knowledge across subteams while engaging classmates in Special Topics.,closed
+528,sp25AFAS102,30772,AFAS102-A-Innovative,3,Innovative team collaborating on course analytics. Running lightweight usability tests while engaging classmates in Leadership Laboratory.,full
+529,sp25AFAS102,30775,AFAS102-Z-Zealous,3,Zealous team collaborating on team availability dashboards. Documenting architectural decisions while engaging classmates in Leadership Laboratory.,open
+530,sp25AFAS112,30780,AFAS112-A-Tenacious,4,Tenacious team collaborating on matching algorithms. Organizing collaborative study sessions while engaging classmates in Heritage and Values of the United States Air Force II.,open
+531,sp25AFAS112,30781,AFAS112-O-Creative,5,Creative team collaborating on notification customization. Supporting inclusive brainstorming while engaging classmates in Heritage and Values of the United States Air Force II.,open
+532,sp25AFAS222,41653,AFAS222-A-Focused,5,Focused team collaborating on team communication. Iterating on prototype milestones while engaging classmates in Team and Leadership Fundamentals II.,locked
+533,sp25AFAS222,30784,AFAS222-M-Jovial,5,Jovial team collaborating on feedback collection. Iterating on prototype milestones while engaging classmates in Team and Leadership Fundamentals II.,open
+534,sp25AFAS332,30788,AFAS332-W-Innovative,4,Innovative team collaborating on UI accessibility improvements. Supporting inclusive brainstorming while engaging classmates in Leading People and Effective Communication II.,locked
+535,sp25AFAS342,30795,AFAS342-Y-Wise,5,Wise team collaborating on profile enrichment. Tracking action items transparently while engaging classmates in Nat Sec Afrs/Prep Actv Duty II.,full
+536,sp25AFRO101,45869,AFRO101-AD2-Youthful,3,"Youthful team collaborating on role assignment tooling. Running lightweight usability tests while engaging classmates in Black America, 1619-Present.",open
+537,sp25AFRO101,45872,AFRO101-AD3-Agile,6,"Agile team collaborating on profile enrichment. Organizing collaborative study sessions while engaging classmates in Black America, 1619-Present.",open
+538,sp25AFRO101,43585,AFRO101-AL1-Keen,4,"Keen team collaborating on feedback collection. Supporting inclusive brainstorming while engaging classmates in Black America, 1619-Present.",closed
+539,sp25AFRO122,75774,AFRO122-AD2-Lively,5,Lively team collaborating on course section insights. Documenting architectural decisions while engaging classmates in Russia and Black America.,open
+540,sp25AFRO122,75777,AFRO122-AD3-Tenacious,5,Tenacious team collaborating on database optimizations. Iterating on prototype milestones while engaging classmates in Russia and Black America.,open
+541,sp25AFRO122,75772,AFRO122-AL1-Creative,3,Creative team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in Russia and Black America.,locked
+542,sp25AFRO132,72386,AFRO132-ADA-Xenial,5,Xenial team collaborating on profile reputation systems. Running lightweight usability tests while engaging classmates in African American Music.,open
+543,sp25AFRO132,72387,AFRO132-ADB-Progressive,4,Progressive team collaborating on matching algorithms. Running lightweight usability tests while engaging classmates in African American Music.,open
+544,sp25AFRO132,72388,AFRO132-ADC-Vibrant,6,Vibrant team collaborating on real-time notifications. Sharing knowledge across subteams while engaging classmates in African American Music.,locked
+545,sp25AFRO132,72389,AFRO132-ADD-Focused,5,Focused team collaborating on course section insights. Supporting inclusive brainstorming while engaging classmates in African American Music.,open
+546,sp25AFRO132,65553,AFRO132-AFR-Creative,4,Creative team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in African American Music.,open
+547,sp25AFRO201,46980,AFRO201-OL1-Skilled,6,Skilled team collaborating on feedback collection. Documenting architectural decisions while engaging classmates in US Racial &amp; Ethnic Politics.,open
+548,sp25AFRO201,46979,AFRO201-OL2-Optimistic,6,Optimistic team collaborating on notification customization. Maintaining tight feedback loops while engaging classmates in US Racial &amp; Ethnic Politics.,open
+549,sp25AFRO212,62510,AFRO212-A-Tenacious,3,Tenacious team collaborating on course section insights. Documenting architectural decisions while engaging classmates in Introduction to African American Theatre.,closed
+550,sp25AFRO215,52318,AFRO215-A-Optimistic,3,Optimistic team collaborating on project scheduling. Planning weekly sprint reviews while engaging classmates in US Citizenship Comparatively.,locked
+551,sp25AFRO220,45863,AFRO220-A-Tenacious,6,Tenacious team collaborating on data-driven recommendations. Sharing knowledge across subteams while engaging classmates in Intro to Research Methods AfAm.,open
+552,sp25AFRO221,64304,AFRO221-RG-Lively,6,Lively team collaborating on data-driven recommendations. Organizing collaborative study sessions while engaging classmates in History of the Prison.,open
+553,sp25AFRO228,70808,AFRO228-JPM-Xenial,4,Xenial team collaborating on database optimizations. Organizing collaborative study sessions while engaging classmates in Hip Hop Music: History and Culture.,open
+554,sp25AFRO259,50054,AFRO259-D-Wise,5,Wise team collaborating on course analytics. Delivering polished project demos while engaging classmates in Early African American Literature and Culture.,open
+555,sp25AFRO260,49623,AFRO260-S-Vibrant,6,Vibrant team collaborating on visual analytics. Planning weekly sprint reviews while engaging classmates in Modern African American Literature and Culture.,open
+556,sp25AFRO276,40112,AFRO276-A-Skilled,5,Skilled team collaborating on team availability dashboards. Organizing collaborative study sessions while engaging classmates in African American History Since 1877.,open
+557,sp25AFRO281,40115,AFRO281-A-Nimble,4,Nimble team collaborating on data-driven recommendations. Organizing collaborative study sessions while engaging classmates in Constructing Race in America.,locked
+558,sp25AFRO310,33076,AFRO310-D1-Jovial,3,Jovial team collaborating on visual analytics. Maintaining tight feedback loops while engaging classmates in Race and Cultural Diversity.,open
+559,sp25AFRO310,45581,AFRO310-D2-Reliable,6,Reliable team collaborating on project scheduling. Maintaining tight feedback loops while engaging classmates in Race and Cultural Diversity.,open
+560,sp25AFRO310,45585,AFRO310-D3-Keen,3,Keen team collaborating on data-driven recommendations. Delivering polished project demos while engaging classmates in Race and Cultural Diversity.,open
+561,sp25AFRO310,45598,AFRO310-D4-Zealous,6,Zealous team collaborating on data-driven recommendations. Maintaining tight feedback loops while engaging classmates in Race and Cultural Diversity.,full
+562,sp25AFRO310,76831,AFRO310-D5-Youthful,6,Youthful team collaborating on profile enrichment. Sharing knowledge across subteams while engaging classmates in Race and Cultural Diversity.,open
+563,sp25AFRO310,33075,AFRO310-L-Reliable,3,Reliable team collaborating on profile reputation systems. Organizing collaborative study sessions while engaging classmates in Race and Cultural Diversity.,full
+564,sp25AFRO340,52020,AFRO340-OL1-Wise,4,Wise team collaborating on profile enrichment. Planning weekly sprint reviews while engaging classmates in Dancing Black Popular Culture.,open
+565,sp25AFRO340,70535,AFRO340-OL2-Nimble,3,Nimble team collaborating on feedback collection. Delivering polished project demos while engaging classmates in Dancing Black Popular Culture.,open
+566,sp25AFRO340,31842,AFRO340-OL3-Honest,4,Honest team collaborating on performance snapshots. Sharing knowledge across subteams while engaging classmates in Dancing Black Popular Culture.,open
+567,sp25AFRO340,77178,AFRO340-OL4-Innovative,4,Innovative team collaborating on project scheduling. Delivering polished project demos while engaging classmates in Dancing Black Popular Culture.,open
+568,sp25AFRO340,77466,AFRO340-OL5-Quick,4,Quick team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Dancing Black Popular Culture.,open
+569,sp25AFRO411,40016,AFRO411-G4-United,6,United team collaborating on notification customization. Running lightweight usability tests while engaging classmates in African American Psychology.,open
+570,sp25AFRO411,39647,AFRO411-U1-Quick,4,Quick team collaborating on data-driven recommendations. Organizing collaborative study sessions while engaging classmates in African American Psychology.,open
+571,sp25AFRO415,62183,AFRO415-G1-Quick,4,Quick team collaborating on database optimizations. Delivering polished project demos while engaging classmates in Africana Feminisms.,open
+572,sp25AFRO421,68792,AFRO421-A-Xenial,6,Xenial team collaborating on real-time notifications. Tracking action items transparently while engaging classmates in Racial and Ethnic Families.,full
+573,sp25AFRO421,68793,AFRO421-B-Honest,3,Honest team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in Racial and Ethnic Families.,full
+574,sp25AFRO482,64561,AFRO482-A-Youthful,4,Youthful team collaborating on database optimizations. Maintaining tight feedback loops while engaging classmates in Immersion Journalism.,open
+575,sp25AFRO495,50165,AFRO495-A1-United,4,United team collaborating on skills matching workflow. Organizing collaborative study sessions while engaging classmates in Senior Thesis Seminar.,open
+576,sp25AFRO498,45629,AFRO498-LM-Creative,6,Creative team collaborating on performance snapshots. Maintaining tight feedback loops while engaging classmates in Spec Topics African Am Studies.,open
+577,sp25AFRO597,63482,AFRO597-FH-Tenacious,4,Tenacious team collaborating on visual analytics. Supporting inclusive brainstorming while engaging classmates in Problems in African-Am Studies.,closed
+578,sp25AFRO598,47380,AFRO598-D-Bold,4,Bold team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Res Sem in African-Am Studies.,open
+579,sp25AFST210,47157,AFST210-P-Skilled,3,Skilled team collaborating on profile enrichment. Delivering polished project demos while engaging classmates in Introduction to Modern African Literature.,open
+580,sp25AFST222,56391,AFST222-A-Keen,5,Keen team collaborating on project scheduling. Iterating on prototype milestones while engaging classmates in Introduction to Modern Africa.,open
+581,sp25AFST232,63321,AFST232-A-Lively,4,Lively team collaborating on skills matching workflow. Maintaining tight feedback loops while engaging classmates in Elementary Swahili II.,open
+582,sp25AFST233,76257,AFST233-AW-Wise,6,Wise team collaborating on performance snapshots. Planning weekly sprint reviews while engaging classmates in Context in International Interventions.,locked
+583,sp25AFST242,30889,AFST242-A-Dynamic,3,Dynamic team collaborating on profile enrichment. Planning weekly sprint reviews while engaging classmates in Elementary Wolof II.,locked
+584,sp25AFST412,46205,AFST412-A1-Energetic,4,Energetic team collaborating on teammate onboarding. Delivering polished project demos while engaging classmates in Lang in African Culture &amp; Soc.,open
+585,sp25AFST420,62185,AFST420-G1-Energetic,3,Energetic team collaborating on database optimizations. Running lightweight usability tests while engaging classmates in Africana Feminisms.,locked
+586,sp25AFST434,30977,AFST434-CI-Zealous,6,Zealous team collaborating on team communication. Documenting architectural decisions while engaging classmates in Intermediate Swahili II.,open
+587,sp25AFST436,39527,AFST436-A-Keen,5,Keen team collaborating on search relevance tuning. Delivering polished project demos while engaging classmates in Advanced Swahili II.,open
+588,sp25AFST444,30988,AFST444-A-Progressive,6,Progressive team collaborating on UI accessibility improvements. Sharing knowledge across subteams while engaging classmates in Intermediate Wolof II.,full
+589,sp25AFST490,69944,AFST490-A-Energetic,4,Energetic team collaborating on UI accessibility improvements. Delivering polished project demos while engaging classmates in Independent Study.,open
+590,sp25AFST515,31025,AFST515-A-Innovative,3,Innovative team collaborating on skills matching workflow. Tracking action items transparently while engaging classmates in Practicum in African Studies.,open
+591,sp25AGCM220,52697,AGCM220-A-Tenacious,5,Tenacious team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Communicating Agriculture.,closed
+592,sp25AGCM220,73165,AGCM220-B-Tenacious,4,Tenacious team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Communicating Agriculture.,open
+593,sp25AGCM398,77154,AGCM398-OAR-Honest,5,Honest team collaborating on database optimizations. Organizing collaborative study sessions while engaging classmates in Undergraduate Seminar.,open
+594,sp25AGCM398,76037,AGCM398-SA-Agile,5,Agile team collaborating on skills matching workflow. Running lightweight usability tests while engaging classmates in Undergraduate Seminar.,open
+595,sp25AGCM420,74731,AGCM420-A-Xenial,6,Xenial team collaborating on project scheduling. Planning weekly sprint reviews while engaging classmates in Public Information Campaigns.,locked
+596,sp25AGCM440,77153,AGCM440-A-United,4,United team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Visualizing Our World.,locked
+597,sp25AGCM495,75870,AGCM495-CS-Progressive,6,Progressive team collaborating on course section insights. Running lightweight usability tests while engaging classmates in Communicating Science.,open
+598,sp25AGED199,64704,AGED199-GAO-Wise,5,Wise team collaborating on team availability dashboards. Organizing collaborative study sessions while engaging classmates in Undergraduate Open Seminar.,open
+599,sp25AGED250,29883,AGED250-A-Nimble,6,Nimble team collaborating on UI accessibility improvements. Delivering polished project demos while engaging classmates in Observation and Program Analys.,open
+600,sp25AGED410,54212,AGED410-B-Creative,6,Creative team collaborating on team availability dashboards. Organizing collaborative study sessions while engaging classmates in Grad Early Field Experience.,open
+601,sp25AGED420,52917,AGED420-A-Jovial,3,Jovial team collaborating on course section insights. Running lightweight usability tests while engaging classmates in Curr Design &amp; Instruction.,open
+602,sp25AGED450,29888,AGED450-A-Keen,5,Keen team collaborating on matching algorithms. Tracking action items transparently while engaging classmates in Program Delivery and Eval.,locked
+603,sp25AHS125,54894,AHS125-JS-Innovative,5,Innovative team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in Freshmen Scholars Seminar.,full
+604,sp25AHS199,64153,AHS199-ADS-United,6,United team collaborating on real-time notifications. Organizing collaborative study sessions while engaging classmates in Undergraduate Open Seminar.,open
+605,sp25AHS292,46523,AHS292-A-Nimble,6,Nimble team collaborating on matching algorithms. Iterating on prototype milestones while engaging classmates in AHS Study Abroad.,full
+606,sp25AIS101,69198,AIS101-DR-Optimistic,4,Optimistic team collaborating on data-driven recommendations. Documenting architectural decisions while engaging classmates in Intro to Amer Indian Studies.,open
+607,sp25AIS265,65548,AIS265-A-Vibrant,6,Vibrant team collaborating on data-driven recommendations. Iterating on prototype milestones while engaging classmates in Intro to American Indian Lit.,full
+608,sp25AIS278,58581,AIS278-AD1-Skilled,4,Skilled team collaborating on UI accessibility improvements. Iterating on prototype milestones while engaging classmates in Native American History.,closed
+609,sp25AIS278,58582,AIS278-AD2-Xenial,4,Xenial team collaborating on UI accessibility improvements. Running lightweight usability tests while engaging classmates in Native American History.,locked
+610,sp25AIS278,58583,AIS278-AD3-Reliable,4,Reliable team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Native American History.,closed
+611,sp25AIS278,44053,AIS278-AL1-Bold,6,Bold team collaborating on team communication. Planning weekly sprint reviews while engaging classmates in Native American History.,open
+612,sp25AIS295,52319,AIS295-A-Dynamic,6,Dynamic team collaborating on team availability dashboards. Documenting architectural decisions while engaging classmates in US Citizenship Comparatively.,locked
+613,sp25AIS357,70260,AIS357-A-Innovative,5,Innovative team collaborating on teammate onboarding. Delivering polished project demos while engaging classmates in Literatures of the Displaced.,closed
+614,sp25AIS481,76911,AIS481-A-Global,6,Global team collaborating on feedback collection. Documenting architectural decisions while engaging classmates in History of American Indian Education.,open
+615,sp25AIS481,76912,AIS481-B-Innovative,6,Innovative team collaborating on notification customization. Supporting inclusive brainstorming while engaging classmates in History of American Indian Education.,full
+616,sp25AIS503,69199,AIS503-A-United,6,United team collaborating on project scheduling. Maintaining tight feedback loops while engaging classmates in Seminar in Indigenous Studies.,open
+617,sp25ALEC115,77158,ALEC115-ADB-Zealous,4,"Zealous team collaborating on visual analytics. Organizing collaborative study sessions while engaging classmates in Let’s Talk about Food, Agriculture, and the Environment.",open
+618,sp25ALEC115,77159,ALEC115-ADC-Lively,4,"Lively team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in Let’s Talk about Food, Agriculture, and the Environment.",open
+619,sp25ALEC115,77156,ALEC115-AL-Progressive,6,"Progressive team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Let’s Talk about Food, Agriculture, and the Environment.",locked
+620,sp25ALEC393,72254,ALEC393-JAS-United,5,"United team collaborating on visual analytics. Supporting inclusive brainstorming while engaging classmates in Internship in Agricultural Leadership, Education and Communications.",full
+621,sp25ALEC505,75828,ALEC505-A-Quick,3,Quick team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Science and Art of Teaching and Learning.,locked
+622,sp25ALEC540,72261,ALEC540-XM-Energetic,5,Energetic team collaborating on profile reputation systems. Sharing knowledge across subteams while engaging classmates in Volunteer Management.,full
+623,sp25ANSC100,29911,ANSC100-AB1-United,6,United team collaborating on notification customization. Iterating on prototype milestones while engaging classmates in Intro to Animal Sciences.,open
+624,sp25ANSC100,29915,ANSC100-AB2-Dynamic,4,Dynamic team collaborating on skills matching workflow. Planning weekly sprint reviews while engaging classmates in Intro to Animal Sciences.,open
+625,sp25ANSC100,29918,ANSC100-AL1-Zealous,4,Zealous team collaborating on real-time notifications. Maintaining tight feedback loops while engaging classmates in Intro to Animal Sciences.,open
+626,sp25ANSC103,29920,ANSC103-AL1-Agile,3,Agile team collaborating on performance snapshots. Iterating on prototype milestones while engaging classmates in Working With Farm Animals.,full
+627,sp25ANSC110,39451,ANSC110-CA-Focused,5,Focused team collaborating on matching algorithms. Planning weekly sprint reviews while engaging classmates in Life With Animals and Biotech.,closed
+628,sp25ANSC120,76114,ANSC120-SR-Honest,3,Honest team collaborating on skills matching workflow. Documenting architectural decisions while engaging classmates in The Art and Ethics of Animal Documentaries.,open
+629,sp25ANSC201,71702,ANSC201-A-Focused,4,Focused team collaborating on team communication. Tracking action items transparently while engaging classmates in Principles of Dairy Production.,locked
+630,sp25ANSC205,29921,ANSC205-AA-Zealous,3,Zealous team collaborating on real-time notifications. Documenting architectural decisions while engaging classmates in World Animal Resources.,full
+631,sp25ANSC207,50313,ANSC207-AL1-Honest,4,Honest team collaborating on course section insights. Running lightweight usability tests while engaging classmates in The Science of Pets and How to Care for Them.,closed
+632,sp25ANSC207,39502,ANSC207-AN1-Tenacious,3,Tenacious team collaborating on notification customization. Running lightweight usability tests while engaging classmates in The Science of Pets and How to Care for Them.,open
+633,sp25ANSC207,50316,ANSC207-AN3-Global,5,Global team collaborating on real-time notifications. Documenting architectural decisions while engaging classmates in The Science of Pets and How to Care for Them.,open
+634,sp25ANSC207,50323,ANSC207-AN4-Nimble,3,Nimble team collaborating on matching algorithms. Iterating on prototype milestones while engaging classmates in The Science of Pets and How to Care for Them.,full
+635,sp25ANSC207,50321,ANSC207-AN6-Jovial,5,Jovial team collaborating on UI accessibility improvements. Documenting architectural decisions while engaging classmates in The Science of Pets and How to Care for Them.,full
+636,sp25ANSC210,71671,ANSC210-AB1-Jovial,3,Jovial team collaborating on database optimizations. Sharing knowledge across subteams while engaging classmates in Grilling and BBQ Science.,open
+637,sp25ANSC210,71672,ANSC210-AB2-Optimistic,6,Optimistic team collaborating on notification customization. Planning weekly sprint reviews while engaging classmates in Grilling and BBQ Science.,open
+638,sp25ANSC210,71673,ANSC210-AB3-Vibrant,6,Vibrant team collaborating on skills matching workflow. Tracking action items transparently while engaging classmates in Grilling and BBQ Science.,open
+639,sp25ANSC210,70873,ANSC210-AL1-Agile,5,Agile team collaborating on project scheduling. Supporting inclusive brainstorming while engaging classmates in Grilling and BBQ Science.,open
+640,sp25ANSC211,29929,ANSC211-A-Quick,4,Quick team collaborating on database optimizations. Supporting inclusive brainstorming while engaging classmates in Breeding Animal Evaluation.,open
+641,sp25ANSC215,71540,ANSC215-C-Lively,3,Lively team collaborating on role assignment tooling. Documenting architectural decisions while engaging classmates in Introduction to Animal Evaluation.,open
+642,sp25ANSC223,54349,ANSC223-A-Optimistic,5,Optimistic team collaborating on matching algorithms. Iterating on prototype milestones while engaging classmates in Animal Nutrition.,open
+643,sp25ANSC224,54702,ANSC224-AB1-Honest,3,Honest team collaborating on performance snapshots. Sharing knowledge across subteams while engaging classmates in Animal Reproduction and Growth.,open
+644,sp25ANSC224,54703,ANSC224-AB2-Honest,3,Honest team collaborating on database optimizations. Supporting inclusive brainstorming while engaging classmates in Animal Reproduction and Growth.,open
+645,sp25ANSC224,54704,ANSC224-AB3-Zealous,5,Zealous team collaborating on profile enrichment. Organizing collaborative study sessions while engaging classmates in Animal Reproduction and Growth.,open
+646,sp25ANSC224,54705,ANSC224-AB4-Zealous,4,Zealous team collaborating on course analytics. Delivering polished project demos while engaging classmates in Animal Reproduction and Growth.,closed
+647,sp25ANSC224,54706,ANSC224-AB5-Innovative,3,Innovative team collaborating on database optimizations. Delivering polished project demos while engaging classmates in Animal Reproduction and Growth.,full
+648,sp25ANSC224,61012,ANSC224-AB6-Creative,5,Creative team collaborating on matching algorithms. Sharing knowledge across subteams while engaging classmates in Animal Reproduction and Growth.,open
+649,sp25ANSC224,54707,ANSC224-AB7-Reliable,4,Reliable team collaborating on feedback collection. Sharing knowledge across subteams while engaging classmates in Animal Reproduction and Growth.,full
+650,sp25ANSC224,76943,ANSC224-AB8-Quick,5,Quick team collaborating on teammate onboarding. Tracking action items transparently while engaging classmates in Animal Reproduction and Growth.,open
+651,sp25ANSC224,54350,ANSC224-AL1-Progressive,4,Progressive team collaborating on profile enrichment. Running lightweight usability tests while engaging classmates in Animal Reproduction and Growth.,locked
+652,sp25ANSC250,54764,ANSC250-B-Reliable,6,Reliable team collaborating on teammate onboarding. Iterating on prototype milestones while engaging classmates in Companion Animals in Society.,open
+653,sp25ANSC255,71682,ANSC255-DS-Youthful,6,Youthful team collaborating on notification customization. Planning weekly sprint reviews while engaging classmates in Animal Ethics.,locked
+654,sp25ANSC255,71683,ANSC255-DS1-Creative,3,Creative team collaborating on database optimizations. Running lightweight usability tests while engaging classmates in Animal Ethics.,open
+655,sp25ANSC255,71684,ANSC255-DS2-Vibrant,4,Vibrant team collaborating on UI accessibility improvements. Organizing collaborative study sessions while engaging classmates in Animal Ethics.,full
+656,sp25ANSC298,29959,ANSC298-A-Agile,4,Agile team collaborating on course analytics. Organizing collaborative study sessions while engaging classmates in Animal Science Careers and Professional Development.,full
+657,sp25ANSC306,29974,ANSC306-AB2-Global,4,Global team collaborating on real-time notifications. Planning weekly sprint reviews while engaging classmates in Equine Science.,open
+658,sp25ANSC306,29972,ANSC306-AL1-Reliable,4,Reliable team collaborating on UI accessibility improvements. Organizing collaborative study sessions while engaging classmates in Equine Science.,open
+659,sp25ANSC313,77321,ANSC313-DH-Zealous,5,Zealous team collaborating on role assignment tooling. Delivering polished project demos while engaging classmates in Horse Appraisal.,open
+660,sp25ANSC363,59971,ANSC363-A-Bold,6,Bold team collaborating on profile reputation systems. Planning weekly sprint reviews while engaging classmates in Behavior of Domestic Animals.,locked
+661,sp25ANSC366,56888,ANSC366-A-Lively,5,Lively team collaborating on visual analytics. Delivering polished project demos while engaging classmates in Animal Behavior.,locked
+662,sp25ANSC398,59057,ANSC398-A-Vibrant,4,Vibrant team collaborating on UI accessibility improvements. Sharing knowledge across subteams while engaging classmates in UG Experiential Learning.,full
+663,sp25ANSC398,59058,ANSC398-B-Energetic,3,Energetic team collaborating on real-time notifications. Running lightweight usability tests while engaging classmates in UG Experiential Learning.,open
+664,sp25ANSC398,59059,ANSC398-C-Creative,6,Creative team collaborating on role assignment tooling. Iterating on prototype milestones while engaging classmates in UG Experiential Learning.,open
+665,sp25ANSC398,59060,ANSC398-D-Wise,6,Wise team collaborating on profile reputation systems. Maintaining tight feedback loops while engaging classmates in UG Experiential Learning.,open
+666,sp25ANSC398,59061,ANSC398-E-Agile,3,Agile team collaborating on profile enrichment. Running lightweight usability tests while engaging classmates in UG Experiential Learning.,open
+667,sp25ANSC398,59062,ANSC398-F-Focused,4,Focused team collaborating on matching algorithms. Documenting architectural decisions while engaging classmates in UG Experiential Learning.,open
+668,sp25ANSC398,76056,ANSC398-FW-Agile,6,Agile team collaborating on search relevance tuning. Iterating on prototype milestones while engaging classmates in UG Experiential Learning.,open
+669,sp25ANSC398,59063,ANSC398-G-Jovial,4,Jovial team collaborating on profile enrichment. Delivering polished project demos while engaging classmates in UG Experiential Learning.,locked
+670,sp25ANSC398,59064,ANSC398-H-Nimble,6,Nimble team collaborating on notification customization. Running lightweight usability tests while engaging classmates in UG Experiential Learning.,closed
+671,sp25ANSC398,59066,ANSC398-J-Energetic,4,Energetic team collaborating on feedback collection. Planning weekly sprint reviews while engaging classmates in UG Experiential Learning.,full
+672,sp25ANSC398,59456,ANSC398-M-Quick,5,Quick team collaborating on skills matching workflow. Planning weekly sprint reviews while engaging classmates in UG Experiential Learning.,closed
+673,sp25ANSC398,63117,ANSC398-MBW-Motivated,6,Motivated team collaborating on profile enrichment. Iterating on prototype milestones while engaging classmates in UG Experiential Learning.,full
+674,sp25ANSC398,59065,ANSC398-MCG-Reliable,6,Reliable team collaborating on real-time notifications. Supporting inclusive brainstorming while engaging classmates in UG Experiential Learning.,open
+675,sp25ANSC398,69821,ANSC398-RU-Nimble,5,Nimble team collaborating on profile enrichment. Planning weekly sprint reviews while engaging classmates in UG Experiential Learning.,full
+676,sp25ANSC398,61016,ANSC398-V-Creative,5,Creative team collaborating on matching algorithms. Running lightweight usability tests while engaging classmates in UG Experiential Learning.,full
+677,sp25ANSC398,77071,ANSC398-WSA-Nimble,3,Nimble team collaborating on UI accessibility improvements. Supporting inclusive brainstorming while engaging classmates in UG Experiential Learning.,open
+678,sp25ANSC406,51162,ANSC406-A-Keen,4,Keen team collaborating on data-driven recommendations. Maintaining tight feedback loops while engaging classmates in Zoo Animal Conservation Sci.,open
+679,sp25ANSC409,29979,ANSC409-A-Creative,6,Creative team collaborating on matching algorithms. Organizing collaborative study sessions while engaging classmates in Meat Science.,open
+680,sp25ANSC438,29976,ANSC438-A-Keen,3,Keen team collaborating on search relevance tuning. Documenting architectural decisions while engaging classmates in Lactation Biology.,open
+681,sp25ANSC440,31603,ANSC440-ONL-Quick,6,Quick team collaborating on notification customization. Documenting architectural decisions while engaging classmates in Applied Statistical Methods I.,open
+682,sp25ANSC442,74613,ANSC442-SRZ-Zealous,5,Zealous team collaborating on real-time notifications. Supporting inclusive brainstorming while engaging classmates in Introduction to Data Analytics.,open
+683,sp25ANSC446,61557,ANSC446-A-Zealous,4,Zealous team collaborating on profile enrichment. Running lightweight usability tests while engaging classmates in Population Genetics.,open
+684,sp25ANSC450,39603,ANSC450-A-Quick,5,Quick team collaborating on project scheduling. Running lightweight usability tests while engaging classmates in Comparative Immunobiology.,full
+685,sp25ANSC464,74801,ANSC464-A-Vibrant,6,Vibrant team collaborating on matching algorithms. Maintaining tight feedback loops while engaging classmates in Physiology of Animal Stress &amp; Disease.,full
+686,sp25ANSC480,76808,ANSC480-A-Dynamic,5,Dynamic team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Introduction to Coding and Precision Management.,open
+687,sp25ANSC498,56799,ANSC498-AL1-Vibrant,6,Vibrant team collaborating on team communication. Maintaining tight feedback loops while engaging classmates in Integrating Animal Sciences.,open
+688,sp25ANSC499,11540,ANSC499-MBW-Progressive,5,Progressive team collaborating on database optimizations. Planning weekly sprint reviews while engaging classmates in Seminar.,open
+689,sp25ANSC499,46879,ANSC499-MG2-Jovial,6,Jovial team collaborating on performance snapshots. Delivering polished project demos while engaging classmates in Seminar.,open
+690,sp25ANSC499,29989,ANSC499-MR-Youthful,3,Youthful team collaborating on team communication. Running lightweight usability tests while engaging classmates in Seminar.,closed
+691,sp25ANSC499,11534,ANSC499-TB-Vibrant,4,Vibrant team collaborating on database optimizations. Sharing knowledge across subteams while engaging classmates in Seminar.,locked
+692,sp25ANSC500,77207,ANSC500-ONL-Vibrant,3,Vibrant team collaborating on course analytics. Tracking action items transparently while engaging classmates in Feeds in Dairy Nutrition and Diet Formulation.,open
+693,sp25ANSC520,29990,ANSC520-A-Lively,3,Lively team collaborating on UI accessibility improvements. Iterating on prototype milestones while engaging classmates in Protein and Energy Nutrition.,full
+694,sp25ANSC521,35388,ANSC521-AD1-Nimble,4,Nimble team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Regulation of Metabolism.,locked
+695,sp25ANSC521,35391,ANSC521-AL1-Xenial,3,Xenial team collaborating on data-driven recommendations. Organizing collaborative study sessions while engaging classmates in Regulation of Metabolism.,full
+696,sp25ANSC525,69143,ANSC525-A-Bold,6,Bold team collaborating on team communication. Organizing collaborative study sessions while engaging classmates in Topics in Nutrition Research.,open
+697,sp25ANSC525,69156,ANSC525-C-Keen,4,Keen team collaborating on team communication. Maintaining tight feedback loops while engaging classmates in Topics in Nutrition Research.,open
+698,sp25ANSC526,68597,ANSC526-A-Reliable,3,Reliable team collaborating on teammate onboarding. Delivering polished project demos while engaging classmates in Adv Companion Animal Nutrition.,open
+699,sp25ANSC526,71670,ANSC526-B-United,6,United team collaborating on skills matching workflow. Delivering polished project demos while engaging classmates in Adv Companion Animal Nutrition.,full
+700,sp25ANSC543,61910,ANSC543-A1-Tenacious,6,Tenacious team collaborating on skills matching workflow. Documenting architectural decisions while engaging classmates in Bioinformatics.,open
+701,sp25ANSC580,76809,ANSC580-A-Nimble,5,Nimble team collaborating on database optimizations. Documenting architectural decisions while engaging classmates in Artificial Intelligence and Computer Vision for Precision Management.,open
+702,sp25ANSC590,30000,ANSC590-A-Zealous,5,Zealous team collaborating on role assignment tooling. Running lightweight usability tests while engaging classmates in Animal Sciences Seminar.,locked
+703,sp25ANSC590,41751,ANSC590-A1-Tenacious,4,Tenacious team collaborating on data-driven recommendations. Sharing knowledge across subteams while engaging classmates in Animal Sciences Seminar.,open
+704,sp25ANSC590,44582,ANSC590-A2-Keen,4,Keen team collaborating on notification customization. Running lightweight usability tests while engaging classmates in Animal Sciences Seminar.,locked
+705,sp25ANSC590,30001,ANSC590-B0-Energetic,3,Energetic team collaborating on UI accessibility improvements. Iterating on prototype milestones while engaging classmates in Animal Sciences Seminar.,open
+706,sp25ANSC590,41752,ANSC590-B1-Quick,4,Quick team collaborating on matching algorithms. Planning weekly sprint reviews while engaging classmates in Animal Sciences Seminar.,open
+707,sp25ANSC590,44583,ANSC590-B2-Bold,6,Bold team collaborating on skills matching workflow. Sharing knowledge across subteams while engaging classmates in Animal Sciences Seminar.,full
+708,sp25ANSC590,30002,ANSC590-C0-Vibrant,5,Vibrant team collaborating on notification customization. Documenting architectural decisions while engaging classmates in Animal Sciences Seminar.,open
+709,sp25ANSC590,41755,ANSC590-C1-Vibrant,3,Vibrant team collaborating on team availability dashboards. Organizing collaborative study sessions while engaging classmates in Animal Sciences Seminar.,open
+710,sp25ANSC590,44585,ANSC590-C2-Jovial,5,Jovial team collaborating on feedback collection. Organizing collaborative study sessions while engaging classmates in Animal Sciences Seminar.,open
+711,sp25ANSC590,30003,ANSC590-D0-Zealous,4,Zealous team collaborating on data-driven recommendations. Delivering polished project demos while engaging classmates in Animal Sciences Seminar.,open
+712,sp25ANSC590,41783,ANSC590-D1-Xenial,3,Xenial team collaborating on database optimizations. Sharing knowledge across subteams while engaging classmates in Animal Sciences Seminar.,full
+713,sp25ANSC590,44586,ANSC590-D2-Jovial,4,Jovial team collaborating on role assignment tooling. Supporting inclusive brainstorming while engaging classmates in Animal Sciences Seminar.,open
+714,sp25ANSC590,30004,ANSC590-E0-Honest,5,Honest team collaborating on notification customization. Delivering polished project demos while engaging classmates in Animal Sciences Seminar.,full
+715,sp25ANSC590,41784,ANSC590-E1-Lively,3,Lively team collaborating on teammate onboarding. Documenting architectural decisions while engaging classmates in Animal Sciences Seminar.,open
+716,sp25ANSC590,30005,ANSC590-F0-Quick,4,Quick team collaborating on visual analytics. Running lightweight usability tests while engaging classmates in Animal Sciences Seminar.,locked
+717,sp25ANSC590,41786,ANSC590-F1-Motivated,5,Motivated team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Animal Sciences Seminar.,open
+718,sp25ANSC590,44592,ANSC590-F2-Dynamic,5,Dynamic team collaborating on teammate onboarding. Running lightweight usability tests while engaging classmates in Animal Sciences Seminar.,locked
+719,sp25ANSC590,30006,ANSC590-G0-Xenial,4,Xenial team collaborating on feedback collection. Running lightweight usability tests while engaging classmates in Animal Sciences Seminar.,closed
+720,sp25ANSC590,41787,ANSC590-G1-Quick,3,Quick team collaborating on performance snapshots. Organizing collaborative study sessions while engaging classmates in Animal Sciences Seminar.,open
+721,sp25ANSC590,30007,ANSC590-H0-United,4,United team collaborating on profile reputation systems. Supporting inclusive brainstorming while engaging classmates in Animal Sciences Seminar.,open
+722,sp25ANSC590,41788,ANSC590-H1-Tenacious,3,Tenacious team collaborating on feedback collection. Iterating on prototype milestones while engaging classmates in Animal Sciences Seminar.,closed
+723,sp25ANSC590,44596,ANSC590-H2-Wise,6,Wise team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in Animal Sciences Seminar.,open
+724,sp25ANSC590,30008,ANSC590-I-Global,5,Global team collaborating on matching algorithms. Supporting inclusive brainstorming while engaging classmates in Animal Sciences Seminar.,open
+725,sp25ANSC590,41789,ANSC590-I1-Quick,4,Quick team collaborating on real-time notifications. Organizing collaborative study sessions while engaging classmates in Animal Sciences Seminar.,open
+726,sp25ANSC590,44597,ANSC590-I2-Innovative,3,Innovative team collaborating on profile reputation systems. Iterating on prototype milestones while engaging classmates in Animal Sciences Seminar.,closed
+727,sp25ANSC590,30012,ANSC590-M0-Nimble,6,Nimble team collaborating on skills matching workflow. Running lightweight usability tests while engaging classmates in Animal Sciences Seminar.,full
+728,sp25ANSC590,41791,ANSC590-M1-Nimble,6,Nimble team collaborating on notification customization. Iterating on prototype milestones while engaging classmates in Animal Sciences Seminar.,full
+729,sp25ANSC590,44601,ANSC590-M2-Vibrant,6,Vibrant team collaborating on project scheduling. Sharing knowledge across subteams while engaging classmates in Animal Sciences Seminar.,open
+730,sp25ANSC590,44593,ANSC590-PM-Motivated,5,Motivated team collaborating on profile enrichment. Running lightweight usability tests while engaging classmates in Animal Sciences Seminar.,open
+731,sp25ANSC590,30011,ANSC590-PM1-Lively,3,Lively team collaborating on search relevance tuning. Supporting inclusive brainstorming while engaging classmates in Animal Sciences Seminar.,closed
+732,sp25ANSC591,68687,ANSC591-A-Honest,3,Honest team collaborating on skills matching workflow. Documenting architectural decisions while engaging classmates in Grad Bioinformatics Seminar.,open
+733,sp25ANSC591,68688,ANSC591-B-Nimble,4,Nimble team collaborating on matching algorithms. Delivering polished project demos while engaging classmates in Grad Bioinformatics Seminar.,open
+734,sp25ANSC591,71689,ANSC591-C-Innovative,5,Innovative team collaborating on team availability dashboards. Documenting architectural decisions while engaging classmates in Grad Bioinformatics Seminar.,open
+735,sp25ANTH101,54598,ANTH101-ONL-Honest,4,Honest team collaborating on feedback collection. Documenting architectural decisions while engaging classmates in Introduction to Anthropology.,open
+736,sp25ANTH103,30027,ANTH103-AL-Optimistic,3,Optimistic team collaborating on profile enrichment. Supporting inclusive brainstorming while engaging classmates in Anthro in a Changing World.,closed
+737,sp25ANTH103,54206,ANTH103-ONL-Zealous,3,Zealous team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Anthro in a Changing World.,closed
+738,sp25ANTH109,37859,ANTH109-E-Jovial,6,Jovial team collaborating on notification customization. Sharing knowledge across subteams while engaging classmates in Religion &amp; Society in West II.,open
+739,sp25ANTH126,74329,ANTH126-CHP-Lively,3,Lively team collaborating on team communication. Tracking action items transparently while engaging classmates in Humans and Animals - Food or Friend?.,open
+740,sp25ANTH210,33812,ANTH210-AL1-Creative,5,Creative team collaborating on feedback collection. Delivering polished project demos while engaging classmates in Families in Global Perspective.,open
+741,sp25ANTH222,56394,ANTH222-A-Quick,5,Quick team collaborating on team communication. Maintaining tight feedback loops while engaging classmates in Introduction to Modern Africa.,full
+742,sp25ANTH230,30045,ANTH230-ADB-Progressive,4,Progressive team collaborating on UI accessibility improvements. Tracking action items transparently while engaging classmates in Sociocultural Anthropology.,open
+743,sp25ANTH230,30047,ANTH230-ADC-Creative,3,Creative team collaborating on database optimizations. Supporting inclusive brainstorming while engaging classmates in Sociocultural Anthropology.,full
+744,sp25ANTH230,30048,ANTH230-AL1-Quick,6,Quick team collaborating on course analytics. Organizing collaborative study sessions while engaging classmates in Sociocultural Anthropology.,closed
+745,sp25ANTH240,30050,ANTH240-ADA-United,4,United team collaborating on database optimizations. Maintaining tight feedback loops while engaging classmates in Biological Anthropology.,full
+746,sp25ANTH240,30051,ANTH240-ADB-Youthful,5,Youthful team collaborating on profile enrichment. Sharing knowledge across subteams while engaging classmates in Biological Anthropology.,closed
+747,sp25ANTH240,30054,ANTH240-AL1-Innovative,3,Innovative team collaborating on project scheduling. Planning weekly sprint reviews while engaging classmates in Biological Anthropology.,full
+748,sp25ANTH242,72172,ANTH242-L-Quick,6,Quick team collaborating on team communication. Maintaining tight feedback loops while engaging classmates in History of Human Evolution.,open
+749,sp25ANTH246,70382,ANTH246-OL2-Skilled,5,Skilled team collaborating on data-driven recommendations. Documenting architectural decisions while engaging classmates in Forensic Science.,open
+750,sp25ANTH246,63359,ANTH246-ONL-Reliable,6,Reliable team collaborating on teammate onboarding. Sharing knowledge across subteams while engaging classmates in Forensic Science.,open
+751,sp25ANTH259,43572,ANTH259-AL-Vibrant,6,Vibrant team collaborating on real-time notifications. Tracking action items transparently while engaging classmates in Latina/o Anthropology.,full
+752,sp25ANTH270,30078,ANTH270-AD1-Creative,4,Creative team collaborating on project scheduling. Planning weekly sprint reviews while engaging classmates in Language in Culture.,open
+753,sp25ANTH270,30080,ANTH270-AD2-Honest,4,Honest team collaborating on skills matching workflow. Organizing collaborative study sessions while engaging classmates in Language in Culture.,open
+754,sp25ANTH270,43580,ANTH270-AD3-United,4,United team collaborating on skills matching workflow. Supporting inclusive brainstorming while engaging classmates in Language in Culture.,open
+755,sp25ANTH270,58654,ANTH270-AD4-Focused,4,Focused team collaborating on team availability dashboards. Maintaining tight feedback loops while engaging classmates in Language in Culture.,closed
+756,sp25ANTH270,30081,ANTH270-AL1-Quick,4,Quick team collaborating on skills matching workflow. Sharing knowledge across subteams while engaging classmates in Language in Culture.,open
+757,sp25ANTH342,56887,ANTH342-A-Youthful,5,Youthful team collaborating on team availability dashboards. Iterating on prototype milestones while engaging classmates in Animal Behavior.,open
+758,sp25ANTH361,56918,ANTH361-A-Energetic,5,Energetic team collaborating on role assignment tooling. Organizing collaborative study sessions while engaging classmates in Ecology and Human Health.,open
+759,sp25ANTH399,63911,ANTH399-LD-Xenial,6,Xenial team collaborating on teammate onboarding. Sharing knowledge across subteams while engaging classmates in Special Topics.,open
+760,sp25ANTH405,57201,ANTH405-1G-United,5,United team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Contemporary Central America.,full
+761,sp25ANTH405,57200,ANTH405-1U-Creative,6,Creative team collaborating on profile reputation systems. Supporting inclusive brainstorming while engaging classmates in Contemporary Central America.,open
+762,sp25ANTH420,54620,ANTH420-1G-Quick,6,Quick team collaborating on performance snapshots. Documenting architectural decisions while engaging classmates in Case Studies Global Heritage.,open
+763,sp25ANTH420,54619,ANTH420-1U-Tenacious,5,Tenacious team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Case Studies Global Heritage.,open
+764,sp25ANTH432,48569,ANTH432-AL1-Agile,3,Agile team collaborating on search relevance tuning. Running lightweight usability tests while engaging classmates in Genes and Behavior.,open
+765,sp25ANTH435,60380,ANTH435-1G-Innovative,5,Innovative team collaborating on role assignment tooling. Iterating on prototype milestones while engaging classmates in The Neandertal Debate.,locked
+766,sp25ANTH435,60379,ANTH435-1U-Jovial,6,Jovial team collaborating on notification customization. Sharing knowledge across subteams while engaging classmates in The Neandertal Debate.,open
+767,sp25ANTH461,46176,ANTH461-1G-Optimistic,5,Optimistic team collaborating on role assignment tooling. Planning weekly sprint reviews while engaging classmates in Hist of Archaeological Theory.,open
+768,sp25ANTH461,46175,ANTH461-1U-Global,4,Global team collaborating on real-time notifications. Maintaining tight feedback loops while engaging classmates in Hist of Archaeological Theory.,open
+769,sp25ANTH462,46499,ANTH462-1G-Lively,5,Lively team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Museum Theory and Practice.,open
+770,sp25ANTH462,46498,ANTH462-1U-Optimistic,3,Optimistic team collaborating on profile enrichment. Documenting architectural decisions while engaging classmates in Museum Theory and Practice.,full
+771,sp25ANTH468,75704,ANTH468-1G-Progressive,3,Progressive team collaborating on profile enrichment. Documenting architectural decisions while engaging classmates in Primate Microbial Seminar.,open
+772,sp25ANTH468,75705,ANTH468-1U-Quick,6,Quick team collaborating on feedback collection. Maintaining tight feedback loops while engaging classmates in Primate Microbial Seminar.,open
+773,sp25ANTH471,43618,ANTH471-1G-Quick,5,Quick team collaborating on notification customization. Running lightweight usability tests while engaging classmates in Ethnography through Language.,open
+774,sp25ANTH471,30157,ANTH471-1U-Agile,4,Agile team collaborating on profile reputation systems. Sharing knowledge across subteams while engaging classmates in Ethnography through Language.,open
+775,sp25ANTH485,76931,ANTH485-1G-Energetic,5,Energetic team collaborating on team communication. Organizing collaborative study sessions while engaging classmates in Anthropology of Policing.,open
+776,sp25ANTH485,76932,ANTH485-1U-Dynamic,3,Dynamic team collaborating on profile reputation systems. Maintaining tight feedback loops while engaging classmates in Anthropology of Policing.,open
+777,sp25ANTH499,65203,ANTH499-LD1-Creative,6,Creative team collaborating on notification customization. Maintaining tight feedback loops while engaging classmates in Topics in Anthropology.,full
+778,sp25ANTH499,70557,ANTH499-ST-Honest,3,Honest team collaborating on feedback collection. Running lightweight usability tests while engaging classmates in Topics in Anthropology.,locked
+779,sp25ANTH515,65206,ANTH515-FH-Global,3,Global team collaborating on team communication. Maintaining tight feedback loops while engaging classmates in Seminar in Anthropology.,open
+780,sp25ANTH515,68025,ANTH515-J-Dynamic,3,Dynamic team collaborating on notification customization. Iterating on prototype milestones while engaging classmates in Seminar in Anthropology.,locked
+781,sp25ANTH515,30177,ANTH515-KC-Jovial,5,Jovial team collaborating on profile reputation systems. Maintaining tight feedback loops while engaging classmates in Seminar in Anthropology.,open
+782,sp25ANTH515,51080,ANTH515-MK2-Wise,6,Wise team collaborating on feedback collection. Sharing knowledge across subteams while engaging classmates in Seminar in Anthropology.,open
+783,sp25ARAB150,66045,ARAB150-A1-United,3,United team collaborating on database optimizations. Sharing knowledge across subteams while engaging classmates in Lang&amp;Culture of Arab World.,open
+784,sp25ARAB202,30198,ARAB202-BE1-Quick,3,Quick team collaborating on profile reputation systems. Running lightweight usability tests while engaging classmates in Elementary Standard Arabic II.,full
+785,sp25ARAB202,30202,ARAB202-CE1-Bold,3,Bold team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in Elementary Standard Arabic II.,full
+786,sp25ARAB404,38896,ARAB404-B-Motivated,5,Motivated team collaborating on role assignment tooling. Sharing knowledge across subteams while engaging classmates in Intermediate Stand Arabic II.,open
+787,sp25ARAB406,30207,ARAB406-A-Optimistic,5,Optimistic team collaborating on real-time notifications. Delivering polished project demos while engaging classmates in Advanced Standard Arabic II.,open
+788,sp25ARAB408,52012,ARAB408-C1-Focused,3,Focused team collaborating on performance snapshots. Planning weekly sprint reviews while engaging classmates in Topics Stand Arabic LangLit II.,open
+789,sp25ARCH172,67071,ARCH172-AB-Lively,6,Lively team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Introduction to Design II.,open
+790,sp25ARCH199,67522,ARCH199-CHP-Nimble,3,Nimble team collaborating on matching algorithms. Running lightweight usability tests while engaging classmates in Undergraduate Open Seminar.,closed
+791,sp25ARCH222,73057,ARCH222-A1-Nimble,5,Nimble team collaborating on team communication. Running lightweight usability tests while engaging classmates in Islamic Gardens &amp; Architecture.,open
+792,sp25ARCH222,73060,ARCH222-B1-Skilled,6,Skilled team collaborating on profile enrichment. Sharing knowledge across subteams while engaging classmates in Islamic Gardens &amp; Architecture.,open
+793,sp25ARCH222,73063,ARCH222-C1-Energetic,6,Energetic team collaborating on teammate onboarding. Running lightweight usability tests while engaging classmates in Islamic Gardens &amp; Architecture.,open
+794,sp25ARCH222,73066,ARCH222-D1-Lively,5,Lively team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Islamic Gardens &amp; Architecture.,open
+795,sp25ARCH222,58986,ARCH222-DFR-Optimistic,5,Optimistic team collaborating on visual analytics. Supporting inclusive brainstorming while engaging classmates in Islamic Gardens &amp; Architecture.,open
+796,sp25ARCH222,74901,ARCH222-E1-Innovative,3,Innovative team collaborating on feedback collection. Iterating on prototype milestones while engaging classmates in Islamic Gardens &amp; Architecture.,closed
+797,sp25ARCH232,67166,ARCH232-AB1-Agile,4,Agile team collaborating on team availability dashboards. Planning weekly sprint reviews while engaging classmates in Structural Fundamentals.,full
+798,sp25ARCH232,67165,ARCH232-AL1-Optimistic,5,Optimistic team collaborating on teammate onboarding. Documenting architectural decisions while engaging classmates in Structural Fundamentals.,open
+799,sp25ARCH274,68735,ARCH274-AB-Focused,6,Focused team collaborating on team communication. Sharing knowledge across subteams while engaging classmates in Fundamentals of Design II.,full
+800,sp25ARCH274,67164,ARCH274-AL-Jovial,6,Jovial team collaborating on visual analytics. Sharing knowledge across subteams while engaging classmates in Fundamentals of Design II.,full
+801,sp25ARCH314,64531,ARCH314-A-Skilled,6,Skilled team collaborating on UI accessibility improvements. Organizing collaborative study sessions while engaging classmates in History of World Landscapes.,open
+802,sp25ARCH314,64532,ARCH314-B-Dynamic,6,Dynamic team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in History of World Landscapes.,closed
+803,sp25ARCH314,64533,ARCH314-C-Motivated,3,Motivated team collaborating on profile reputation systems. Maintaining tight feedback loops while engaging classmates in History of World Landscapes.,open
+804,sp25ARCH314,64534,ARCH314-D-Jovial,5,Jovial team collaborating on team availability dashboards. Supporting inclusive brainstorming while engaging classmates in History of World Landscapes.,closed
+805,sp25ARCH314,44251,ARCH314-E-Energetic,4,Energetic team collaborating on performance snapshots. Tracking action items transparently while engaging classmates in History of World Landscapes.,locked
+806,sp25ARCH314,73593,ARCH314-F-Dynamic,3,Dynamic team collaborating on data-driven recommendations. Planning weekly sprint reviews while engaging classmates in History of World Landscapes.,open
+807,sp25ARCH314,64455,ARCH314-LC-Honest,6,Honest team collaborating on data-driven recommendations. Planning weekly sprint reviews while engaging classmates in History of World Landscapes.,full
+808,sp25ARCH372,70934,ARCH372-B-United,4,United team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Intermediate Design II.,open
+809,sp25ARCH372,70134,ARCH372-E0-Agile,4,Agile team collaborating on real-time notifications. Iterating on prototype milestones while engaging classmates in Intermediate Design II.,full
+810,sp25ARCH372,70135,ARCH372-E1-Youthful,5,Youthful team collaborating on data-driven recommendations. Organizing collaborative study sessions while engaging classmates in Intermediate Design II.,open
+811,sp25ARCH372,70136,ARCH372-E2-Progressive,4,Progressive team collaborating on team availability dashboards. Planning weekly sprint reviews while engaging classmates in Intermediate Design II.,open
+812,sp25ARCH372,70137,ARCH372-E3-Jovial,4,Jovial team collaborating on real-time notifications. Running lightweight usability tests while engaging classmates in Intermediate Design II.,locked
+813,sp25ARCH372,70138,ARCH372-E4-Honest,6,Honest team collaborating on skills matching workflow. Organizing collaborative study sessions while engaging classmates in Intermediate Design II.,open
+814,sp25ARCH372,70139,ARCH372-E5-Jovial,5,Jovial team collaborating on performance snapshots. Documenting architectural decisions while engaging classmates in Intermediate Design II.,locked
+815,sp25ARCH372,70140,ARCH372-E6-Focused,5,Focused team collaborating on project scheduling. Sharing knowledge across subteams while engaging classmates in Intermediate Design II.,open
+816,sp25ARCH372,71782,ARCH372-E7-Bold,6,Bold team collaborating on course section insights. Documenting architectural decisions while engaging classmates in Intermediate Design II.,open
+817,sp25ARCH401,30252,ARCH401-EMS-Innovative,4,Innovative team collaborating on notification customization. Organizing collaborative study sessions while engaging classmates in Independent Study.,full
+818,sp25ARCH401,76269,ARCH401-VAN-Bold,4,Bold team collaborating on project scheduling. Organizing collaborative study sessions while engaging classmates in Independent Study.,locked
+819,sp25ARCH403,77318,ARCH403-CN-Keen,3,Keen team collaborating on matching algorithms. Planning weekly sprint reviews while engaging classmates in Special Topics in Architectural History.,open
+820,sp25ARCH403,77342,ARCH403-PH-Skilled,4,Skilled team collaborating on skills matching workflow. Supporting inclusive brainstorming while engaging classmates in Special Topics in Architectural History.,closed
+821,sp25ARCH407,51478,ARCH407-A-Tenacious,5,Tenacious team collaborating on feedback collection. Running lightweight usability tests while engaging classmates in Rome: City of Visible History.,open
+822,sp25ARCH409,61901,ARCH409-B-Global,5,Global team collaborating on teammate onboarding. Delivering polished project demos while engaging classmates in Studies in Spanish Architecture.,open
+823,sp25ARCH416,39951,ARCH416-M-Nimble,5,"Nimble team collaborating on data-driven recommendations. Organizing collaborative study sessions while engaging classmates in The Architecture of the United States, c.1650 to Present.",open
+824,sp25ARCH435,70116,ARCH435-AB1-Skilled,3,Skilled team collaborating on team communication. Sharing knowledge across subteams while engaging classmates in Structural Systems and Construction Methods.,locked
+825,sp25ARCH435,70117,ARCH435-AB2-Wise,4,Wise team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in Structural Systems and Construction Methods.,full
+826,sp25ARCH435,70118,ARCH435-AB3-Jovial,6,Jovial team collaborating on notification customization. Delivering polished project demos while engaging classmates in Structural Systems and Construction Methods.,open
+827,sp25ARCH435,71285,ARCH435-AB4-Honest,4,Honest team collaborating on UI accessibility improvements. Delivering polished project demos while engaging classmates in Structural Systems and Construction Methods.,open
+828,sp25ARCH435,70112,ARCH435-AL1-Reliable,6,Reliable team collaborating on profile reputation systems. Delivering polished project demos while engaging classmates in Structural Systems and Construction Methods.,open
+829,sp25ARCH435,70546,ARCH435-B-Energetic,6,Energetic team collaborating on visual analytics. Sharing knowledge across subteams while engaging classmates in Structural Systems and Construction Methods.,open
+830,sp25ARCH468,61902,ARCH468-B-Optimistic,4,Optimistic team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Overseas Architectural Studies.,open
+831,sp25ARCH472,43798,ARCH472-T3-Skilled,6,Skilled team collaborating on course analytics. Delivering polished project demos while engaging classmates in Arch Des in Landscape &amp; Cities.,open
+832,sp25ARCH474,76367,ARCH474-ABC-Quick,5,Quick team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Advanced Design II.,closed
+833,sp25ARCH474,71792,ARCH474-B-Reliable,5,Reliable team collaborating on profile reputation systems. Organizing collaborative study sessions while engaging classmates in Advanced Design II.,open
+834,sp25ARCH474,71793,ARCH474-C-Honest,4,Honest team collaborating on search relevance tuning. Sharing knowledge across subteams while engaging classmates in Advanced Design II.,closed
+835,sp25ARCH474,71784,ARCH474-E0-Motivated,3,Motivated team collaborating on matching algorithms. Tracking action items transparently while engaging classmates in Advanced Design II.,locked
+836,sp25ARCH474,71785,ARCH474-E1-Lively,6,Lively team collaborating on search relevance tuning. Sharing knowledge across subteams while engaging classmates in Advanced Design II.,locked
+837,sp25ARCH474,71786,ARCH474-E2-Xenial,5,Xenial team collaborating on real-time notifications. Maintaining tight feedback loops while engaging classmates in Advanced Design II.,locked
+838,sp25ARCH474,71787,ARCH474-E3-Reliable,3,Reliable team collaborating on search relevance tuning. Organizing collaborative study sessions while engaging classmates in Advanced Design II.,locked
+839,sp25ARCH474,71788,ARCH474-E4-Quick,6,Quick team collaborating on real-time notifications. Supporting inclusive brainstorming while engaging classmates in Advanced Design II.,open
+840,sp25ARCH474,71789,ARCH474-E5-Motivated,6,Motivated team collaborating on role assignment tooling. Planning weekly sprint reviews while engaging classmates in Advanced Design II.,closed
+841,sp25ARCH474,71790,ARCH474-E6-Creative,6,Creative team collaborating on feedback collection. Tracking action items transparently while engaging classmates in Advanced Design II.,open
+842,sp25ARCH490,75898,ARCH490-AGD-Youthful,3,Youthful team collaborating on database optimizations. Supporting inclusive brainstorming while engaging classmates in Special Topics in Contemporary Architecture.,open
+843,sp25ARCH490,77300,ARCH490-GS-Skilled,6,Skilled team collaborating on project scheduling. Planning weekly sprint reviews while engaging classmates in Special Topics in Contemporary Architecture.,locked
+844,sp25ARCH490,76281,ARCH490-MOD-Innovative,5,Innovative team collaborating on course section insights. Delivering polished project demos while engaging classmates in Special Topics in Contemporary Architecture.,closed
+845,sp25ARCH491,64214,ARCH491-M-Skilled,6,Skilled team collaborating on visual analytics. Delivering polished project demos while engaging classmates in Arch Professional Internship.,open
+846,sp25ARCH499,61241,ARCH499-MUN-Energetic,3,Energetic team collaborating on skills matching workflow. Maintaining tight feedback loops while engaging classmates in Off-Campus Study.,open
+847,sp25ARCH501,61894,ARCH501-LEC-Creative,3,Creative team collaborating on skills matching workflow. Supporting inclusive brainstorming while engaging classmates in Architectural Practice.,full
+848,sp25ARCH510,64526,ARCH510-A-Vibrant,3,Vibrant team collaborating on feedback collection. Documenting architectural decisions while engaging classmates in History of World Landscapes.,open
+849,sp25ARCH510,44254,ARCH510-AD2-Tenacious,4,Tenacious team collaborating on team availability dashboards. Sharing knowledge across subteams while engaging classmates in History of World Landscapes.,open
+850,sp25ARCH510,44255,ARCH510-AD3-Progressive,6,Progressive team collaborating on profile reputation systems. Iterating on prototype milestones while engaging classmates in History of World Landscapes.,full
+851,sp25ARCH510,44257,ARCH510-AD4-Motivated,3,Motivated team collaborating on profile reputation systems. Sharing knowledge across subteams while engaging classmates in History of World Landscapes.,open
+852,sp25ARCH510,64457,ARCH510-LC-Xenial,5,Xenial team collaborating on database optimizations. Iterating on prototype milestones while engaging classmates in History of World Landscapes.,open
+853,sp25ARCH517,67177,ARCH517-AD1-Keen,4,"Keen team collaborating on profile enrichment. Tracking action items transparently while engaging classmates in Modern Architectural History, 1850-Present.",locked
+854,sp25ARCH517,67178,ARCH517-AD2-Xenial,6,"Xenial team collaborating on course section insights. Iterating on prototype milestones while engaging classmates in Modern Architectural History, 1850-Present.",closed
+855,sp25ARCH517,67179,ARCH517-AD3-Lively,4,"Lively team collaborating on real-time notifications. Documenting architectural decisions while engaging classmates in Modern Architectural History, 1850-Present.",full
+856,sp25ARCH517,67180,ARCH517-AD4-Zealous,5,"Zealous team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Modern Architectural History, 1850-Present.",open
+857,sp25ARCH517,67181,ARCH517-AD5-Focused,3,"Focused team collaborating on course section insights. Iterating on prototype milestones while engaging classmates in Modern Architectural History, 1850-Present.",locked
+858,sp25ARCH517,67182,ARCH517-AD6-Energetic,3,"Energetic team collaborating on search relevance tuning. Sharing knowledge across subteams while engaging classmates in Modern Architectural History, 1850-Present.",full
+859,sp25ARCH517,67176,ARCH517-AL-Nimble,6,"Nimble team collaborating on feedback collection. Delivering polished project demos while engaging classmates in Modern Architectural History, 1850-Present.",open
+860,sp25ARCH535,77355,ARCH535-TB-Wise,6,Wise team collaborating on profile enrichment. Supporting inclusive brainstorming while engaging classmates in Design of Tall Buildings.,open
+861,sp25ARCH537,67057,ARCH537-AB1-Quick,3,Quick team collaborating on project scheduling. Planning weekly sprint reviews while engaging classmates in Environmental Control Systems II.,open
+862,sp25ARCH537,67171,ARCH537-AB2-Creative,3,Creative team collaborating on search relevance tuning. Sharing knowledge across subteams while engaging classmates in Environmental Control Systems II.,open
+863,sp25ARCH537,67172,ARCH537-AB3-Skilled,6,Skilled team collaborating on performance snapshots. Documenting architectural decisions while engaging classmates in Environmental Control Systems II.,open
+864,sp25ARCH537,67056,ARCH537-AL1-Focused,5,Focused team collaborating on profile enrichment. Delivering polished project demos while engaging classmates in Environmental Control Systems II.,open
+865,sp25ARCH538,75899,ARCH538-IN-Lively,6,Lively team collaborating on course analytics. Running lightweight usability tests while engaging classmates in Integrative Design of Buildings.,locked
+866,sp25ARCH554,44155,ARCH554-S-Tenacious,5,Tenacious team collaborating on role assignment tooling. Iterating on prototype milestones while engaging classmates in Adv Steel Design.,closed
+867,sp25ARCH560,67070,ARCH560-AL1-Global,5,Global team collaborating on role assignment tooling. Documenting architectural decisions while engaging classmates in Advanced Structural Analysis.,open
+868,sp25ARCH571,54638,ARCH571-E1-Youthful,4,Youthful team collaborating on project scheduling. Planning weekly sprint reviews while engaging classmates in Design: Detail and Architectonics.,open
+869,sp25ARCH571,54639,ARCH571-E2-Tenacious,3,Tenacious team collaborating on database optimizations. Documenting architectural decisions while engaging classmates in Design: Detail and Architectonics.,full
+870,sp25ARCH572,53006,ARCH572-E0-Motivated,4,Motivated team collaborating on course section insights. Maintaining tight feedback loops while engaging classmates in Design: Health and Well-being.,locked
+871,sp25ARCH572,30293,ARCH572-E1-Youthful,5,Youthful team collaborating on performance snapshots. Delivering polished project demos while engaging classmates in Design: Health and Well-being.,open
+872,sp25ARCH572,30295,ARCH572-E2-Focused,6,Focused team collaborating on notification customization. Documenting architectural decisions while engaging classmates in Design: Health and Well-being.,open
+873,sp25ARCH572,30297,ARCH572-E3-Lively,4,Lively team collaborating on teammate onboarding. Maintaining tight feedback loops while engaging classmates in Design: Health and Well-being.,open
+874,sp25ARCH572,30298,ARCH572-E4-Bold,3,Bold team collaborating on team communication. Delivering polished project demos while engaging classmates in Design: Health and Well-being.,open
+875,sp25ARCH573,45249,ARCH573-E1-United,4,United team collaborating on skills matching workflow. Maintaining tight feedback loops while engaging classmates in Design: Technology and Performance.,open
+876,sp25ARCH573,54644,ARCH573-E2-Skilled,3,Skilled team collaborating on UI accessibility improvements. Running lightweight usability tests while engaging classmates in Design: Technology and Performance.,open
+877,sp25ARCH574,30325,ARCH574-E1-Global,4,Global team collaborating on project scheduling. Delivering polished project demos while engaging classmates in Design: Architecture and Urban Design.,locked
+878,sp25ARCH574,42929,ARCH574-E2-Innovative,5,Innovative team collaborating on performance snapshots. Running lightweight usability tests while engaging classmates in Design: Architecture and Urban Design.,open
+879,sp25ARCH575,72848,ARCH575-E1-Youthful,4,Youthful team collaborating on project scheduling. Iterating on prototype milestones while engaging classmates in Integrative Architecture Design Studio.,open
+880,sp25ARCH575,72851,ARCH575-E2-Dynamic,4,Dynamic team collaborating on visual analytics. Sharing knowledge across subteams while engaging classmates in Integrative Architecture Design Studio.,open
+881,sp25ARCH575,75162,ARCH575-E3-Energetic,3,Energetic team collaborating on database optimizations. Iterating on prototype milestones while engaging classmates in Integrative Architecture Design Studio.,full
+882,sp25ARCH576,67628,ARCH576-AP-Progressive,4,Progressive team collaborating on search relevance tuning. Planning weekly sprint reviews while engaging classmates in Architectural Design Seminar.,open
+883,sp25ARCH576,77409,ARCH576-KH-Motivated,3,Motivated team collaborating on skills matching workflow. Documenting architectural decisions while engaging classmates in Architectural Design Seminar.,open
+884,sp25ARCH576,74927,ARCH576-PI4-Tenacious,3,Tenacious team collaborating on matching algorithms. Sharing knowledge across subteams while engaging classmates in Architectural Design Seminar.,open
+885,sp25ARCH588,77569,ARCH588-JZ-Zealous,3,Zealous team collaborating on data-driven recommendations. Documenting architectural decisions while engaging classmates in Independent Study.,open
+886,sp25ARCH590,75422,ARCH590-YKY-Nimble,4,Nimble team collaborating on team availability dashboards. Delivering polished project demos while engaging classmates in Directed Research.,full
+887,sp25ARCH591,77079,ARCH591-PHO-Bold,5,Bold team collaborating on profile enrichment. Maintaining tight feedback loops while engaging classmates in Special Problems in Architectural History and Theory.,open
+888,sp25ARCH591,77259,ARCH591-TEH-Bold,3,Bold team collaborating on real-time notifications. Maintaining tight feedback loops while engaging classmates in Special Problems in Architectural History and Theory.,locked
+889,sp25ARCH592,73523,ARCH592-ZED-Reliable,3,Reliable team collaborating on visual analytics. Running lightweight usability tests while engaging classmates in Special Problems in Urbanism.,locked
+890,sp25ARCH593,52986,ARCH593-DP-Global,4,Global team collaborating on visual analytics. Documenting architectural decisions while engaging classmates in Special Problems in Detail and Fabrication.,open
+891,sp25ARCH593,47481,ARCH593-SGL-Dynamic,3,Dynamic team collaborating on matching algorithms. Supporting inclusive brainstorming while engaging classmates in Special Problems in Detail and Fabrication.,open
+892,sp25ARCH594,74719,ARCH594-LCC-Keen,5,Keen team collaborating on feedback collection. Running lightweight usability tests while engaging classmates in Special Problems in Building Performance.,closed
+893,sp25ARCH594,46865,ARCH594-SIM-Motivated,6,Motivated team collaborating on data-driven recommendations. Maintaining tight feedback loops while engaging classmates in Special Problems in Building Performance.,open
+894,sp25ARCH595,73442,ARCH595-MT-Vibrant,6,Vibrant team collaborating on course analytics. Maintaining tight feedback loops while engaging classmates in Spec Prob Struct Theory &amp; Des.,open
+895,sp25ARCH596,76193,ARCH596-AAA-Innovative,3,Innovative team collaborating on feedback collection. Iterating on prototype milestones while engaging classmates in Special Problems in Health and Wellbeing.,open
+896,sp25ART102,60429,ART102-DR1-Keen,6,Keen team collaborating on course section insights. Organizing collaborative study sessions while engaging classmates in Drawing for Non-Majors.,closed
+897,sp25ART102,62776,ART102-DR2-Dynamic,3,Dynamic team collaborating on database optimizations. Supporting inclusive brainstorming while engaging classmates in Drawing for Non-Majors.,full
+898,sp25ART103,69158,ART103-PA3-Motivated,4,Motivated team collaborating on database optimizations. Organizing collaborative study sessions while engaging classmates in Painting for Non-Majors.,open
+899,sp25ART140,52285,ART140-BB1-Creative,6,Creative team collaborating on team communication. Organizing collaborative study sessions while engaging classmates in Introduction to Art.,locked
+900,sp25ART140,52286,ART140-BB2-Creative,3,Creative team collaborating on performance snapshots. Supporting inclusive brainstorming while engaging classmates in Introduction to Art.,open
+901,sp25ART140,30358,ART140-BB3-Keen,5,Keen team collaborating on course analytics. Delivering polished project demos while engaging classmates in Introduction to Art.,open
+902,sp25ART140,30359,ART140-BB4-Bold,5,Bold team collaborating on UI accessibility improvements. Sharing knowledge across subteams while engaging classmates in Introduction to Art.,open
+903,sp25ART140,30362,ART140-BB5-Lively,3,Lively team collaborating on search relevance tuning. Planning weekly sprint reviews while engaging classmates in Introduction to Art.,open
+904,sp25ART140,52287,ART140-BB6-Dynamic,3,Dynamic team collaborating on course analytics. Tracking action items transparently while engaging classmates in Introduction to Art.,locked
+905,sp25ART140,52288,ART140-BB7-Honest,4,Honest team collaborating on UI accessibility improvements. Documenting architectural decisions while engaging classmates in Introduction to Art.,open
+906,sp25ART140,52289,ART140-BB8-Quick,4,Quick team collaborating on database optimizations. Planning weekly sprint reviews while engaging classmates in Introduction to Art.,open
+907,sp25ART140,43765,ART140-BL1-Skilled,4,Skilled team collaborating on feedback collection. Tracking action items transparently while engaging classmates in Introduction to Art.,open
+908,sp25ART156,74457,ART156-U1-United,6,United team collaborating on real-time notifications. Planning weekly sprint reviews while engaging classmates in Ceramics: Wheel Throwing.,open
+909,sp25ART191,40341,ART191-CW-Quick,5,Quick team collaborating on role assignment tooling. Tracking action items transparently while engaging classmates in Unit One Studio/Seminar.,open
+910,sp25ART553,77334,ART553-A-Bold,3,Bold team collaborating on visual analytics. Planning weekly sprint reviews while engaging classmates in Cripping Art + Design.,open
+911,sp25ART553,77336,ART553-ONL-Optimistic,3,Optimistic team collaborating on team communication. Planning weekly sprint reviews while engaging classmates in Cripping Art + Design.,full
+912,sp25ARTD202,63647,ARTD202-M9B-Dynamic,6,Dynamic team collaborating on role assignment tooling. Supporting inclusive brainstorming while engaging classmates in Industrial Design II.,open
+913,sp25ARTD202,50473,ARTD202-M9C-Global,5,Global team collaborating on notification customization. Supporting inclusive brainstorming while engaging classmates in Industrial Design II.,open
+914,sp25ARTD202,69165,ARTD202-M9D-Xenial,5,Xenial team collaborating on team communication. Documenting architectural decisions while engaging classmates in Industrial Design II.,open
+915,sp25ARTD218,65186,ARTD218-GD1-Keen,5,Keen team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in Interaction Design Foundation.,locked
+916,sp25ARTD218,65187,ARTD218-GD2-Energetic,5,Energetic team collaborating on team communication. Tracking action items transparently while engaging classmates in Interaction Design Foundation.,open
+917,sp25ARTD218,72157,ARTD218-GD3-Honest,5,Honest team collaborating on database optimizations. Delivering polished project demos while engaging classmates in Interaction Design Foundation.,open
+918,sp25ARTD228,63648,ARTD228-ST1-Keen,5,Keen team collaborating on course analytics. Documenting architectural decisions while engaging classmates in Computer Applications.,open
+919,sp25ARTD228,51410,ARTD228-ST2-Nimble,6,Nimble team collaborating on profile enrichment. Delivering polished project demos while engaging classmates in Computer Applications.,open
+920,sp25ARTD299,46831,ARTD299-AD1-Nimble,6,Nimble team collaborating on course section insights. Running lightweight usability tests while engaging classmates in Spec Topics in Design Courses.,open
+921,sp25ARTD302,50474,ARTD302-T1-Zealous,4,Zealous team collaborating on visual analytics. Planning weekly sprint reviews while engaging classmates in Industrial Design IV.,open
+922,sp25ARTD302,50475,ARTD302-T2-Bold,5,Bold team collaborating on visual analytics. Sharing knowledge across subteams while engaging classmates in Industrial Design IV.,open
+923,sp25ARTD302,65222,ARTD302-T3-Skilled,4,Skilled team collaborating on course section insights. Delivering polished project demos while engaging classmates in Industrial Design IV.,open
+924,sp25ARTD328,54735,ARTD328-T9-Motivated,6,Motivated team collaborating on course section insights. Tracking action items transparently while engaging classmates in Human-Centered Product Design.,open
+925,sp25ARTD333,65177,ARTD333-GD2-Dynamic,5,Dynamic team collaborating on course section insights. Delivering polished project demos while engaging classmates in Type &amp; Image.,full
+926,sp25ARTD333,67470,ARTD333-GD3-Lively,6,Lively team collaborating on role assignment tooling. Maintaining tight feedback loops while engaging classmates in Type &amp; Image.,full
+927,sp25ARTD333,72163,ARTD333-GD4-Progressive,3,Progressive team collaborating on visual analytics. Documenting architectural decisions while engaging classmates in Type &amp; Image.,open
+928,sp25ARTD402,50478,ARTD402-T1B-Motivated,5,Motivated team collaborating on skills matching workflow. Organizing collaborative study sessions while engaging classmates in Industrial Design VI.,full
+929,sp25ARTD402,67168,ARTD402-T1C-United,4,United team collaborating on profile reputation systems. Documenting architectural decisions while engaging classmates in Industrial Design VI.,open
+930,sp25ARTD420,70525,ARTD420-1G-Quick,5,Quick team collaborating on data-driven recommendations. Sharing knowledge across subteams while engaging classmates in Disability Design.,full
+931,sp25ARTD420,70389,ARTD420-1U-United,4,United team collaborating on real-time notifications. Planning weekly sprint reviews while engaging classmates in Disability Design.,locked
+932,sp25ARTD444,65179,ARTD444-GD1-Innovative,4,Innovative team collaborating on UI accessibility improvements. Documenting architectural decisions while engaging classmates in Typographic Systems.,open
+933,sp25ARTD444,65180,ARTD444-GD2-Quick,6,Quick team collaborating on database optimizations. Tracking action items transparently while engaging classmates in Typographic Systems.,open
+934,sp25ARTD444,69268,ARTD444-GD3-Skilled,3,Skilled team collaborating on database optimizations. Organizing collaborative study sessions while engaging classmates in Typographic Systems.,open
+935,sp25ARTD444,70538,ARTD444-GG1-Innovative,5,Innovative team collaborating on profile enrichment. Supporting inclusive brainstorming while engaging classmates in Typographic Systems.,open
+936,sp25ARTD444,70540,ARTD444-GG3-Zealous,6,Zealous team collaborating on visual analytics. Sharing knowledge across subteams while engaging classmates in Typographic Systems.,open
+937,sp25ARTD471,65182,ARTD471-GD1-Bold,5,Bold team collaborating on team availability dashboards. Delivering polished project demos while engaging classmates in Graphic Design Capstone.,open
+938,sp25ARTD471,72182,ARTD471-GD3-Lively,3,Lively team collaborating on team communication. Maintaining tight feedback loops while engaging classmates in Graphic Design Capstone.,open
+939,sp25ARTD471,74824,ARTD471-GD4-Global,4,Global team collaborating on skills matching workflow. Sharing knowledge across subteams while engaging classmates in Graphic Design Capstone.,locked
+940,sp25ARTD499,59101,ARTD499-MB-Jovial,5,Jovial team collaborating on UI accessibility improvements. Maintaining tight feedback loops while engaging classmates in Special Topics in Design.,locked
+941,sp25ARTD499,57936,ARTD499-VTA-Wise,3,Wise team collaborating on real-time notifications. Running lightweight usability tests while engaging classmates in Special Topics in Design.,open
+942,sp25ARTD595,30512,ARTD595-A-Agile,6,Agile team collaborating on profile enrichment. Tracking action items transparently while engaging classmates in MFA Design for Responsible Innovation Studio.,open
+943,sp25ARTE260,53195,ARTE260-SL-United,6,United team collaborating on visual analytics. Documenting architectural decisions while engaging classmates in Museums in Action.,open
+944,sp25ARTE301,30427,ARTE301-R8-Nimble,5,"Nimble team collaborating on role assignment tooling. Organizing collaborative study sessions while engaging classmates in Curriculum, Assessment, and Art Education.",open
+945,sp25ARTE401,60425,ARTE401-B-Wise,6,Wise team collaborating on course section insights. Delivering polished project demos while engaging classmates in Teaching Seminar.,open
+946,sp25ARTE480,53016,ARTE480-LHG-Creative,4,Creative team collaborating on course section insights. Maintaining tight feedback loops while engaging classmates in Popular Visual Culture.,closed
+947,sp25ARTE480,52291,ARTE480-LHU-Xenial,4,Xenial team collaborating on feedback collection. Running lightweight usability tests while engaging classmates in Popular Visual Culture.,open
+948,sp25ARTE501,44192,ARTE501-ST-Zealous,6,Zealous team collaborating on profile reputation systems. Maintaining tight feedback loops while engaging classmates in Issues in Art Education.,open
+949,sp25ARTF102,68896,ARTF102-SD-Optimistic,5,Optimistic team collaborating on project scheduling. Tracking action items transparently while engaging classmates in Observational Drawing.,open
+950,sp25ARTH110,68862,ARTH110-AD1-Creative,4,Creative team collaborating on team communication. Documenting architectural decisions while engaging classmates in Introduction to the History of Art and Visual Culture.,full
+951,sp25ARTH110,68863,ARTH110-AD2-Zealous,6,Zealous team collaborating on database optimizations. Iterating on prototype milestones while engaging classmates in Introduction to the History of Art and Visual Culture.,open
+952,sp25ARTH110,68864,ARTH110-AD3-United,5,United team collaborating on data-driven recommendations. Supporting inclusive brainstorming while engaging classmates in Introduction to the History of Art and Visual Culture.,closed
+953,sp25ARTH110,68866,ARTH110-AD4-Energetic,4,Energetic team collaborating on real-time notifications. Supporting inclusive brainstorming while engaging classmates in Introduction to the History of Art and Visual Culture.,full
+954,sp25ARTH110,68867,ARTH110-AD5-Creative,5,Creative team collaborating on search relevance tuning. Iterating on prototype milestones while engaging classmates in Introduction to the History of Art and Visual Culture.,open
+955,sp25ARTH110,68868,ARTH110-AD6-Quick,6,Quick team collaborating on database optimizations. Documenting architectural decisions while engaging classmates in Introduction to the History of Art and Visual Culture.,locked
+956,sp25ARTH110,68861,ARTH110-AL1-Progressive,3,Progressive team collaborating on team communication. Supporting inclusive brainstorming while engaging classmates in Introduction to the History of Art and Visual Culture.,full
+957,sp25ARTH211,63628,ARTH211-A-Energetic,4,Energetic team collaborating on notification customization. Supporting inclusive brainstorming while engaging classmates in Design History Survey.,closed
+958,sp25ARTH219,73058,ARTH219-A1-Honest,4,Honest team collaborating on role assignment tooling. Supporting inclusive brainstorming while engaging classmates in Islamic Gardens &amp; Architecture.,open
+959,sp25ARTH219,73061,ARTH219-B1-Skilled,4,Skilled team collaborating on profile enrichment. Planning weekly sprint reviews while engaging classmates in Islamic Gardens &amp; Architecture.,open
+960,sp25ARTH219,73064,ARTH219-C1-Global,3,Global team collaborating on visual analytics. Supporting inclusive brainstorming while engaging classmates in Islamic Gardens &amp; Architecture.,open
+961,sp25ARTH219,73067,ARTH219-D1-Motivated,6,Motivated team collaborating on notification customization. Sharing knowledge across subteams while engaging classmates in Islamic Gardens &amp; Architecture.,open
+962,sp25ARTH219,73054,ARTH219-DFR-Skilled,4,Skilled team collaborating on teammate onboarding. Delivering polished project demos while engaging classmates in Islamic Gardens &amp; Architecture.,open
+963,sp25ARTH219,74902,ARTH219-E1-Global,4,Global team collaborating on performance snapshots. Tracking action items transparently while engaging classmates in Islamic Gardens &amp; Architecture.,locked
+964,sp25ARTH240,60061,ARTH240-DO-Skilled,3,Skilled team collaborating on team communication. Tracking action items transparently while engaging classmates in Art of the Nineteenth Century.,open
+965,sp25ARTH242,65135,ARTH242-KR-Optimistic,4,Optimistic team collaborating on profile reputation systems. Tracking action items transparently while engaging classmates in Art Since 1940.,locked
+966,sp25ARTH299,50159,ARTH299-CS-Skilled,6,Skilled team collaborating on search relevance tuning. Documenting architectural decisions while engaging classmates in Spec Topics in Art History.,closed
+967,sp25ARTH320,76113,ARTH320-NG-Dynamic,6,Dynamic team collaborating on team communication. Delivering polished project demos while engaging classmates in Sacred Sites in Japan.,open
+968,sp25ARTH403,39091,ARTH403-A3-Quick,3,Quick team collaborating on team availability dashboards. Delivering polished project demos while engaging classmates in Word and Image in Chinese Art.,open
+969,sp25ARTH403,39090,ARTH403-G-Global,3,Global team collaborating on course analytics. Sharing knowledge across subteams while engaging classmates in Word and Image in Chinese Art.,closed
+970,sp25ARTH416,39787,ARTH416-A-Vibrant,5,Vibrant team collaborating on visual analytics. Delivering polished project demos while engaging classmates in The Archaeology of Italy.,open
+971,sp25ARTH462,47360,ARTH462-1G-Zealous,4,Zealous team collaborating on profile reputation systems. Supporting inclusive brainstorming while engaging classmates in Museum Theory and Practice.,open
+972,sp25ARTH462,47361,ARTH462-1U-Zealous,6,Zealous team collaborating on team communication. Delivering polished project demos while engaging classmates in Museum Theory and Practice.,locked
+973,sp25ARTH491,30646,ARTH491-ABG-United,4,United team collaborating on teammate onboarding. Maintaining tight feedback loops while engaging classmates in Topics in Art History.,open
+974,sp25ARTH491,12454,ARTH491-ABU-Zealous,3,Zealous team collaborating on team communication. Tracking action items transparently while engaging classmates in Topics in Art History.,open
+975,sp25ARTH495,39097,ARTH495-A-Bold,6,Bold team collaborating on notification customization. Running lightweight usability tests while engaging classmates in Undergraduate Seminar in Art History.,closed
+976,sp25ARTH495,77352,ARTH495-B-Xenial,3,Xenial team collaborating on team availability dashboards. Documenting architectural decisions while engaging classmates in Undergraduate Seminar in Art History.,open
+977,sp25ARTH539,51094,ARTH539-OV-Reliable,3,Reliable team collaborating on matching algorithms. Documenting architectural decisions while engaging classmates in Academies of Art.,open
+978,sp25ARTJ301,75868,ARTJ301-CHP-Reliable,6,Reliable team collaborating on teammate onboarding. Iterating on prototype milestones while engaging classmates in Manga: The Art of Image and Word.,closed
+979,sp25ARTS210,30375,ARTS210-U1-Skilled,6,Skilled team collaborating on notification customization. Supporting inclusive brainstorming while engaging classmates in Ceramics Sculpture I.,open
+980,sp25ARTS391,13086,ARTS391-SFJ-Tenacious,4,Tenacious team collaborating on matching algorithms. Delivering polished project demos while engaging classmates in Independent Study.,open
+981,sp25ARTS392,75996,ARTS392-DW-Tenacious,3,Tenacious team collaborating on profile reputation systems. Iterating on prototype milestones while engaging classmates in Current Art Issues Seminar.,open
+982,sp25ARTS392,30723,ARTS392-RG-Progressive,4,Progressive team collaborating on search relevance tuning. Maintaining tight feedback loops while engaging classmates in Current Art Issues Seminar.,open
+983,sp25ARTS405,67434,ARTS405-G-Skilled,6,Skilled team collaborating on UI accessibility improvements. Delivering polished project demos while engaging classmates in Special Topics in Printmaking.,open
+984,sp25ARTS405,67435,ARTS405-U-Bold,6,Bold team collaborating on teammate onboarding. Planning weekly sprint reviews while engaging classmates in Special Topics in Printmaking.,open
+985,sp25ARTS444,41504,ARTS444-BGG-Lively,5,Lively team collaborating on role assignment tooling. Supporting inclusive brainstorming while engaging classmates in Interaction II.,locked
+986,sp25ARTS444,40435,ARTS444-BGU-Focused,6,Focused team collaborating on performance snapshots. Planning weekly sprint reviews while engaging classmates in Interaction II.,open
+987,sp25ARTS445,57052,ARTS445-GRD-Energetic,4,Energetic team collaborating on performance snapshots. Documenting architectural decisions while engaging classmates in Special Topics in New Media.,open
+988,sp25ARTS445,30356,ARTS445-UG-Dynamic,5,Dynamic team collaborating on skills matching workflow. Documenting architectural decisions while engaging classmates in Special Topics in New Media.,full
+989,sp25ARTS446,77166,ARTS446-DWG-Xenial,3,Xenial team collaborating on course analytics. Delivering polished project demos while engaging classmates in Topics in Performance Art.,open
+990,sp25ARTS446,77165,ARTS446-DWU-Keen,4,Keen team collaborating on course analytics. Iterating on prototype milestones while engaging classmates in Topics in Performance Art.,open
+991,sp25ARTS451,46823,ARTS451-GM-Focused,5,Focused team collaborating on profile enrichment. Documenting architectural decisions while engaging classmates in BFASA Capstone Studio.,open
+992,sp25ARTS455,52672,ARTS455-UG-Jovial,4,Jovial team collaborating on search relevance tuning. Tracking action items transparently while engaging classmates in Advanced Painting.,full
+993,sp25ARTS499,62127,ARTS499-GMG-Progressive,6,Progressive team collaborating on course analytics. Organizing collaborative study sessions while engaging classmates in Special Topics in Studio Art.,full
+994,sp25ARTS499,46779,ARTS499-GMU-Honest,3,Honest team collaborating on profile reputation systems. Supporting inclusive brainstorming while engaging classmates in Special Topics in Studio Art.,locked
+995,sp25ARTS593,13165,ARTS593-CB-Vibrant,4,Vibrant team collaborating on profile enrichment. Tracking action items transparently while engaging classmates in Seminar: Methods Criticism.,open
+996,sp25ARTS595,13319,ARTS595-CB-Motivated,3,Motivated team collaborating on course analytics. Supporting inclusive brainstorming while engaging classmates in Graduate Laboratory.,open
+997,sp25ARTS595,44470,ARTS595-RC-Bold,3,Bold team collaborating on performance snapshots. Documenting architectural decisions while engaging classmates in Graduate Laboratory.,open
+998,sp25ASRM210,73486,ASRM210-ADA-Jovial,6,Jovial team collaborating on profile reputation systems. Tracking action items transparently while engaging classmates in Theory of Interest.,open
+999,sp25ASRM210,73487,ASRM210-ADB-Quick,5,Quick team collaborating on role assignment tooling. Running lightweight usability tests while engaging classmates in Theory of Interest.,open
+1000,sp25ASRM210,68699,ASRM210-AL1-Tenacious,3,Tenacious team collaborating on matching algorithms. Sharing knowledge across subteams while engaging classmates in Theory of Interest.,open
