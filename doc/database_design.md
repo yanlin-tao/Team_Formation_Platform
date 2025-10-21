@@ -37,7 +37,7 @@ Each team member can access the instance via MySQL Workbench or CLI using their 
 - **Cloud SQL Instance Summary:**  
 <p align="center">
     <img src="./img_src/cloudsql_summary.png" alt="cloudsql_summary"
-        style="width:100%; height:auto; max-width:80%;">
+        style="width:100%; height:auto; max-width:40%;">
   <br><em>Figure 1. cloudsql_summary</em>
 </p>
 
