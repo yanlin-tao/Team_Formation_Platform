@@ -72,7 +72,7 @@ CREATE TABLE Term (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/Term.png" alt="term"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 3. Table create for Term </em>
 </p>
 
