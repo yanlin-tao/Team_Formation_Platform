@@ -238,7 +238,7 @@ Our Team Up! platform gives students a simple way to find teammates. The left me
 At the top, a large search bar lets students look up courses by name or code, or browse by course tags. Below, popular posts are shown with team requests and view counts. Students can open these posts to learn more and send a join request or message.
 
 <p align="center">
-    <img src="./img_src/post.png" alt="UI Diagram"
+    <img src="./img_src/post_page.png" alt="UI Diagram"
         style="width:60%; height:auto; max-width:100%;">
        <br><em>Figure 3. post page </em>
 </p>

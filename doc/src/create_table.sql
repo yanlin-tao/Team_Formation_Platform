@@ -44,7 +44,7 @@ CREATE TABLE User (
 CREATE TABLE Skill (
     skill_id   INT PRIMARY KEY,
     name       VARCHAR(64) UNIQUE NOT NULL,
-    category   VARCHAR(64),
+    category   VARCHAR(64)
 );
 
 CREATE TABLE UserSkill (
