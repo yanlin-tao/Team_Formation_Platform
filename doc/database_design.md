@@ -241,7 +241,7 @@ CREATE TABLE Post (
 
 - **Operation Screenshot:**  
 <p align="center">
-    <img src="./img_src/Post.png" alt="post"
+    <img src="./img_src/Posts.png" alt="post"
         style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 11. Table create for Post</em>
 </p>
