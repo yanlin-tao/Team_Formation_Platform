@@ -7,7 +7,7 @@
 
 ## I. Database Implementation
 
-### 1.1 Environment Setup
+## 1.1 Environment Setup
 
 Our database is deployed on **Google Cloud SQL (Enterprise Edition)**.  
 The following table summarizes our instance configuration and connection details.
@@ -319,10 +319,9 @@ CREATE TABLE PostSkill (
   <br><em>Figure 14. Table create for PostSkill</em>
 </p>
 
+---
 
 ### 1.3 Data Insertion
-
----
 
 #### **Data Source Overview**
 
@@ -334,7 +333,7 @@ Our database contains a combination of **real academic data** and **synthetic us
   - **Format**: CSV with 12,000+ rows covering all Spring 2025 courses
   - **Content**: Course metadata, sections, instructors, schedules, locations
   - **Fields**: Year, Term, Subject, Number, Name, Description, Credit Hours, CRN, Section, Instructor, Meeting Time, Location, etc.
-  - **📁 [View Full Dataset: `course-catalog.csv`](../data/course-catalog.csv)** *(12,000+ rows)*
+  - **[View Full Dataset: `course-catalog.csv`](../data/course-catalog.csv)**
 
 **Course Data Sample:**
 | Year | Term | Subject | Number | Name | Credit Hours | CRN | Section | Type | Start Time | End Time | Days | Room | Building | Instructors |
@@ -349,7 +348,7 @@ Our database contains a combination of **real academic data** and **synthetic us
   - **Count**: 1,000+ user records
   - **Content**: NetID, email, display names, bios, academic info (major, grade, GPA)
   - **Realism**: Includes diverse majors, grade levels, and authentic UIUC email patterns
-  - **[View Full Dataset: `user.csv`](../data/user.csv)** *(1,000+ rows)*
+  - **[View Full Dataset: `user.csv`](../data/user.csv)** 
 
 **User Data Sample:**
 | User ID | NetID | Email | Display Name | Major | Grade | GPA | Bio (Excerpt) |
@@ -363,7 +362,7 @@ Our database contains a combination of **real academic data** and **synthetic us
   - **Count**: 1,000+ team records
   - **Content**: Team names, target sizes, status, course associations
   - **Realism**: Teams linked to actual course sections with appropriate naming conventions
-  - **[View Full Dataset: `team.csv`](../data/team.csv)** *(1,000+ rows)*
+  - **[View Full Dataset: `team.csv`](../data/team.csv)** 
 
 **Team Data Sample:**
 | Team ID | Course ID | Section ID | Team Name | Target Size | Status | Notes (Excerpt) |
@@ -403,7 +402,7 @@ SELECT COUNT(*) FROM table_name;
 
 ---
 
-### 2. Advanced SQL Queries
+### II. Advanced SQL Queries
 
 This section presents four advanced SQL queries that utilize multiple relational operations such as JOIN, GROUP BY, SET operators, and subqueries.  
 Each query includes its purpose, SQL statement, and a screenshot of the top 15 results.
@@ -479,7 +478,7 @@ Briefly describe the purpose of this query.
 
 ---
 
-### 3. Indexing & Performance Analysis
+### III. Indexing & Performance Analysis
 
 This section evaluates query performance before and after applying indexing strategies using the `EXPLAIN ANALYZE` command.  
 Each query’s execution cost is compared under different index configurations.

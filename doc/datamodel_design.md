@@ -81,7 +81,8 @@ Represents a project or study group created within a course or section. Teams ma
 - **target_size** — Intended maximum number of members.
 - **notes** — Free-form team description or notes.
 - **status** — Team’s lifecycle state (e.g., open, locked, full, closed).
-
+- **created_at** — Creation timestamp.
+- **updated_at** — Last modification timestamp.
 
 ---
 
