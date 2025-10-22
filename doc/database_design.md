@@ -93,7 +93,7 @@ CREATE TABLE Course (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/Course.png" alt="course"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 4. Table create for Course</em>
 </p>
 
@@ -115,7 +115,7 @@ CREATE TABLE Section (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/Section.png" alt="section"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 5. Table create for Section</em>
 </p>
 
@@ -139,7 +139,7 @@ CREATE TABLE User (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/User.png" alt="user"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 6. Table create for User</em>
 </p>
 
@@ -156,7 +156,7 @@ CREATE TABLE Skill (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/Skill.png" alt="skill"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 7. Table create for Skill</em>
 </p>
 
@@ -176,7 +176,7 @@ CREATE TABLE UserSkill (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/UserSkill.png" alt="userskill"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 8. Table create for UserSkill</em>
 </p>
 
@@ -198,7 +198,7 @@ CREATE TABLE Team (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/Team.png" alt="team"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 9. Table create for Team</em>
 </p>
 
@@ -219,7 +219,7 @@ CREATE TABLE TeamMember (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/TeamMember.png" alt="teammember"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 10. Table create for TeamMember</em>
 </p>
 
@@ -242,7 +242,7 @@ CREATE TABLE Post (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/Post.png" alt="post"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 11. Table create for Post</em>
 </p>
 
@@ -267,7 +267,7 @@ CREATE TABLE Comment (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/Comment.png" alt="comment"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 12. Table create for Comment</em>
 </p>
 
@@ -291,7 +291,7 @@ CREATE TABLE MatchRequest (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/MatchRequest.png" alt="matchrequest"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 13. Table create for MatchRequest</em>
 </p>
 
@@ -310,6 +310,6 @@ CREATE TABLE PostSkill (
 - **Operation Screenshot:**  
 <p align="center">
     <img src="./img_src/PostSkill.png" alt="postskill"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 14. Table create for PostSkill</em>
 </p>
