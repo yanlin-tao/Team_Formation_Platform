@@ -1,4 +1,9 @@
-# Database Design 
+# Database Design and Implementation
+
+<p align="left">
+    <img src="./img_src/label.png" alt="label Diagram"
+        style="width:300px; height:auto; max-width:30%;">
+</p>
 
 ## I. Database Implementation
 
@@ -44,7 +49,7 @@ Each team member can access the instance via MySQL Workbench or CLI using their 
 - **Connection Details:**  
 <p align="center">
     <img src="./img_src/cloudsql_connection.png" alt="cloudsql_connection"
-        style="width:100%; height:auto; max-width:100%;">
+        style="width:80%; height:auto; max-width:100%;">
   <br><em>Figure 2. cloudsql_connection</em>
 </p>
 
@@ -313,3 +318,195 @@ CREATE TABLE PostSkill (
         style="width:50%; height:auto; max-width:100%;">
   <br><em>Figure 14. Table create for PostSkill</em>
 </p>
+
+
+### 1.3 Data Insertion
+
+---
+
+#### **Data Source**
+- Describe the origin of your data here (e.g., real dataset, mock data, or auto-generated via Python script).  
+- Mention if you used any open datasets or self-created CSV files.
+
+#### **Insertion Method**
+- Specify the method used for populating the tables, such as:
+  - Manual SQL INSERT statements
+  - Bulk import using `LOAD DATA INFILE`
+  - Automated script using Python and MySQL connector
+- Provide a brief explanation of the process and any challenges encountered.
+
+#### **Table Row Count Verification**
+After data insertion, the following queries were executed to verify that at least three tables contain more than 1000 rows each.
+
+Example command:  
+(SQL)
+SELECT COUNT(*) FROM table_name;
+
+| **Table Name** | **Rows Inserted** | **Verification Command** | **Screenshot** |
+|----------------|-------------------|---------------------------|----------------|
+| Term | (fill later) | SELECT COUNT(*) FROM Term; | ![term_count](./img_src/count_term.png) |
+| Course | (fill later) | SELECT COUNT(*) FROM Course; | ![course_count](./img_src/count_course.png) |
+| Section | (fill later) | SELECT COUNT(*) FROM Section; | ![section_count](./img_src/count_section.png) |
+| User | (fill later) | SELECT COUNT(*) FROM User; | ![user_count](./img_src/count_user.png) |
+| Team | (fill later) | SELECT COUNT(*) FROM Team; | ![team_count](./img_src/count_team.png) |
+
+---
+
+### 2. Advanced SQL Queries
+
+This section presents four advanced SQL queries that utilize multiple relational operations such as JOIN, GROUP BY, SET operators, and subqueries.  
+Each query includes its purpose, SQL statement, and a screenshot of the top 15 results.
+
+---
+
+#### **Query 1 — [Query Name Here]**
+**Used SQL Features:** (e.g., JOIN + GROUP BY)
+
+(SQL)
+SELECT ... FROM ...  
+WHERE ...  
+GROUP BY ...  
+ORDER BY ...  
+LIMIT 15;
+
+**Explanation:**  
+Describe what the query is intended to do (e.g., “Shows the total number of students enrolled in each course”).
+
+**Result Screenshot:**  
+![query1_result](./img_src/query1.png)
+
+---
+
+#### **Query 2 — [Query Name Here]**
+**Used SQL Features:** (e.g., Aggregation + Subquery)
+
+(SQL)
+SELECT ... FROM ...  
+WHERE ... IN (SELECT ...)  
+GROUP BY ...  
+LIMIT 15;
+
+**Explanation:**  
+Describe the query purpose (e.g., “Finds users who participated in multiple teams”).
+
+**Result Screenshot:**  
+![query2_result](./img_src/query2.png)
+
+---
+
+#### **Query 3 — [Query Name Here]**
+**Used SQL Features:** (e.g., SET Operators)
+
+(SQL)
+(SELECT ... FROM ...)  
+UNION  
+(SELECT ... FROM ...)  
+LIMIT 15;
+
+**Explanation:**  
+Briefly explain what this query achieves.
+
+**Result Screenshot:**  
+![query3_result](./img_src/query3.png)
+
+---
+
+#### **Query 4 — [Query Name Here]**
+**Used SQL Features:** (e.g., Aggregation + HAVING)
+
+(SQL)
+SELECT ... FROM ...  
+GROUP BY ...  
+HAVING ...  
+LIMIT 15;
+
+**Explanation:**  
+Briefly describe the purpose of this query.
+
+**Result Screenshot:**  
+![query4_result](./img_src/query4.png)
+
+---
+
+### 3. Indexing & Performance Analysis
+
+This section evaluates query performance before and after applying indexing strategies using the `EXPLAIN ANALYZE` command.  
+Each query’s execution cost is compared under different index configurations.
+
+---
+
+#### **3.1 Baseline (No Index)**
+
+The following table summarizes the cost of each query before applying any index optimization.
+
+| **Query** | **Cost (Before Index)** | **Screenshot** |
+|------------|-------------------------|----------------|
+| Query 1 | (fill later) | ![explain1_before](./img_src/explain1_before.png) |
+| Query 2 | (fill later) | ![explain2_before](./img_src/explain2_before.png) |
+| Query 3 | (fill later) | ![explain3_before](./img_src/explain3_before.png) |
+| Query 4 | (fill later) | ![explain4_before](./img_src/explain4_before.png) |
+
+---
+
+#### **3.2 Different Index Designs**
+
+For each advanced query, we tested at least three different indexing strategies and measured their impact on cost.
+
+**Index Design 1 — Join Columns**
+
+(SQL)
+CREATE INDEX idx_user_course ON Enrollment(user_id, course_id);
+
+**Observed Effect:**  
+Describe the impact (e.g., “Improved JOIN performance between Enrollment and Course by reducing cost 35%.”)
+
+**Before vs After Cost Comparison:**  
+| Query | Before | After | Change | Screenshot |
+|--------|---------|--------|---------|-------------|
+| Query 1 | (fill later) | (fill later) | (fill later) | ![explain1_after_idx1](./img_src/explain1_after_idx1.png) |
+
+---
+
+**Index Design 2 — Filter Columns**
+
+(SQL)
+CREATE INDEX idx_course_term ON Course(term_id);
+
+**Observed Effect:**  
+Describe performance change (e.g., “Improved filtering on term-based queries.”)
+
+| Query | Before | After | Change | Screenshot |
+|--------|---------|--------|---------|-------------|
+| Query 3 | (fill later) | (fill later) | (fill later) | ![explain3_after_idx2](./img_src/explain3_after_idx2.png) |
+
+---
+
+**Index Design 3 — Aggregation Columns**
+
+(SQL)
+CREATE INDEX idx_course_subject ON Course(subject);
+
+**Observed Effect:**  
+Describe result (e.g., “Reduced grouping cost by 25% in aggregated queries.”)
+
+| Query | Before | After | Change | Screenshot |
+|--------|---------|--------|---------|-------------|
+| Query 4 | (fill later) | (fill later) | (fill later) | ![explain4_after_idx3](./img_src/explain4_after_idx3.png) |
+
+---
+
+#### **3.3 Final Index Choice**
+
+| **Index Name** | **Columns** | **Purpose / Reason for Selection** |
+|-----------------|-------------|------------------------------------|
+| idx_user_course | (user_id, course_id) | Optimizes JOIN between Enrollment and Course |
+| idx_course_term | (term_id) | Improves filtering by term |
+| idx_course_subject | (subject) | Enhances GROUP BY aggregation efficiency |
+
+**Explanation:**  
+Summarize which indices were chosen as the final design and explain the reasoning behind them.  
+If no performance gain was observed, explain possible causes such as small dataset size, data distribution, or query structure limitations.
+
+(Optional: include performance trend chart)
+
+![index_chart](./img_src/index_comparison.png)
