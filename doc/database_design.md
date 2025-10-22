@@ -1,6 +1,6 @@
 # Database Design 
 
-## 1. Database Implementation
+## I. Database Implementation
 
 ### 1.1 Environment Setup
 
@@ -37,7 +37,7 @@ Each team member can access the instance via MySQL Workbench or CLI using their 
 - **Cloud SQL Instance Summary:**  
 <p align="center">
     <img src="./img_src/cloudsql_summary.png" alt="cloudsql_summary"
-        style="width:60%; height:auto; max-width:100%;">
+        style="width:40%; height:auto; max-width:100%;">
   <br><em>Figure 1. cloudsql_summary</em>
 </p>
 
