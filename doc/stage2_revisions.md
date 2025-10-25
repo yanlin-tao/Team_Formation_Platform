@@ -1,7 +1,7 @@
 # Stage2 Datamodel Design Revision
 
-In response to the feedback we received for Stage 2, we have revised our (doc/datamodel_design.md) file to address the points deducted in the previous submission.
-This document (doc/stage2_revisions.md) briefly summarizes where we lost points and explains the corresponding corrections and improvements made in our updated design.
+In response to the feedback we received for Stage 2, we have revised our **[doc/datamodel_design.md](./datamodel_design.md)** file to address the points deducted in the previous submission.
+This document **[doc/stage2_revisions.md](./stage2_revisions.md)** briefly summarizes where we lost points and explains the corresponding corrections and improvements made in our updated design.
 
 ## Problem 1: "Your UML includes foreign keys and data types, which are implementation details. Keep the conceptual diagram free of FKs or SQL domains."(-1)
 
