@@ -1,8 +1,13 @@
-Based on the comments in stage 2, we have the following changes:
+# stage2_revision
+
+In response to the feedback we received for Stage 2, we have revised our doc/datamodel_design.md file to address the points deducted in the previous submission.
+This document (stage2_revisions.md) briefly summarizes where we lost points and explains the corresponding corrections and improvements made in our updated design.
 
 ## problem 1: "Your UML includes foreign keys and data types, which are implementation details. Keep the conceptual diagram free of FKs or SQL domains."(-1)
 
-As for this problem, we have modified our UML, following shows our old UML and our updated UML(remove implementation details related to foreign keys). 
+Our original UML diagram included foreign keys and data types, which are implementation-level details and should not appear in a conceptual model.
+
+We have modified our UML, removed all FK and SQL domain annotations from the UML to make it a purely conceptual representation, as required. Following shows our old UML and our updated UML(remove implementation details related to foreign keys). 
 
 ### old UML diagram
 <p align="left">
@@ -18,7 +23,11 @@ As for this problem, we have modified our UML, following shows our old UML and o
 
 ## problem 2: "In UserSkill, the two FKs should also form a composite primary key since it’s a many-to-many table."(-1)
 
-As for this problem, we just updated our **III. Logical Design — Relational Schema** as follow:
+In previous design, the UserSkill table did not define a composite primary key even though it represents a many-to-many relationship between User and Skill.
+
+We updated the Logical Design — Relational Schema section to specify that (user_id, skill_id) together form the composite primary key, aligning with standard relational design principles.
+
+Updated **III. Logical Design — Relational Schema** as follow:
 
 ### old version: 
 <p align="left">
