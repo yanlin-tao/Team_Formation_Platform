@@ -295,20 +295,12 @@ A post can require multiple skills; a skill can be required by many posts.
 - **Notes/Constraints:** Keeps `Post` in 1NF; supports filtering and matching.
 
 
-### 1.3 ER diagram
+### 1.3 UML diagram
 
 <p align="center">
     <img src="./img_src/modified_UML_diagram.png" alt="ER Diagram"
         style="width:100%; height:auto; max-width:100%;">
   <br><em>Figure 1. UML Diagram</em>
-</p>
-
----
-
-<p align="center">
-    <img src="./img_src/ER_diagram.png" alt="ER Diagram"
-        style="width:100%; height:auto; max-width:100%;">
-  <br><em>Figure 2. ER Diagram</em>
 </p>
 
 ---
