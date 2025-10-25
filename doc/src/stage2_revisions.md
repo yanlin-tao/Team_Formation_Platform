@@ -12,7 +12,7 @@ As for this problem, we have modified our UML, following shows our old UML and o
 
 ### modified UML diagram
 <p align="left">
-    <img src="./img_src/modified_UML diagram.png" alt="modified UML_diagram"
+    <img src="./img_src/modified_UML_diagram.png" alt="modified UML_diagram"
         style="width:300px; height:auto; max-width:30%;">
 </p>
 
