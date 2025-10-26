@@ -414,7 +414,7 @@ UNION ALL SELECT 'PostSkill', COUNT(*) FROM PostSkill;
 **Result Screenshot:**
 <p align="center">
     <img src="./img_src/data_count.png" alt="All Table Counts"
-        style="width:80%; height:auto; max-width:100%;">
+        style="width:100%; height:auto; max-width:100%;">
   <br><em>Figure 15. Verification of row counts for all database tables</em>
 </p>
 
