@@ -327,56 +327,27 @@ CREATE TABLE PostSkill (
 
 Our database contains a combination of **real academic data** and **synthetic user-generated content** to support comprehensive testing and demonstration of our team formation platform.
 
-**Real Data Sources:**
-- **Course Catalog Data**: Complete Spring 2025 course offerings from UIUC
-  - **Source**: Exported from UIUC course catalog/schedule dataset
-  - **Format**: CSV with 12,000+ rows covering all Spring 2025 courses
-  - **Content**: Course metadata, sections, instructors, schedules, locations
-  - **Fields**: Year, Term, Subject, Number, Name, Description, Credit Hours, CRN, Section, Instructor, Meeting Time, Location, etc.
-  - **[View Full Dataset: `course-catalog.csv`](../data/course-catalog.csv)**
+**Data Sources:**
 
-**Course Data Sample:**
-| Year | Term | Subject | Number | Name | Credit Hours | CRN | Section | Type | Start Time | End Time | Days | Room | Building | Instructors |
-|------|------|---------|--------|------|--------------|-----|---------|------|------------|----------|------|------|----------|-------------|
-| 2025 | Spring | AAS | 100 | Intro Asian American Studies | 3 hours | 69781 | AB | Lecture-Discussion | 02:00 PM | 03:20 PM | MW | 304 | Noyes Laboratory | Geng, C |
-| 2025 | Spring | AAS | 100 | Intro Asian American Studies | 3 hours | 30107 | AD1 | Discussion/Recitation | 09:00 AM | 09:50 AM | F | 1030 | Literatures, Cultures, & Ling | Siglos, D;Wang, Y |
-| 2025 | Spring | CS | 411 | Data Mining | 3 hours | 12345 | AL1 | Lecture | 10:00 AM | 10:50 AM | MWF | 1404 | Siebel Center | Smith, J |
-| 2025 | Spring | MATH | 241 | Calculus III | 4 hours | 23456 | AL1 | Lecture | 11:00 AM | 11:50 AM | MWF | 100 | Altgeld Hall | Johnson, M |
+1. **Course Catalog Data** (Real Data)
+   - Complete Spring 2025 course offerings from UIUC
+   - 12,000+ rows of course metadata, sections, instructors, schedules, and locations
+   - **Dataset**: [`course-catalog.csv`](../data/course-catalog.csv)
 
-**Synthetic Data Sources:**
-- **User Profiles**: Generated using LLM to create realistic student profiles
-  - **Count**: 1,000+ user records
-  - **Content**: NetID, email, display names, bios, academic info (major, grade, GPA)
-  - **Realism**: Includes diverse majors, grade levels, and authentic UIUC email patterns
-  - **[View Full Dataset: `user.csv`](../data/user.csv)** 
+2. **User Profiles** (Synthetic Data)
+   - 1,000+ realistic student profiles generated using LLM
+   - Includes NetID, email, display names, bios, majors, and grade levels
+   - **Dataset**: [`user.csv`](../data/user.csv)
 
-**User Data Sample:**
-| User ID | NetID | Email | Display Name | Major | Grade | GPA | Bio (Excerpt) |
-|---------|-------|-------|--------------|-------|-------|-----|----------------|
-| 1 | kmiller1 | kmiller1@illinois.edu | Kara Miller | Chemistry | Sophomore | 3.2 | Enthusiastic about mobile app design, passionate about creating reliable services... |
-| 2 | nbailey1 | nbailey1@illinois.edu | Noah Bailey | Data Science | Graduate | 4.7 | Enthusiastic about Agile project planning, passionate about building scalable platforms... |
-| 3 | jwalker1 | jwalker1@illinois.edu | Jessica Walker | Materials Science | Freshman | 3.6 | Enthusiastic about data analytics, passionate about mentoring teammates... |
-| 4 | vhall1 | vhall1@illinois.edu | Victor Hall | Chemistry | Freshman | 4.0 | Enthusiastic about UI/UX research, passionate about crafting insightful dashboards... |
+3. **Team Data** (Synthetic Data)
+   - 630+ team formations linked to actual course sections
+   - Includes team names, target sizes, status, and course associations
+   - **Dataset**: [`team.csv`](../data/team.csv)
 
-- **Team Data**: Generated to match course sections and create realistic team scenarios
-  - **Count**: 1,000+ team records
-  - **Content**: Team names, target sizes, status, course associations
-  - **Realism**: Teams linked to actual course sections with appropriate naming conventions
-  - **[View Full Dataset: `team.csv`](../data/team.csv)** 
-
-**Team Data Sample:**
-| Team ID | Course ID | Section ID | Team Name | Target Size | Status | Notes (Excerpt) |
-|---------|-----------|------------|-----------|-------------|--------|------------------|
-| 1 | sp25AAS100 | 69781 | AAS100-AB-Progressive | 6 | open | Progressive team collaborating on team availability dashboards... |
-| 2 | sp25AAS100 | 30107 | AAS100-AD1-Energetic | 4 | closed | Energetic team collaborating on team availability dashboards... |
-| 3 | sp25AAS100 | 41729 | AAS100-AD2-Agile | 5 | locked | Agile team collaborating on course analytics... |
-| 4 | sp25AAS100 | 43832 | AAS100-AD3-Jovial | 6 | open | Jovial team collaborating on search relevance tuning... |
-
-
-#### **Data Summary**
-- **Course Data**: 12,000+ real UIUC Spring 2025 course sections across all departments
-- **User Data**: 1,000+ synthetic student profiles with diverse majors and grade levels  
-- **Team Data**: 1,000+ synthetic team formations linked to actual course sections
+4. **Social Content Data** (Synthetic Data)
+   - 990+ posts and 1,050+ comments generated for team discussions
+   - 1,970+ team member relationships
+   - **Datasets**: [`post.csv`](../data/post.csv), [`comment.csv`](../data/comment.csv), [`team_member.csv`](../data/team_member.csv)
 
 
 #### **Insertion Method**
@@ -407,6 +378,19 @@ We implemented Python-based ETL pipelines to import data from CSV files into our
 - **Validation**: Automated handling of duplicate entries and unique constraints
 - **Process**: Bulk insert of user records with error handling
 
+**Team & Social Content Data Import:**
+- **Team Data**: Imported 631 teams from `team.csv` with course-section associations
+  - Generated course_id in format `sp25{subject}{number}` (e.g., `sp25CS411`)
+  - Randomly matched teams to valid course-sections in the database
+  - Generated team names based on course identifiers
+- **TeamMember Data**: Imported 1,971 team member relationships
+  - Linked users to teams with role assignments (owner, member)
+- **Post Data**: Imported 992 posts from `post.csv`
+  - Posts linked to existing teams and users
+  - Removed invalid section_id field not in database schema
+- **Comment Data**: Imported 1,051 comments from `comment.csv`
+  - Comments linked to existing posts with optional parent comments for nested replies
+
 **Python Script Highlights:**
 ```python
 # Extract course and section data from CSV
@@ -429,61 +413,46 @@ for user in users:
 
 After data insertion, we executed count queries to verify that at least three tables contain more than 1000 rows each.
 
-**Verification Commands:**
+**Verification Command:**
 ```sql
-SELECT COUNT(*) FROM Term;
-SELECT COUNT(*) FROM Course;
-SELECT COUNT(*) FROM Section;
-SELECT COUNT(*) FROM User;
-SELECT COUNT(*) FROM Team;
+SELECT 'Term' as table_name, COUNT(*) as count FROM Term 
+UNION ALL SELECT 'Course', COUNT(*) FROM Course 
+UNION ALL SELECT 'Section', COUNT(*) FROM Section 
+UNION ALL SELECT 'User', COUNT(*) FROM User 
+UNION ALL SELECT 'Team', COUNT(*) FROM Team 
+UNION ALL SELECT 'TeamMember', COUNT(*) FROM TeamMember 
+UNION ALL SELECT 'Post', COUNT(*) FROM Post 
+UNION ALL SELECT 'Comment', COUNT(*) FROM Comment 
+UNION ALL SELECT 'Skill', COUNT(*) FROM Skill 
+UNION ALL SELECT 'UserSkill', COUNT(*) FROM UserSkill 
+UNION ALL SELECT 'MatchRequest', COUNT(*) FROM MatchRequest 
+UNION ALL SELECT 'PostSkill', COUNT(*) FROM PostSkill 
+ORDER BY table_name;
 ```
 
-**Insertion Results:**
+**Result Screenshot:**
+<p align="center">
+    <img src="./img_src/data_count.png" alt="All Table Counts"
+        style="width:50%; height:auto; max-width:100%;">
+  <br><em>Figure 15. Verification of row counts for all database tables</em>
+</p>
 
-| **Table Name** | **Rows Inserted** | **Verification Command** | **Screenshot** |
-|----------------|-------------------|---------------------------|----------------|
-| Term | **1** | `SELECT COUNT(*) FROM Term;` | ![term_count](./img_src/count_term.png) |
-| Course | **1,260** | `SELECT COUNT(*) FROM Course;` | ![course_count](./img_src/count_course.png) |
-| Section | **4,377** | `SELECT COUNT(*) FROM Section;` | ![section_count](./img_src/count_section.png) |
-| User | **1,000** | `SELECT COUNT(*) FROM User;` | ![user_count](./img_src/count_user.png) |
-| Team | 0 | `SELECT COUNT(*) FROM Team;` | *(Pending)* |
+**Insertion Results Summary:**
 
-**Course Distribution by Subject:**
-
-| **Subject** | **Course Count** | **Percentage** |
-|-------------|------------------|----------------|
-| IS | 110 | 8.7% |
-| MUS | 105 | 8.3% |
-| ECE | 101 | 8.0% |
-| CLE | 85 | 6.7% |
-| CS | 85 | 6.7% |
-| MATH | 74 | 5.9% |
-| CEE | 55 | 4.4% |
-| CHEM | 55 | 4.4% |
-| SHS | 50 | 4.0% |
-| PHYS | 48 | 3.8% |
-| ... | ... | ... |
-
-**Total**: 26 subjects, 1,260 courses, 4,377 sections
-
-**User Distribution by Major (Top 10):**
-
-| **Major** | **User Count** |
-|-----------|----------------|
-| Data Science | 70 |
-| Physics | 62 |
-| Graphic Design | 60 |
-| Chemistry | 59 |
-| Business Administration | 59 |
-| Economics | 57 |
-| Information Sciences | 54 |
-| Materials Science | 51 |
-| Electrical Engineering | 51 |
-| Civil Engineering | 48 |
-
-**Total**: 1,000 users across diverse academic majors
-
-**Requirements Met**: Three tables exceed 1000 rows (Course: 1,260; Section: 4,377; User: 1,000)
+| **Table Name** | **Rows Inserted** |
+|----------------|-------------------|
+| Term | 1 |
+| **Course** | **1,260** |
+| **Section** | **4,377** |
+| **User** | **1,000** |
+| Team | 631 |
+| **TeamMember** | **1,971** |
+| Post | 992 |
+| Comment | 1,051 |
+| Skill | 0 |
+| UserSkill | 0 |
+| MatchRequest | 0 |
+| PostSkill | 0 |
 
 ---
 

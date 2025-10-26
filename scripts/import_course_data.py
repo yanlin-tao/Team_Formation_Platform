@@ -89,7 +89,8 @@ def process_course_data(csv_file, subject_filter=None):
                 elif subject != subject_filter:
                     continue
 
-            course_id = f"{subject}{number}"
+            # Generate course_id in format: sp25 + subject + number (e.g., sp25AAS100)
+            course_id = f"sp25{subject}{number}"
 
             # Create course entry if not exists
             if course_id not in courses:
