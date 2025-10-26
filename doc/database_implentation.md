@@ -391,24 +391,6 @@ We implemented Python-based ETL pipelines to import data from CSV files into our
 - **Comment Data**: Imported 1,051 comments from `comment.csv`
   - Comments linked to existing posts with optional parent comments for nested replies
 
-**Python Script Highlights:**
-```python
-# Extract course and section data from CSV
-courses, sections = process_course_data(CSV_FILE, subject_filter=["CS", "ECE", "MATH", "PHYS", "CHEM", "STAT"])
-
-# Insert courses
-for course in courses:
-    cursor.execute("INSERT INTO Course ...", course_data)
-
-# Insert sections  
-for section in sections:
-    cursor.execute("INSERT INTO Section ...", section_data)
-
-# Insert users
-for user in users:
-    cursor.execute("INSERT INTO User ...", user_data)
-```
-
 #### **Table Row Count Verification**
 
 After data insertion, we executed count queries to verify that at least three tables contain more than 1000 rows each.
