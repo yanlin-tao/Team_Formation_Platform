@@ -437,14 +437,14 @@ UNION ALL SELECT 'PostSkill', COUNT(*) FROM PostSkill;
 
 ---
 
-### II. Advanced SQL Queries
+## II. Advanced SQL Queries, Indexing & Performance Analysis
 
 This section presents four advanced SQL queries that utilize multiple relational operations such as JOIN, GROUP BY, SET operators, and subqueries.  
 Each query includes its purpose, SQL statement, and a screenshot of the top 15 results.
 
 ---
 
-#### **Query 1 — View all teams a user has joined (including member count, course, and semester info)**
+### **Query 1 — View all teams a user has joined (including member count, course, and semester info)**
 **Used SQL Features: JOIN + LEFT JOIN + Aggregation (COUNT) + GROUP BY**
 
 This query lists all teams that a specific user has joined, along with the number of members in each team and related course information. It supports our platform’s goal of helping students easily track their current collaborations and participation across different courses and semesters.
@@ -466,7 +466,7 @@ GROUP BY t.team_id, t.team_name, c.title;
 ```
 Note: Replace **<target_user_id>** with the specific user’s ID to see which teams that user has joined. In our analysis, we will use three **target_user_id(646, 576, 230)** within our table. 
 
-**Result Screenshot:**  
+**Query Result Screenshot:**  
 ![query1_result](./img_src/query1_1_1.png)
 ![query1_result](./img_src/query1_1_2.png)
 ![query1_result](./img_src/query1_1_3.png)
@@ -479,23 +479,23 @@ Basic EXPLAIN ANALYZE:
 Note: Example query outputs screenshot cannot show 15 lines since user who joined the most teams has only 7 teams in our table. 
 
 Design A：using composite index
-(
+```sql
 CREATE INDEX idx_teammember_userid_teamid ON TeamMember(user_id, team_id); 
-)
+```
 ![query1_result](./img_src/query1_2_1.png)
 ![query1_result](./img_src/query1_2_2.png)
 ![query1_result](./img_src/query1_2_3.png)
 Design B: using single index
-(
+```sql
 CREATE INDEX idx_team_teamname ON Team(team_name);
-)
+```
 ![query1_result](./img_src/query1_3_1.png)
 ![query1_result](./img_src/query1_3_2.png)
 ![query1_result](./img_src/query1_3_3.png)
 Design C: using single index
-(
+```sql
 CREATE INDEX idx_course_title ON Course(title);
-)
+```
 ![query1_result](./img_src/query1_4_1.png)
 ![query1_result](./img_src/query1_4_2.png)
 ![query1_result](./img_src/query1_4_3.png)
@@ -525,8 +525,8 @@ Thus, we are not using indexing for this query.
 
 ---
 
-#### **Query 2 — View the current number of teams and members in each section.**
-**Used SQL Features:JOIN + LEFT JOIN + Aggregation (COUNT) + GROUP BY + ORDER BY** 
+### **Query 2 — View the current number of teams and members in each section.**
+**Used SQL Features: JOIN + LEFT JOIN + Aggregation (COUNT) + GROUP BY + ORDER BY** 
 
 This query shows how many teams and team members exist in each course section, helping our website track team-formation progress. It lets students see open teams to join. This supports our platform’s goal of making team matching transparent, efficient, and course-organized.
 
@@ -551,21 +551,21 @@ ORDER BY s.crn, t.team_name;
 Basic EXPLAIN ANALYZE:
 ![query3_result](./img_src/query2_2.png)
 Design A：
-(
+```sql
 CREATE INDEX idx_team_course_section ON Team(course_id, section_id);
-)
+```
 ![query3_result](./img_src/query2_3.png)
 Design B: Covering / Order-Friendly Indexes
-(
+```sql
 CREATE INDEX idx_section_instructor ON Section(instructor);
 CREATE INDEX idx_team_order ON Team(section_id, team_name);
-)
+```
 ![query3_result](./img_src/query2_4.png)
 Design C:
-(
+```sql
 CREATE INDEX idx_section_instructor ON Section(instructor);
 CREATE INDEX idx_team_team_name ON Team(team_name);
-)
+```
 ![query3_result](./img_src/query2_5.png)
 ### Rows / Costs Performance
 
@@ -585,20 +585,121 @@ Overall, results confirm that join-focused indexing (A) achieves the best perfor
 
 ---
 
-#### **Query 3 — [Query Name Here]**
-**Used SQL Features:** (e.g., SET Operators)
+#### **Query 3 — Find All “Not Full” Teams in a Given Course Section**
+**Used SQL Features: JOIN + LEFT JOIN + Aggregation (COUNT / HAVING) + GROUP BY + ORDER BY** 
 
-(SQL)
-(SELECT ... FROM ...)  
-UNION  
-(SELECT ... FROM ...)  
-LIMIT 15;
+This query finds all teams in a given section that are still open and not yet full. It joins the Team and TeamMember tables to count current members, filters teams whose member count is below the target size, and sorts the results by remaining slots. In our project, this query powers the “Find Available Teams” feature, helping users quickly locate open teams within a course section.
 
-**Explanation:**  
-Briefly explain what this query achieves.
+```sql
+EXPLAIN ANALYZE
+SELECT
+t.team_id,
+t.team_name,
+COUNT(DISTINCT tm.user_id) AS current_members,
+t.target_size,
+(t.target_size - COUNT(DISTINCT tm.user_id)) AS remaining_slots
+FROM Team AS t
+LEFT JOIN TeamMember AS tm
+ON tm.team_id = t.team_id
+WHERE t.section_id = <target_section_id> 
+AND t.status = 'open'
+GROUP BY t.team_id, t.team_name, t.target_size
+HAVING COUNT(DISTINCT tm.user_id) < t.target_size
+ORDER BY remaining_slots DESC, t.team_id;
+```
 
-**Result Screenshot:**  
-![query3_result](./img_src/query3.png)
+Note: Replace **<target_section_id>** with the specific course section’s ID to check all non-full teams in that section. In our analysis, we will use three **target_section_id(37931, 70777, 43555)** within our table. 
+
+**Query Result Screenshot:**  
+<p align="center">
+  <img src="./img_src/query3_1_1.png" alt="query3_result_1" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_1_2.png" alt="query3_result_2" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_1_3.png" alt="query3_result_3" style="width:32%; max-width:32%; height:auto;">
+  <br><em>Figure 1: Query 3 example results (three target sections)</em>
+ </p>
+
+Basic EXPLAIN ANALYZE:
+<p align="center">
+  <img src="./img_src/query3_1_1_cost.png" alt="query3_explain_1" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_1_2_cost.png" alt="query3_explain_2" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_1_3_cost.png" alt="query3_explain_3" style="width:32%; max-width:32%; height:auto;">
+  <br><em>Figure 2: EXPLAIN ANALYZE (baseline costs for three sections)</em>
+ </p>
+
+Design A：Filtering Composite Index
+```sql
+CREATE INDEX idx_team_section_status ON Team(section_id, status);
+```
+Idea: Push down WHERE filtering via composite index on (section_id, status) to prune rows early.
+<p align="center">
+  <img src="./img_src/query3_2_1.png" alt="query3_designA_1" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_2_2.png" alt="query3_designA_2" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_2_3.png" alt="query3_designA_3" style="width:32%; max-width:32%; height:auto;">
+  <br><em>Figure 3: Design A results across three sections</em>
+ </p>
+
+Design B: Covering Index for GROUP BY
+```sql
+CREATE INDEX idx_team_cover ON Team(section_id, status, team_name, target_size);
+```
+Idea: Use a wider covering index to satisfy GROUP BY/SELECT columns from index and reduce table lookups.
+<p align="center">
+  <img src="./img_src/query3_3_1.png" alt="query3_designB_1" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_3_2.png" alt="query3_designB_2" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_3_3.png" alt="query3_designB_3" style="width:32%; max-width:32%; height:auto;">
+  <br><em>Figure 4: Design B results across three sections</em>
+ </p>
+
+Design C: Composite Index with Sorting Optimization
+```sql
+CREATE INDEX idx_team_section_status_target ON Team(section_id, status, target_size);
+```
+Idea: Extend the composite index with target_size to potentially assist sorting/aggregation, trading size for minor gains.
+<p align="center">
+  <img src="./img_src/query3_4_1.png" alt="query3_designC_1" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_4_2.png" alt="query3_designC_2" style="width:32%; max-width:32%; height:auto;">
+  <img src="./img_src/query3_4_3.png" alt="query3_designC_3" style="width:32%; max-width:32%; height:auto;">
+  <br><em>Figure 5: Design C results across three sections</em>
+ </p>
+
+### Rows / Costs Performance
+As for cost analysis, we take the average of three examples and got the following result:
+
+| Design   | Rows    |Costs|
+|----------|--------:|----:|
+| Original |  923  | 464.33 |
+| A        |  2.69  | 2.86|
+| B        | 2.69 | 2.55 |
+| C        | 2.69 | 3.44 |
+
+### Indexing Analysis:
+
+**Design A — Filtering Composite Index: `Team(section_id, status)`**
+
+**Plan change:** The executor switched from *Table scan on t* to *Index lookup on t using idx_team_section_status*, so filtering happens at the index level before the join/aggregation.  
+**Observed effect:** Representative cost dropped from baseline (~**464**) to about **2.45–2.86** across sections, i.e., ≈**99%** reduction.  
+**Why it helps:** Both predicates in the `WHERE` clause are equality filters; a composite index on these columns maximizes selectivity and eliminates the scan of irrelevant teams.  
+**Overhead:** Moderate index size; minimal write/maintenance impact relative to the gain.
+
+**Design B — Covering Index for GROUP BY: `Team(section_id, status, team_name, target_size)`**
+
+**Plan change:** Still leverages index lookup for filtering; additionally, many referenced columns are fetched directly from the secondary index, reducing some table lookups.  
+**Observed effect:** Cost around **2.55** on average—slightly better than A in your runs, but not materially different.  
+**Why it helps (in theory):** By “covering” non-PK columns used in `SELECT/GROUP BY`, the executor may reduce back-and-forth to the base table.  
+**Overhead:** Larger index footprint and higher maintenance cost. Since `team_name/target_size` are not part of selective predicates, the extra width mainly increases storage/updates without clear win over A.
+
+**Design C — Composite With Target Size: `Team(section_id, status, target_size)`**
+
+**Plan change:** Index lookup on `(section_id, status)` remains; adding `target_size` does not directly accelerate filtering or aggregation logic.  
+**Observed effect:** Cost about **3.44** on average—still vastly better than baseline but worse than A/B.  
+**Why it helps (limited):** `target_size` is not a filter key; it does not reduce the candidate set nor meaningfully improve grouping/sorting (the order uses an expression on an aggregate).  
+**Overhead:** Added width without corresponding selectivity benefit.
+
+**Trade-offs & Final Selection**
+
+All three designs eliminate the full scan and massively reduce cost versus baseline. Design B shows a marginal numeric edge in your small-scale tests, but it achieves this by widening the index with non-selective columns—raising storage and write overhead for minimal real-world gain. Design C adds a non-filter column that does not improve selectivity or ordering, thus underperforms A/B.
+
+**We choose `idx_team_section_status` (Design A)** as the final index. It aligns exactly with the selective predicates, yields ≈**99%** cost reduction (∼**464** → **2.45–2.86**), and offers the best balance between performance improvement and operational overhead.
 
 ---
 
