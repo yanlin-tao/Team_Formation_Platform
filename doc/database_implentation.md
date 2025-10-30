@@ -465,6 +465,8 @@ Describe what the query is intended to do (e.g., “Shows the total number of st
 #### **Query 2 — View the current number of teams and members in each section.**
 **Used SQL Features:JOIN + LEFT JOIN + Aggregation (COUNT) + GROUP BY + ORDER BY** 
 
+This query shows how many teams and team members exist in each course section, helping our website track team-formation progress. It lets students see open teams to join. This supports our platform’s goal of making team matching transparent, efficient, and course-organized.
+
 ```sql
 (
 SELECT
