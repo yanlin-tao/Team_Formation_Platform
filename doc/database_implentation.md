@@ -487,6 +487,7 @@ Design A：using composite index
 CREATE INDEX idx_teammember_userid_teamid ON TeamMember(user_id, team_id); 
 ```
 Idea: Accelerate lookup of a user's memberships, enabling faster joins to teams for aggregation.
+
 ![query1_result](./img_src/query1_2_1.png)
 ![query1_result](./img_src/query1_2_2.png)
 ![query1_result](./img_src/query1_2_3.png)
@@ -498,6 +499,7 @@ Design B: using single index
 CREATE INDEX idx_team_teamname ON Team(team_name);
 ```
 Idea: Provide an index on projected/grouped attribute to test any benefit on grouping/lookup.
+
 ![query1_result](./img_src/query1_3_1.png)
 ![query1_result](./img_src/query1_3_2.png)
 ![query1_result](./img_src/query1_3_3.png)
@@ -509,6 +511,7 @@ Design C: using single index
 CREATE INDEX idx_course_title ON Course(title);
 ```
 Idea: Index the joined course title to evaluate any join/projection speedup.
+
 ![query1_result](./img_src/query1_4_1.png)
 ![query1_result](./img_src/query1_4_2.png)
 ![query1_result](./img_src/query1_4_3.png)
@@ -577,6 +580,7 @@ Design A：
 CREATE INDEX idx_team_course_section ON Team(course_id, section_id);
 ```
 Idea: Index the join keys to enable efficient nested-loop joins and early row pruning.
+
 ![query2_designA](./img_src/query2_3.png)
 
 <p align="center"><em>Figure 23: Design A results</em></p>
@@ -587,6 +591,7 @@ CREATE INDEX idx_section_instructor ON Section(instructor);
 CREATE INDEX idx_team_order ON Team(section_id, team_name);
 ```
 Idea: Improve WHERE on instructor and assist ORDER BY with a team ordering index.
+
 ![query2_designB](./img_src/query2_4.png)
 
 <p align="center"><em>Figure 24: Design B results</em></p>
@@ -597,6 +602,7 @@ CREATE INDEX idx_section_instructor ON Section(instructor);
 CREATE INDEX idx_team_team_name ON Team(team_name);
 ```
 Idea: Focus on filter/sort columns only; expect limited gains without join-key indexing.
+
 ![query2_designC](./img_src/query2_5.png)
 
 <p align="center"><em>Figure 25: Design C results</em></p>
@@ -662,6 +668,7 @@ Design A：Filtering Composite Index
 CREATE INDEX idx_team_section_status ON Team(section_id, status);
 ```
 Idea: Push down WHERE filtering via composite index on (section_id, status) to prune rows early.
+
 ![query1_result](./img_src/query3_2_1.png)
 ![query1_result](./img_src/query3_2_2.png)
 ![query1_result](./img_src/query3_2_3.png)
@@ -673,6 +680,7 @@ Design B: Covering Index for GROUP BY
 CREATE INDEX idx_team_cover ON Team(section_id, status, team_name, target_size);
 ```
 Idea: Use a wider covering index to satisfy GROUP BY/SELECT columns from index and reduce table lookups.
+
 ![query1_result](./img_src/query3_3_1.png)
 ![query1_result](./img_src/query3_3_2.png)
 ![query1_result](./img_src/query3_3_3.png)
@@ -684,6 +692,7 @@ Design C: Composite Index with Sorting Optimization
 CREATE INDEX idx_team_section_status_target ON Team(section_id, status, target_size);
 ```
 Idea: Extend the composite index with target_size to potentially assist sorting/aggregation, trading size for minor gains.
+
 ![query1_result](./img_src/query3_4_1.png)
 ![query1_result](./img_src/query3_4_2.png)
 ![query1_result](./img_src/query3_4_3.png)
