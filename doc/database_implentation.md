@@ -611,56 +611,76 @@ ORDER BY remaining_slots DESC, t.team_id;
 Note: Replace **<target_section_id>** with the specific course section’s ID to check all non-full teams in that section. In our analysis, we will use three **target_section_id(37931, 70777, 43555)** within our table. 
 
 **Query Result Screenshot:**  
-<p align="center">
-  <img src="./img_src/query3_1_1.png" alt="query3_result_1" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_1_2.png" alt="query3_result_2" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_1_3.png" alt="query3_result_3" style="width:32%; max-width:32%; height:auto;">
-  <br><em>Figure 1: Query 3 example results (three target sections)</em>
- </p>
+<table align="center">
+  <tr>
+    <td align="center"><img src="./img_src/query3_1_1.png" alt="query3_result_1" width="300"></td>
+    <td align="center"><img src="./img_src/query3_1_2.png" alt="query3_result_2" width="300"></td>
+    <td align="center"><img src="./img_src/query3_1_3.png" alt="query3_result_3" width="300"></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center"><em>Figure 1: Query 3 example results (three target sections)</em></td>
+  </tr>
+ </table>
 
 Basic EXPLAIN ANALYZE:
-<p align="center">
-  <img src="./img_src/query3_1_1_cost.png" alt="query3_explain_1" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_1_2_cost.png" alt="query3_explain_2" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_1_3_cost.png" alt="query3_explain_3" style="width:32%; max-width:32%; height:auto;">
-  <br><em>Figure 2: EXPLAIN ANALYZE (baseline costs for three sections)</em>
- </p>
+<table align="center">
+  <tr>
+    <td align="center"><img src="./img_src/query3_1_1_cost.png" alt="query3_explain_1" width="300"></td>
+    <td align="center"><img src="./img_src/query3_1_2_cost.png" alt="query3_explain_2" width="300"></td>
+    <td align="center"><img src="./img_src/query3_1_3_cost.png" alt="query3_explain_3" width="300"></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center"><em>Figure 2: EXPLAIN ANALYZE (baseline costs for three sections)</em></td>
+  </tr>
+ </table>
 
 Design A：Filtering Composite Index
 ```sql
 CREATE INDEX idx_team_section_status ON Team(section_id, status);
 ```
 Idea: Push down WHERE filtering via composite index on (section_id, status) to prune rows early.
-<p align="center">
-  <img src="./img_src/query3_2_1.png" alt="query3_designA_1" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_2_2.png" alt="query3_designA_2" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_2_3.png" alt="query3_designA_3" style="width:32%; max-width:32%; height:auto;">
-  <br><em>Figure 3: Design A results across three sections</em>
- </p>
+<table align="center">
+  <tr>
+    <td align="center"><img src="./img_src/query3_2_1.png" alt="query3_designA_1" width="300"></td>
+    <td align="center"><img src="./img_src/query3_2_2.png" alt="query3_designA_2" width="300"></td>
+    <td align="center"><img src="./img_src/query3_2_3.png" alt="query3_designA_3" width="300"></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center"><em>Figure 3: Design A results across three sections</em></td>
+  </tr>
+ </table>
 
 Design B: Covering Index for GROUP BY
 ```sql
 CREATE INDEX idx_team_cover ON Team(section_id, status, team_name, target_size);
 ```
 Idea: Use a wider covering index to satisfy GROUP BY/SELECT columns from index and reduce table lookups.
-<p align="center">
-  <img src="./img_src/query3_3_1.png" alt="query3_designB_1" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_3_2.png" alt="query3_designB_2" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_3_3.png" alt="query3_designB_3" style="width:32%; max-width:32%; height:auto;">
-  <br><em>Figure 4: Design B results across three sections</em>
- </p>
+<table align="center">
+  <tr>
+    <td align="center"><img src="./img_src/query3_3_1.png" alt="query3_designB_1" width="300"></td>
+    <td align="center"><img src="./img_src/query3_3_2.png" alt="query3_designB_2" width="300"></td>
+    <td align="center"><img src="./img_src/query3_3_3.png" alt="query3_designB_3" width="300"></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center"><em>Figure 4: Design B results across three sections</em></td>
+  </tr>
+ </table>
 
 Design C: Composite Index with Sorting Optimization
 ```sql
 CREATE INDEX idx_team_section_status_target ON Team(section_id, status, target_size);
 ```
 Idea: Extend the composite index with target_size to potentially assist sorting/aggregation, trading size for minor gains.
-<p align="center">
-  <img src="./img_src/query3_4_1.png" alt="query3_designC_1" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_4_2.png" alt="query3_designC_2" style="width:32%; max-width:32%; height:auto;">
-  <img src="./img_src/query3_4_3.png" alt="query3_designC_3" style="width:32%; max-width:32%; height:auto;">
-  <br><em>Figure 5: Design C results across three sections</em>
- </p>
+<table align="center">
+  <tr>
+    <td align="center"><img src="./img_src/query3_4_1.png" alt="query3_designC_1" width="300"></td>
+    <td align="center"><img src="./img_src/query3_4_2.png" alt="query3_designC_2" width="300"></td>
+    <td align="center"><img src="./img_src/query3_4_3.png" alt="query3_designC_3" width="300"></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center"><em>Figure 5: Design C results across three sections</em></td>
+  </tr>
+ </table>
 
 ### Rows / Costs Performance
 As for cost analysis, we take the average of three examples and got the following result:
