@@ -444,21 +444,84 @@ Each query includes its purpose, SQL statement, and a screenshot of the top 15 r
 
 ---
 
-#### **Query 1 — [Query Name Here]**
-**Used SQL Features:** (e.g., JOIN + GROUP BY)
+#### **Query 1 — View all teams a user has joined (including member count, course, and semester info)**
+**Used SQL Features: JOIN + LEFT JOIN + Aggregation (COUNT) + GROUP BY**
 
-(SQL)
-SELECT ... FROM ...  
-WHERE ...  
-GROUP BY ...  
-ORDER BY ...  
-LIMIT 15;
+This query lists all teams that a specific user has joined, along with the number of members in each team and related course information. It supports our platform’s goal of helping students easily track their current collaborations and participation across different courses and semesters.
 
-**Explanation:**  
-Describe what the query is intended to do (e.g., “Shows the total number of students enrolled in each course”).
+```sql
+(
+SELECT 
+ t.team_id, 
+ t.team_name, 
+ c.title AS course_title, 
+ COUNT(tu2.user_id) AS member_count
+FROM Team t
+JOIN Course c ON t.course_id = c.course_id
+JOIN TeamMember tu ON t.team_id = tu.team_id
+LEFT JOIN TeamMember tu2 ON t.team_id = tu2.team_id
+WHERE tu.user_id = <target_user_id>
+GROUP BY t.team_id, t.team_name, c.title;
+)
+```
+Note: Replace **<target_user_id>** with the specific user’s ID to see which teams that user has joined. In our analysis, we will use three **target_user_id(646, 576, 230)** within our table. 
 
 **Result Screenshot:**  
-![query1_result](./img_src/query1.png)
+![query1_result](./img_src/query1_1_1.png)
+![query1_result](./img_src/query1_1_2.png)
+![query1_result](./img_src/query1_1_3.png)
+
+Basic EXPLAIN ANALYZE:
+![query1_result](./img_src/query1_1_1_cost.png)
+![query1_result](./img_src/query1_1_2_cost.png)
+![query1_result](./img_src/query1_1_3_cost.png)
+
+Note: Example query outputs screenshot cannot show 15 lines since user who joined the most teams has only 7 teams in our table. 
+
+Design A：using composite index
+(
+CREATE INDEX idx_teammember_userid_teamid ON TeamMember(user_id, team_id); 
+)
+![query1_result](./img_src/query1_2_1.png)
+![query1_result](./img_src/query1_2_2.png)
+![query1_result](./img_src/query1_2_3.png)
+Design B: using single index
+(
+CREATE INDEX idx_team_teamname ON Team(team_name);
+)
+![query1_result](./img_src/query1_3_1.png)
+![query1_result](./img_src/query1_3_2.png)
+![query1_result](./img_src/query1_3_3.png)
+Design C: using single index
+(
+CREATE INDEX idx_course_title ON Course(title);
+)
+![query1_result](./img_src/query1_4_1.png)
+![query1_result](./img_src/query1_4_2.png)
+![query1_result](./img_src/query1_4_3.png)
+
+### Rows / Costs Performance
+As for cost analysis, we take the average of three examples and got the following result:
+
+| Design   | Rows    |Costs|
+|----------|--------:|----:|
+| Original | 15.623 | 7.07 |
+| A        | 15.623 | 7.457|
+| B        | 15.623 | 7.46 |
+| C        | 15.623 | 7.457|
+
+### Indexing Analysis:
+Based on above, we decide not to use indexing for this query, the reasons are below:
+
+We tried to use the query to search the teams that a user is in for three different users with different numbers of teams they are in (7, 5, or 3 teams). After the indexing, the average costs and average number of rows for searching had no significant difference and even worse. As for each single search, the cost also became worse. Thus, we are not accept any indexing for this advance query. 
+
+Second, we reflect on our original query, there are some other reasons for us to not accept indexing here:
+
+Existing primary-key indexes already cover all major join and filter attributes.The TeamMember table uses a composite primary key (team_id, user_id), while both Team and Course have primary keys on team_id and course_id. These automatically created indexes are already used by the optimizer, as confirmed by the EXPLAIN ANALYZE output showing “Covering index lookup” and “Single-row index lookup” operations. 
+
+The query’s aggregation (GROUP BY), which we have indexing attributes in, occurs on a temporary table after the JOIN operations. MySQL builds a temporary in-memory (or disk) table for grouping, which means that indexes on team_name and title cannot be utilized in the grouping phase. The optimizer still performs “Aggregate using temporary table,” so the new indexes only increase maintenance overhead without reducing cost.
+
+Thus, we are not using indexing for this query. 
 
 ---
 
@@ -498,7 +561,7 @@ CREATE INDEX idx_section_instructor ON Section(instructor);
 CREATE INDEX idx_team_order ON Team(section_id, team_name);
 )
 ![query3_result](./img_src/query2_4.png)
-Design C –:
+Design C:
 (
 CREATE INDEX idx_section_instructor ON Section(instructor);
 CREATE INDEX idx_team_team_name ON Team(team_name);
