@@ -439,8 +439,8 @@ UNION ALL SELECT 'PostSkill', COUNT(*) FROM PostSkill;
 
 ## II. Advanced SQL Queries, Indexing & Performance Analysis
 
-This section presents four advanced SQL queries that utilize multiple relational operations such as JOIN, GROUP BY, SET operators, and subqueries.  
-Each query includes its purpose, SQL statement, and a screenshot of the top 15 results.
+This section presents three advanced SQL queries that utilize multiple relational operations such as JOIN, GROUP BY, HAVING, and aggregation.  
+Each query includes its purpose, SQL statement, comprehensive indexing analysis with three different index designs, and performance comparison.
 
 ---
 
@@ -471,10 +471,14 @@ Note: Replace **<target_user_id>** with the specific user’s ID to see which te
 ![query1_result](./img_src/query1_1_2.png)
 ![query1_result](./img_src/query1_1_3.png)
 
+<p align="center"><em>Figure 16: Query 1 example results (three target users)</em></p>
+
 Basic EXPLAIN ANALYZE:
 ![query1_result](./img_src/query1_1_1_cost.png)
 ![query1_result](./img_src/query1_1_2_cost.png)
 ![query1_result](./img_src/query1_1_3_cost.png)
+
+<p align="center"><em>Figure 17: EXPLAIN ANALYZE (baseline costs for three users)</em></p>
 
 Note: Example query outputs screenshot cannot show 15 lines since user who joined the most teams has only 7 teams in our table. 
 
@@ -482,23 +486,34 @@ Design A：using composite index
 ```sql
 CREATE INDEX idx_teammember_userid_teamid ON TeamMember(user_id, team_id); 
 ```
+Idea: Accelerate lookup of a user's memberships, enabling faster joins to teams for aggregation.
 ![query1_result](./img_src/query1_2_1.png)
 ![query1_result](./img_src/query1_2_2.png)
 ![query1_result](./img_src/query1_2_3.png)
+
+<p align="center"><em>Figure 18: Design A results across three users</em></p>
+
 Design B: using single index
 ```sql
 CREATE INDEX idx_team_teamname ON Team(team_name);
 ```
+Idea: Provide an index on projected/grouped attribute to test any benefit on grouping/lookup.
 ![query1_result](./img_src/query1_3_1.png)
 ![query1_result](./img_src/query1_3_2.png)
 ![query1_result](./img_src/query1_3_3.png)
+
+<p align="center"><em>Figure 19: Design B results across three users</em></p>
+
 Design C: using single index
 ```sql
 CREATE INDEX idx_course_title ON Course(title);
 ```
+Idea: Index the joined course title to evaluate any join/projection speedup.
 ![query1_result](./img_src/query1_4_1.png)
 ![query1_result](./img_src/query1_4_2.png)
 ![query1_result](./img_src/query1_4_3.png)
+
+<p align="center"><em>Figure 20: Design C results across three users</em></p>
 
 ### Rows / Costs Performance
 As for cost analysis, we take the average of three examples and got the following result:
@@ -547,26 +562,44 @@ GROUP BY s.crn, s.instructor, t.team_id, t.team_name, t.target_size
 ORDER BY s.crn, t.team_name;
 )
 ```
-![query3_result](./img_src/query2_1.png)
+**Query Result Screenshot:**  
+![query2_result](./img_src/query2_1.png)
+
+<p align="center"><em>Figure 21: Query 2 example result (section/team overview)</em></p>
+
 Basic EXPLAIN ANALYZE:
-![query3_result](./img_src/query2_2.png)
+![query2_explain](./img_src/query2_2.png)
+
+<p align="center"><em>Figure 22: EXPLAIN ANALYZE (baseline)</em></p>
+
 Design A：
 ```sql
 CREATE INDEX idx_team_course_section ON Team(course_id, section_id);
 ```
-![query3_result](./img_src/query2_3.png)
+Idea: Index the join keys to enable efficient nested-loop joins and early row pruning.
+![query2_designA](./img_src/query2_3.png)
+
+<p align="center"><em>Figure 23: Design A results</em></p>
+
 Design B: Covering / Order-Friendly Indexes
 ```sql
 CREATE INDEX idx_section_instructor ON Section(instructor);
 CREATE INDEX idx_team_order ON Team(section_id, team_name);
 ```
-![query3_result](./img_src/query2_4.png)
+Idea: Improve WHERE on instructor and assist ORDER BY with a team ordering index.
+![query2_designB](./img_src/query2_4.png)
+
+<p align="center"><em>Figure 24: Design B results</em></p>
+
 Design C:
 ```sql
 CREATE INDEX idx_section_instructor ON Section(instructor);
 CREATE INDEX idx_team_team_name ON Team(team_name);
 ```
-![query3_result](./img_src/query2_5.png)
+Idea: Focus on filter/sort columns only; expect limited gains without join-key indexing.
+![query2_designC](./img_src/query2_5.png)
+
+<p align="center"><em>Figure 25: Design C results</em></p>
 ### Rows / Costs Performance
 
 | Design   | Rows    | Costs   |
@@ -615,14 +648,14 @@ Note: Replace **<target_section_id>** with the specific course section’s ID to
 ![query3_result](./img_src/query3_1_2.png)
 ![query3_result](./img_src/query3_1_3.png)
 
-<p align="center"><em>Figure 1: Query 3 example results (three target sections)</em></p>
+<p align="center"><em>Figure 26: Query 3 example results (three target sections)</em></p>
 
 Basic EXPLAIN ANALYZE:
 ![query1_result](./img_src/query3_1_1_cost.png)
 ![query1_result](./img_src/query3_1_2_cost.png)
 ![query1_result](./img_src/query3_1_3_cost.png)
 
-<p align="center"><em>Figure 2: EXPLAIN ANALYZE (baseline costs for three sections)</em></p>
+<p align="center"><em>Figure 27: EXPLAIN ANALYZE (baseline costs for three sections)</em></p>
 
 Design A：Filtering Composite Index
 ```sql
@@ -633,7 +666,7 @@ Idea: Push down WHERE filtering via composite index on (section_id, status) to p
 ![query1_result](./img_src/query3_2_2.png)
 ![query1_result](./img_src/query3_2_3.png)
 
-<p align="center"><em>Figure 3: Design A results across three sections</em></p>
+<p align="center"><em>Figure 28: Design A results across three sections</em></p>
 
 Design B: Covering Index for GROUP BY
 ```sql
@@ -644,7 +677,7 @@ Idea: Use a wider covering index to satisfy GROUP BY/SELECT columns from index a
 ![query1_result](./img_src/query3_3_2.png)
 ![query1_result](./img_src/query3_3_3.png)
 
-<p align="center"><em>Figure 4: Design B results across three sections</em></p>
+<p align="center"><em>Figure 29: Design B results across three sections</em></p>
 
 Design C: Composite Index with Sorting Optimization
 ```sql
@@ -655,7 +688,7 @@ Idea: Extend the composite index with target_size to potentially assist sorting/
 ![query1_result](./img_src/query3_4_2.png)
 ![query1_result](./img_src/query3_4_3.png)
 
-<p align="center"><em>Figure 5: Design C results across three sections</em></p>
+<p align="center"><em>Figure 30: Design C results across three sections</em></p>
 
 ### Rows / Costs Performance
 As for cost analysis, we take the average of three examples and got the following result:
@@ -698,102 +731,18 @@ All three designs eliminate the full scan and massively reduce cost versus basel
 
 ---
 
-#### **Query 4 — [Query Name Here]**
-**Used SQL Features:** (e.g., Aggregation + HAVING)
+## Summary
 
-(SQL)
-SELECT ... FROM ...  
-GROUP BY ...  
-HAVING ...  
-LIMIT 15;
+This document presents the database implementation and performance optimization for the TeamUp UIUC platform. We successfully deployed a MySQL 8.0 database on Google Cloud SQL with 12 core tables, populated them with 1,000+ rows of real and synthetic data, and developed three advanced SQL queries with comprehensive indexing analysis.
 
-**Explanation:**  
-Briefly describe the purpose of this query.
+**Key Achievements:**
+- **Database Implementation**: Created 12 tables with proper DDL, foreign keys, and constraints, successfully importing 1,260 courses, 4,377 sections, 1,000 users, and 1,971 team memberships.
+- **Advanced Queries**: Developed three complex queries utilizing JOINs, GROUP BY, HAVING, and aggregation operations to support core platform features.
+- **Indexing Analysis**: Tested three different indexing strategies for each query, observing dramatic performance improvements (up to 99% cost reduction) when appropriate indexes were applied.
 
-**Result Screenshot:**  
-![query4_result](./img_src/query4.png)
+**Index Selection Findings:**
+- **Query 1**: No index recommended — existing primary key indexes already optimize the query efficiently.
+- **Query 2**: `idx_team_course_section` recommended — achieved 99.8% cost reduction by optimizing join operations.
+- **Query 3**: `idx_team_section_status` recommended — achieved 99% cost reduction by filtering composite predicates.
 
----
-
-### III. Indexing & Performance Analysis
-
-This section evaluates query performance before and after applying indexing strategies using the `EXPLAIN ANALYZE` command.  
-Each query’s execution cost is compared under different index configurations.
-
----
-
-#### **3.1 Baseline (No Index)**
-
-The following table summarizes the cost of each query before applying any index optimization.
-
-| **Query** | **Cost (Before Index)** | **Screenshot** |
-|------------|-------------------------|----------------|
-| Query 1 | (fill later) | ![explain1_before](./img_src/explain1_before.png) |
-| Query 2 | (fill later) | ![explain2_before](./img_src/explain2_before.png) |
-| Query 3 | (fill later) | ![explain3_before](./img_src/explain3_before.png) |
-| Query 4 | (fill later) | ![explain4_before](./img_src/explain4_before.png) |
-
----
-
-#### **3.2 Different Index Designs**
-
-For each advanced query, we tested at least three different indexing strategies and measured their impact on cost.
-
-**Index Design 1 — Join Columns**
-
-(SQL)
-CREATE INDEX idx_user_course ON Enrollment(user_id, course_id);
-
-**Observed Effect:**  
-Describe the impact (e.g., “Improved JOIN performance between Enrollment and Course by reducing cost 35%.”)
-
-**Before vs After Cost Comparison:**  
-| Query | Before | After | Change | Screenshot |
-|--------|---------|--------|---------|-------------|
-| Query 1 | (fill later) | (fill later) | (fill later) | ![explain1_after_idx1](./img_src/explain1_after_idx1.png) |
-
----
-
-**Index Design 2 — Filter Columns**
-
-(SQL)
-CREATE INDEX idx_course_term ON Course(term_id);
-
-**Observed Effect:**  
-Describe performance change (e.g., “Improved filtering on term-based queries.”)
-
-| Query | Before | After | Change | Screenshot |
-|--------|---------|--------|---------|-------------|
-| Query 3 | (fill later) | (fill later) | (fill later) | ![explain3_after_idx2](./img_src/explain3_after_idx2.png) |
-
----
-
-**Index Design 3 — Aggregation Columns**
-
-(SQL)
-CREATE INDEX idx_course_subject ON Course(subject);
-
-**Observed Effect:**  
-Describe result (e.g., “Reduced grouping cost by 25% in aggregated queries.”)
-
-| Query | Before | After | Change | Screenshot |
-|--------|---------|--------|---------|-------------|
-| Query 4 | (fill later) | (fill later) | (fill later) | ![explain4_after_idx3](./img_src/explain4_after_idx3.png) |
-
----
-
-#### **3.3 Final Index Choice**
-
-| **Index Name** | **Columns** | **Purpose / Reason for Selection** |
-|-----------------|-------------|------------------------------------|
-| idx_user_course | (user_id, course_id) | Optimizes JOIN between Enrollment and Course |
-| idx_course_term | (term_id) | Improves filtering by term |
-| idx_course_subject | (subject) | Enhances GROUP BY aggregation efficiency |
-
-**Explanation:**  
-Summarize which indices were chosen as the final design and explain the reasoning behind them.  
-If no performance gain was observed, explain possible causes such as small dataset size, data distribution, or query structure limitations.
-
-(Optional: include performance trend chart)
-
-![index_chart](./img_src/index_comparison.png)
+Our analysis demonstrates the critical importance of indexing join columns and composite filter predicates, while also showing that not all queries benefit from additional indexes when primary key indexes already provide optimal performance.
