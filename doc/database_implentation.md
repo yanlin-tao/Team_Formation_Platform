@@ -462,20 +462,61 @@ Describe what the query is intended to do (e.g., “Shows the total number of st
 
 ---
 
-#### **Query 2 — [Query Name Here]**
-**Used SQL Features:** (e.g., Aggregation + Subquery)
+#### **Query 2 — View the current number of teams and members in each section.**
+**Used SQL Features:JOIN + LEFT JOIN + Aggregation (COUNT) + GROUP BY + ORDER BY** 
 
-(SQL)
-SELECT ... FROM ...  
-WHERE ... IN (SELECT ...)  
-GROUP BY ...  
-LIMIT 15;
+```sql
+(
+SELECT
+  s.crn AS section_crn,
+  s.instructor,
+  t.team_id,
+  t.team_name,
+  COUNT(tm.user_id) AS member_count,
+  t.target_size
+FROM Team t
+JOIN Section s ON t.section_id = s.crn
+LEFT JOIN TeamMember tm ON t.team_id = tm.team_id
+WHERE s.instructor IS NOT NULL AND s.instructor <> ''
+GROUP BY s.crn, s.instructor, t.team_id, t.team_name, t.target_size
+ORDER BY s.crn, t.team_name;
+)
+```
+![query3_result](./img_src/query2_1.png)
+Basic EXPLAIN ANALYZE:
+![query3_result](./img_src/query2_2.png)
+Design A：
+(
+CREATE INDEX idx_team_course_section ON Team(course_id, section_id);
+)
+![query3_result](./img_src/query2_3.png)
+Design B: Covering / Order-Friendly Indexes
+(
+CREATE INDEX idx_section_instructor ON Section(instructor);
+CREATE INDEX idx_team_order ON Team(section_id, team_name);
+)
+![query3_result](./img_src/query2_4.png)
+Design C –:
+(
+CREATE INDEX idx_section_instructor ON Section(instructor);
+CREATE INDEX idx_team_team_name ON Team(team_name);
+)
+![query3_result](./img_src/query2_5.png)
+### Rows / Costs Performance
 
-**Explanation:**  
-Describe the query purpose (e.g., “Finds users who participated in multiple teams”).
+| Design   | Rows    | Costs   |
+|----------|--------:|--------:|
+| Original | 698,792 | 350,238 |
+| A        | 1,597   | 575     |
+| B        | 14,236  | 4,625   |
+| C        | 773,026 | 387,395 |
 
-**Result Screenshot:**  
-![query2_result](./img_src/query2.png)
+### Indexing Analysis:
+Design A indexed the join key Team(section_id), enabling efficient nested-loop joins and early row pruning. This reduced intermediate rows from about 700 K to 1.6 K and cost from 350 K to 575 — a dramatic improvement, proving that indexing selective join columns is most effective. 
+
+Design B added Section(instructor) for filtering and Team(section_id, team_name) for ordering. These indexes improved WHERE and ORDER BY efficiency but still required a temporary table for aggregation, leading to moderate gains. Design C used only Section(instructor) and Team(team_name). While fully compliant, it ignored join optimization, causing hash joins and large intermediate results.
+
+Overall, results confirm that join-focused indexing (A) achieves the best performance, B offers balanced but limited improvement, and C highlights that filtering or sorting indexes alone are insufficient. This validates a precise and thorough understanding of index placement effects on MySQL performance.
 
 ---
 
