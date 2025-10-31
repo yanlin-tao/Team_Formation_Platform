@@ -467,6 +467,7 @@ GROUP BY t.team_id, t.team_name, c.title;
 Note: Replace **<target_user_id>** with the specific user’s ID to see which teams that user has joined. In our analysis, we will use three **target_user_id(646, 576, 230)** within our table. 
 
 **Query Result Screenshot:**  
+
 ![query1_result](./img_src/query1_1_1.png)
 ![query1_result](./img_src/query1_1_2.png)
 ![query1_result](./img_src/query1_1_3.png)
@@ -566,11 +567,13 @@ ORDER BY s.crn, t.team_name;
 )
 ```
 **Query Result Screenshot:**  
+
 ![query2_result](./img_src/query2_1.png)
 
 <p align="center"><em>Figure 21: Query 2 example result (section/team overview)</em></p>
 
 Basic EXPLAIN ANALYZE:
+
 ![query2_explain](./img_src/query2_2.png)
 
 <p align="center"><em>Figure 22: EXPLAIN ANALYZE (baseline)</em></p>
@@ -606,6 +609,7 @@ Idea: Focus on filter/sort columns only; expect limited gains without join-key i
 ![query2_designC](./img_src/query2_5.png)
 
 <p align="center"><em>Figure 25: Design C results</em></p>
+
 ### Rows / Costs Performance
 
 | Design   | Rows    | Costs   |
@@ -650,6 +654,7 @@ ORDER BY remaining_slots DESC, t.team_id;
 Note: Replace **<target_section_id>** with the specific course section’s ID to check all non-full teams in that section. In our analysis, we will use three **target_section_id(37931, 70777, 43555)** within our table. 
 
 **Query Result Screenshot:**  
+
 ![query3_result](./img_src/query3_1_1.png)
 ![query3_result](./img_src/query3_1_2.png)
 ![query3_result](./img_src/query3_1_3.png)
@@ -657,6 +662,7 @@ Note: Replace **<target_section_id>** with the specific course section’s ID to
 <p align="center"><em>Figure 26: Query 3 example results (three target sections)</em></p>
 
 Basic EXPLAIN ANALYZE:
+
 ![query1_result](./img_src/query3_1_1_cost.png)
 ![query1_result](./img_src/query3_1_2_cost.png)
 ![query1_result](./img_src/query3_1_3_cost.png)
