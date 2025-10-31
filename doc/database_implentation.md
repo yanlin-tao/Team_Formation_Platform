@@ -832,15 +832,16 @@ Idea: Support the second subquery, which filters the Comment table using a compo
 
 <p align="center"><em>Figure 35: Design C results across three users</em></p>
 
-### Costs Performance
+### Rows / Costs Performance
 As for cost analysis, we take the average of three examples and got the following result:
 
-| Design   | Costs|
-|----------|----:|
-| Original |10.813 |
-| A        | 10.813|
-| B        | 10.813|
-| C        | 9.337|
+| Design   | Rows    |Costs|
+|----------|--------:|----:|
+| Original |  3.67  | 10.813 |
+| A        |  3.67  | 10.813|
+| B        | 3.67 | 10.813 |
+| C        | 3.67 | 9.337 |
+
 
 ### Indexing Analysis:
 **Design A**:
