@@ -746,6 +746,119 @@ All three designs eliminate the full scan and massively reduce cost versus basel
 
 ---
 
+### **Query 4 — View all posts a user has written or commented on (ordered by creation time)**
+**Used SQL Features: JOIN + Subquery (IN) + SET Operator UNION + ORDER BY**
+
+This query retrieves all posts that a specific user has either authored or interacted with through comments.It helps users to easily find out the posts and track the team formation progress and the following response of the posts. 
+
+```sql
+(SELECT DISTINCT 
+    p.post_id, 
+    p.title, 
+    p.content, 
+    p.created_at, 
+    u.display_name 
+ FROM Post p 
+ JOIN User u ON p.user_id = u.user_id 
+ WHERE p.user_id = <target_user_id>)
+ 
+UNION
+
+(SELECT DISTINCT 
+    p.post_id, 
+    p.title, 
+    p.content, 
+    p.created_at, 
+    u.display_name 
+ FROM Post p 
+ JOIN User u ON p.user_id = u.user_id 
+ WHERE p.post_id IN (
+     SELECT post_id 
+     FROM Comment 
+     WHERE user_id = <target_user_id>))
+ORDER BY created_at DESC;
+
+```
+Note: **<target_user_id>** in the above code should be replaced with the user id whose interactions of posts and comments are checked. In our analysis, we random sample three **target_user_ids = (7, 452, 954)**. Note that the results shown cannot reach 15 lines as we don’t have such a large synthetic dataset for posts and comments. The users we sampled are involved in fewer than 15 posts. 
+
+**Query Result Screenshot:** 
+
+![query4_result](./img_src/query4_1_1.png)
+![query4_result](./img_src/query4_1_2.png)
+![query4_result](./img_src/query4_1_3.png)
+
+<p align="center"><em>Figure 31: Query 4 example results (three target users)</em></p>
+
+Basic EXPLAIN ANALYZE:
+![query4_result](./img_src/query4_1_4.png)
+![query4_result](./img_src/query4_1_5.png)
+![query4_result](./img_src/query4_1_6.png)
+
+<p align="center"><em>Figure 32: EXPLAIN ANALYZE (baseline costs for three users)</em></p>
+
+**Design A：Using Composite Index**
+```sql
+CREATE INDEX idx_post_created ON Post(user_id, created_at DESC);
+```
+Idea: Support the first subquery, which filters the user_id in the Post and sort results efficiently by created_at DESC without extra sorting.
+
+![query4_result](./img_src/query4_2_1.png)
+![query4_result](./img_src/query4_2_2.png)
+![query4_result](./img_src/query4_2_3.png)
+
+<p align="center"><em>Figure 33: Design A results across three users</em></p>
+
+**Design B: Using Covering Index**
+```sql
+CREATE INDEX idx_post_user_created_cover ON Post(user_id, created_at DESC, post_id, title);
+```
+Idea: Cover all columns used in the first subquery (user_id, created_at, post_id, title) and try to avoid table lookup.
+
+![query4_result](./img_src/query4_3_1.png)
+![query4_result](./img_src/query4_3_2.png)
+![query4_result](./img_src/query4_3_3.png)
+
+<p align="center"><em>Figure 34: Design B results across three users</em></p>
+
+**Design C: Using Composite Index**
+```sql
+CREATE INDEX idx_comment_user_post ON Comment (user_id, post_id);
+```
+Idea: Support the second subquery, which filters the Comment table using a composite indexing
+
+![query4_result](./img_src/query4_4_1.png)
+![query4_result](./img_src/query4_4_2.png)
+![query4_result](./img_src/query4_4_3.png)
+
+<p align="center"><em>Figure 35: Design C results across three users</em></p>
+
+### Costs Performance
+As for cost analysis, we take the average of three examples and got the following result:
+
+| Design   | Costs|
+|----------|----:|
+| Original |10.813 |
+| A        | 10.813|
+| B        | 10.813|
+| C        | 9.337|
+
+### Indexing Analysis:
+**Design A**:
+
+This index was designed to support the filtering condition WHERE p.user_id = <target_user_id> and the ORDER BY created_at DESC clause in the first subquery. The goal was to enable an index range scan to retrieve all posts by the user in descending chronological order without requiring a separate sort operation. However, the measured average cost remained 10.813, the same as the baseline. This is probably because we already have an indexing for our foreign key user_id. And the UNION operation may also be a reason why it performs nearly the same as our baseline. 
+
+**Design B**:
+
+This index extended Design A into a covering index as Design A does not work well, adding post_id and title so that the database could potentially retrieve all required columns directly from the index without accessing the base table. However, performance again showed no improvement (average cost = 10.813). Even with a whole covering index, the database is still forced to access the main Post table regardless.
+
+**Design C**: 
+
+By indexing both user_id (the filtering condition) and post_id (the returned column), the database could efficiently locate all posts the user commented on. This design reduced the average cost to 9.337, demonstrating clear improvement over the baseline. The optimizer was able to avoid a full table scan on the Comment table and instead perform a targeted index lookup. Although we have had the automatic foreign key indexing of user_id and post_id, the composite indexing of (user_id, post_id) performs better. 
+
+Based on the above results, our final indexing design would be **Design C** as it provides meaningful performance improvements by directly optimizing the subquery that filtered comments by user. It achieves about **10% cost reduction** (10.81 → 9.34).
+
+---
+
 ## Summary
 
 This document presents the database implementation and performance optimization for the TeamUp UIUC platform. We successfully deployed a MySQL 8.0 database on Google Cloud SQL with 12 core tables, populated them with 1,000+ rows of real and synthetic data, and developed three advanced SQL queries with comprehensive indexing analysis.
@@ -759,5 +872,6 @@ This document presents the database implementation and performance optimization 
 - **Query 1**: No index recommended — existing primary key indexes already optimize the query efficiently.
 - **Query 2**: `idx_team_course_section` recommended — achieved 99.8% cost reduction by optimizing join operations.
 - **Query 3**: `idx_team_section_status` recommended — achieved 99% cost reduction by filtering composite predicates.
+- **Query 4**: `idx_comment_user_post` recommended — achieved 10% cost reduction by filtering composite predicates.
 
 Our analysis demonstrates the critical importance of indexing join columns and composite filter predicates, while also showing that not all queries benefit from additional indexes when primary key indexes already provide optimal performance.
