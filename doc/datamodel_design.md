@@ -1,4 +1,4 @@
-# Conceptual & Logical Database Design
+# PT1-Stage 2: Conceptual and Logical Database Design
 
 <p align="left">
     <img src="./img_src/label.png" alt="label Diagram"

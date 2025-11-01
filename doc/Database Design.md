@@ -1,4 +1,4 @@
-# Database Design and Implementation
+# PT1-Stage 3: Database Implementation and Indexing
 
 <p align="left">
     <img src="./img_src/label.png" alt="label Diagram"
