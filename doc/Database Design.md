@@ -461,7 +461,8 @@ JOIN Course c ON t.course_id = c.course_id
 JOIN TeamMember tu ON t.team_id = tu.team_id
 LEFT JOIN TeamMember tu2 ON t.team_id = tu2.team_id
 WHERE tu.user_id = <target_user_id>
-GROUP BY t.team_id, t.team_name, c.title;
+GROUP BY t.team_id, t.team_name, c.title
+LIMIT 15;
 )
 ```
 Note: Replace **<target_user_id>** with the specific user’s ID to see which teams that user has joined. In our analysis, we will use three **target_user_id(646, 576, 230)** within our table. 
@@ -563,7 +564,8 @@ JOIN Section s ON t.section_id = s.crn
 LEFT JOIN TeamMember tm ON t.team_id = tm.team_id
 WHERE s.instructor IS NOT NULL AND s.instructor <> ''
 GROUP BY s.crn, s.instructor, t.team_id, t.team_name, t.target_size
-ORDER BY s.crn, t.team_name;
+ORDER BY s.crn, t.team_name
+LIMIT 15;
 )
 ```
 **Query Result Screenshot:**  
@@ -648,7 +650,8 @@ WHERE t.section_id = <target_section_id>
 AND t.status = 'open'
 GROUP BY t.team_id, t.team_name, t.target_size
 HAVING COUNT(DISTINCT tm.user_id) < t.target_size
-ORDER BY remaining_slots DESC, t.team_id;
+ORDER BY remaining_slots DESC, t.team_id
+LIMIT 15;
 ```
 
 Note: Replace **<target_section_id>** with the specific course section’s ID to check all non-full teams in that section. In our analysis, we will use three **target_section_id(37931, 70777, 43555)** within our table. 
@@ -776,7 +779,8 @@ UNION
      SELECT post_id 
      FROM Comment 
      WHERE user_id = <target_user_id>))
-ORDER BY created_at DESC;
+ORDER BY created_at DESC
+LIMIT 15;
 
 ```
 Note: **<target_user_id>** in the above code should be replaced with the user id whose interactions of posts and comments are checked. In our analysis, we random sample three **target_user_ids = (7, 452, 954)**. Note that the results shown cannot reach 15 lines as we don’t have such a large synthetic dataset for posts and comments. The users we sampled are involved in fewer than 15 posts. 
