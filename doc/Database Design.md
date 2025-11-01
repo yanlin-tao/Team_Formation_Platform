@@ -630,7 +630,7 @@ Overall, results confirm that join-focused indexing (A) achieves the best perfor
 
 ---
 
-#### **Query 3 — Find All “Not Full” Teams in a Given Course Section**
+#### **Query 3 — Find All Not Full Teams in a Given Course Section**
 **Used SQL Features: JOIN + LEFT JOIN + Aggregation (COUNT / HAVING) + GROUP BY + ORDER BY** 
 
 This query finds all teams in a given section that are still open and not yet full. It joins the Team and TeamMember tables to count current members, filters teams whose member count is below the target size, and sorts the results by remaining slots. In our project, this query powers the “Find Available Teams” feature, helping users quickly locate open teams within a course section.
