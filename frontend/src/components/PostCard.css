@@ -1,0 +1,88 @@
+.post-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #e0e0e0;
+}
+
+.post-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  border-color: #1a73e8;
+}
+
+.post-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.post-card-title {
+  font-size: 1.3rem;
+  color: #333;
+  margin: 0;
+  flex: 1;
+  font-weight: 600;
+}
+
+.post-card-status {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.post-card-content {
+  margin-bottom: 1rem;
+}
+
+.post-card-preview {
+  color: #666;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.post-card-info {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.post-card-course,
+.post-card-section {
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.post-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.post-card-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-item {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.post-card-author {
+  color: #999;
+  font-size: 0.85rem;
+}
+
