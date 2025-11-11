@@ -4,32 +4,24 @@ from pydantic import BaseModel
 from typing import Optional, List
 import mysql.connector
 from mysql.connector import Error
-import os
-from dotenv import load_dotenv
+from config import DB_CONFIG, CORS_ORIGINS, API_HOST, API_PORT, validate_config
 
-load_dotenv()
+# Validate configuration on startup
+try:
+    validate_config()
+except ValueError as e:
+    print(f"Warning: {e}")
 
 app = FastAPI(title="TeamUp UIUC API", version="1.0.0")
 
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Database configuration
-DB_CONFIG = {
-    'host': os.getenv('DB_HOST', '34.172.159.62'),
-    'port': int(os.getenv('DB_PORT', 3306)),
-    'user': os.getenv('DB_USER', 'root'),
-    'password': os.getenv('DB_PASSWORD', ''),
-    'database': os.getenv('DB_NAME', 'team001_db'),
-    'charset': 'utf8mb4',
-    'collation': 'utf8mb4_unicode_ci'
-}
 
 
 def get_db_connection():
@@ -298,5 +290,5 @@ def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=API_HOST, port=API_PORT)
 
