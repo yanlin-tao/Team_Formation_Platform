@@ -58,7 +58,9 @@ function PostPage() {
       <div className="post-page">
         <Sidebar />
         <div className="post-content">
-          <div className="loading-message">Loading post...</div>
+          <div className="post-content-wrapper">
+            <div className="loading-message">Loading post...</div>
+          </div>
         </div>
       </div>
     )
@@ -69,10 +71,12 @@ function PostPage() {
       <div className="post-page">
         <Sidebar />
         <div className="post-content">
-          <div className="error-message">{error || 'Post not found'}</div>
-          <button className="back-button" onClick={() => navigate('/')}>
-            Back to Home
-          </button>
+          <div className="post-content-wrapper">
+            <div className="error-message">{error || 'Post not found'}</div>
+            <button className="back-button" onClick={() => navigate('/')}>
+              ← Back to Home
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -82,11 +86,12 @@ function PostPage() {
     <div className="post-page">
       <Sidebar />
       <div className="post-content">
-        <button className="back-button" onClick={() => navigate('/')}>
-          ← Back to Home
-        </button>
+        <div className="post-content-wrapper">
+          <button className="back-button" onClick={() => navigate('/')}>
+            ← Back to Home
+          </button>
 
-        <div className="post-detail">
+          <div className="post-detail">
           <div className="post-header">
             <h1 className="post-title">{post.title}</h1>
             <div className="post-meta">
@@ -99,7 +104,10 @@ function PostPage() {
 
           <div className="post-info">
             <div className="info-item">
-              <strong>Course:</strong> {post.course_title || 'N/A'}
+              <strong>Course:</strong> 
+              {post.course_subject && post.course_number 
+                ? `${post.course_subject} ${post.course_number}${post.course_title ? ` - ${post.course_title}` : ''}`
+                : post.course_title || 'N/A'}
             </div>
             {post.section_code && (
               <div className="info-item">
@@ -166,6 +174,7 @@ function PostPage() {
               ✓ Join request sent successfully!
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>

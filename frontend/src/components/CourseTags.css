@@ -1,0 +1,70 @@
+/* UIUC Color Palette */
+:root {
+  --uiuc-navy: #13294B;
+  --uiuc-orange: #FF5F00;
+  --uiuc-light-blue: #6CACE4;
+  --uiuc-light-orange: #FFB81C;
+  --uiuc-gray: #5B6770;
+  --uiuc-light-gray: #E8E8E8;
+  --uiuc-white: #FFFFFF;
+  --uiuc-bg: #F8F9FA;
+}
+
+.course-tags-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.tag-label {
+  color: var(--uiuc-gray);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.course-tag {
+  background: var(--uiuc-light-blue);
+  color: var(--uiuc-navy);
+  border: 2px solid var(--uiuc-light-blue);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.course-tag:hover {
+  background: #A8D5E2;
+  color: var(--uiuc-white);
+  border-color: var(--uiuc-light-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(108, 172, 228, 0.3);
+}
+
+.tag-loading {
+  color: var(--uiuc-gray);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.course-tag:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .course-tags-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .tag-label {
+    width: 100%;
+  }
+}
+

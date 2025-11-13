@@ -1,3 +1,15 @@
+/* UIUC Color Palette */
+:root {
+  --uiuc-navy: #13294B;
+  --uiuc-orange: #FF5F00;
+  --uiuc-light-blue: #6CACE4;
+  --uiuc-light-orange: #FFB81C;
+  --uiuc-gray: #5B6770;
+  --uiuc-light-gray: #E8E8E8;
+  --uiuc-white: #FFFFFF;
+  --uiuc-bg: #F8F9FA;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,11 +22,37 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, var(--uiuc-bg) 0%, #F0F4F8 100%);
+  color: var(--uiuc-navy);
+  line-height: 1.6;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--uiuc-light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--uiuc-orange);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E65100;
 }
 
