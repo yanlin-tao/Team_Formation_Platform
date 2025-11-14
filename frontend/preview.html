@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamUp UIUC! - Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+        }
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: #fff;
+            border-right: 1px solid #e0e0e0;
+            padding: 1.5rem;
+        }
+        .sidebar h2 {
+            color: #1a73e8;
+            margin-bottom: 2rem;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+        }
+        .nav-item:hover {
+            background-color: #f5f5f5;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 2rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .header h1 {
+            font-size: 3rem;
+            color: #1a73e8;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .search-button {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .section-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .post-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .post-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .post-preview {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .post-info {
+            padding: 0.75rem;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .status-badge {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .info-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        .info-box h3 {
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+        .info-box p {
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <h2>TeamUp</h2>
+            <div class="nav-item">🏠 Home</div>
+            <div class="nav-item">🔔 Notifications</div>
+            <div class="nav-item">🔍 Search</div>
+            <div class="nav-item">💬 Messages</div>
+            <div class="nav-item">📚 My Courses</div>
+            <div class="nav-item">👥 My Teams</div>
+        </div>
+        <div class="content">
+            <div class="header">
+                <h1>TeamUp UIUC!</h1>
+                <p>Find your perfect teammates for course projects</p>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search courses by name or code...">
+                <button class="search-button">🔍 Search</button>
+            </div>
+
+            <div class="info-box">
+                <h3>📌 注意</h3>
+                <p>这是静态预览页面。要运行完整的前端应用（带 React 功能），需要安装 Node.js 和 npm，然后运行 <code>npm install</code> 和 <code>npm run dev</code></p>
+            </div>
+
+            <h2 class="section-title">Popular Posts</h2>
+            <div class="posts-grid">
+                <div class="post-card">
+                    <div class="status-badge">Open</div>
+                    <h3 class="post-title">Looking for teammates for CS 411 Project</h3>
+                    <p class="post-preview">We need a backend developer and a frontend developer for our database project. Experience with FastAPI and React preferred...</p>
+                    <div class="post-info">
+                        <strong>Course:</strong> CS 411 - Database Systems<br>
+                        <strong>Section:</strong> AB
+                    </div>
+                    <div class="post-footer">
+                        <div>👁️ 45 | 📨 12</div>
+                        <div>By John Doe</div>
+                    </div>
+                </div>
+
+                <div class="post-card">
+                    <div class="status-badge">Open</div>
+                    <h3 class="post-title">ECE 391 Team Formation</h3>
+                    <p class="post-preview">Looking for teammates who are familiar with embedded systems and C programming. We have 2 spots available...</p>
+                    <div class="post-info">
+                        <strong>Course:</strong> ECE 391 - Computer Systems Engineering<br>
+                        <strong>Section:</strong> AL1
+                    </div>
+                    <div class="post-footer">
+                        <div>👁️ 32 | 📨 8</div>
+                        <div>By Jane Smith</div>
+                    </div>
+                </div>
+
+                <div class="post-card">
+                    <div class="status-badge">Open</div>
+                    <h3 class="post-title">CS 225 Data Structures Group</h3>
+                    <p class="post-preview">Need one more person for our group project. Must be comfortable with C++ and data structures...</p>
+                    <div class="post-info">
+                        <strong>Course:</strong> CS 225 - Data Structures<br>
+                        <strong>Section:</strong> AD1
+                    </div>
+                    <div class="post-footer">
+                        <div>👁️ 28 | 📨 5</div>
+                        <div>By Bob Johnson</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
