@@ -11,6 +11,32 @@ try:
 except ValueError as e:
     print(f"Warning: {e}")
 
+# Test database connection on startup
+def test_db_connection_on_startup():
+    """Test database connection when application starts"""
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        if conn.is_connected():
+            cursor = conn.cursor()
+            cursor.execute("SELECT VERSION();")
+            version = cursor.fetchone()
+            cursor.close()
+            conn.close()
+            print(f"✅ Database connection successful! MySQL version: {version[0]}")
+            print(f"   Connected to: {DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']} as user '{DB_CONFIG['user']}'")
+            return True
+    except Error as e:
+        print(f"❌ Database connection failed on startup: {e}")
+        print(f"   Configuration: host={DB_CONFIG['host']}, port={DB_CONFIG['port']}, "
+              f"user={DB_CONFIG['user']}, database={DB_CONFIG['database']}")
+        print(f"   Password: {'*' * len(DB_CONFIG.get('password', '')) if DB_CONFIG.get('password') else 'NOT SET'}")
+        print(f"   Please check your .env file or environment variables")
+        print(f"   Default values in config.py: user='admin', database='CS411-teamup'")
+        return False
+
+# Test connection on startup
+test_db_connection_on_startup()
+
 app = FastAPI(title="TeamUp UIUC API", version="1.0.0")
 
 # CORS middleware
@@ -27,10 +53,19 @@ def get_db_connection():
     """Create and return a database connection"""
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
+        if not conn.is_connected():
+            raise Error("Connection established but not connected")
         return conn
     except Error as e:
-        print(f"Error connecting to MySQL: {e}")
-        raise HTTPException(status_code=500, detail="Database connection failed")
+        error_msg = f"Error connecting to MySQL: {e}"
+        print(error_msg)
+        print(f"Database config used: host={DB_CONFIG['host']}, port={DB_CONFIG['port']}, "
+              f"user={DB_CONFIG['user']}, database={DB_CONFIG['database']}, "
+              f"password={'*' * len(DB_CONFIG.get('password', '')) if DB_CONFIG.get('password') else 'NOT SET'}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Database connection failed: {str(e)}. Check your database configuration in .env file or config.py"
+        )
 
 
 def get_default_terms():
