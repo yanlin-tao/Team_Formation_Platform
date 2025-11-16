@@ -1,7 +1,9 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Optional, List
+from pydantic import BaseModel, EmailStr
+from typing import Optional, List, Dict, Any
+import uuid
+from datetime import datetime
 import mysql.connector
 from mysql.connector import Error
 from config import DB_CONFIG, CORS_ORIGINS, API_HOST, API_PORT, validate_config
@@ -98,6 +100,149 @@ class JoinRequest(BaseModel):
     message: str
 
 
+class RegisterRequest(BaseModel):
+    display_name: str
+    email: EmailStr
+    netid: Optional[str] = None
+    password: Optional[str] = None
+
+
+class LoginRequest(BaseModel):
+    identifier: str  # email or netid
+    password: Optional[str] = None
+
+
+class AuthUser(BaseModel):
+    user_id: int
+    display_name: str
+    email: EmailStr
+    netid: Optional[str] = None
+    avatar_url: Optional[str] = None
+
+
+class AuthResponse(BaseModel):
+    token: str
+    user: AuthUser
+
+
+class CommentResponse(BaseModel):
+    comment_id: int
+    post_id: int
+    user_id: int
+    author_name: Optional[str] = None
+    avatar_url: Optional[str] = None
+    content: str
+    parent_comment_id: Optional[int] = None
+    created_at: Optional[str] = None
+
+
+class CommentCreate(BaseModel):
+    user_id: int
+    content: str
+    parent_comment_id: Optional[int] = None
+
+
+MOCK_USER = {
+    "user_id": 101,
+    "display_name": "Avery Chen",
+    "email": "avery.chen@illinois.edu",
+    "netid": "achen12",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1763434?v=4",
+}
+
+
+def get_mock_profile_payload() -> Dict[str, Any]:
+    return {
+        "profile": {
+            "name": "Avery Chen",
+            "title": "Product-focused CS + Advertising Student",
+            "major": "Computer Science + Advertising Minor",
+            "graduation": "Spring 2025",
+            "location": "Urbana-Champaign, IL",
+            "bio": "I blend user research with rapid prototyping to ship course project MVPs. Currently leading matchmaking initiatives for CS 411 and co-hosting peer onboarding workshops.",
+            "availability": "Weekdays after 5 PM & weekends",
+        },
+        "stats": [
+            {"label": "Active Courses", "value": 5, "trend": "+1 this term"},
+            {"label": "Open Requests", "value": 3, "trend": "2 waiting replies"},
+            {"label": "Successful Matches", "value": 14, "trend": "92% response rate"},
+            {
+                "label": "Collaboration Score",
+                "value": "4.8/5",
+                "trend": "Consistently high",
+            },
+        ],
+        "activeTeams": [
+            {
+                "name": "CS 411 • Team Atlas",
+                "role": "Product Lead",
+                "focus": "Matching dashboard with predictive ranking",
+                "progress": 72,
+                "spots": 1,
+            },
+            {
+                "name": "ECE 484 • Resonance Lab",
+                "role": "UX Researcher",
+                "focus": "Signal optimization visualizer",
+                "progress": 45,
+                "spots": 2,
+            },
+        ],
+        "spotlightProjects": [
+            {
+                "course": "CS 412 • Data Mining",
+                "title": "Peer Mentor Matching Engine",
+                "summary": "Combined MySQL window functions with FastAPI streaming to cut match time by 63%.",
+            },
+            {
+                "course": "INFO 490 • Design Studio",
+                "title": "TeamUp Brand Refresh",
+                "summary": "Partnered with 4 designers to craft UIUC-themed system with reusable tokens.",
+            },
+        ],
+        "skills": {
+            "core": [
+                "Product Strategy",
+                "Data Storytelling",
+                "Team Facilitation",
+                "Rapid Prototyping",
+            ],
+            "tools": ["Figma", "FastAPI", "MySQL", "Supabase", "Vite", "Zustand"],
+        },
+        "recentActivity": [
+            {
+                "title": "Launched skill tags for CS 411",
+                "time": "2h ago",
+                "detail": "Shared tagged templates with 28 teammates.",
+            },
+            {
+                "title": "Reviewed 3 join requests",
+                "time": "Yesterday",
+                "detail": "Left feedback for students in INFO 303.",
+            },
+            {
+                "title": "Published sprint recap",
+                "time": "Mon, 10:45 PM",
+                "detail": "Outlined blockers + unblocked tasks for Atlas.",
+            },
+        ],
+        "learningTargets": [
+            {
+                "topic": "GraphQL Federation",
+                "detail": "Scalable gateway for course data mesh",
+            },
+            {
+                "topic": "LLM Prompt Chaining",
+                "detail": "Auto-generate teammate intros & outreach tips",
+            },
+            {
+                "topic": "Service Reliability",
+                "detail": "Add SLO dashboards for matching backlog",
+            },
+        ],
+    }
+
+
 # API Routes
 @app.get("/")
 def root():
@@ -165,6 +310,215 @@ async def get_terms():
             conn.close()
 
 
+def _build_auth_user(row: Dict[str, Any]) -> AuthUser:
+    return AuthUser(
+        user_id=row["user_id"],
+        display_name=row.get("display_name") or row.get("netid") or row.get("email"),
+        email=row["email"],
+        netid=row.get("netid"),
+        avatar_url=row.get("avatar_url"),
+    )
+
+
+def _fetch_user_by_identifier(cursor, identifier: str):
+    query = """
+        SELECT user_id, display_name, email, netid, avatar_url
+        FROM User
+        WHERE email = %s OR netid = %s
+        LIMIT 1
+    """
+    cursor.execute(query, (identifier, identifier))
+    return cursor.fetchone()
+
+
+@app.post("/api/auth/register", response_model=AuthResponse)
+async def register_user(payload: RegisterRequest):
+    """
+    Registration endpoint backed by the database. Password is collected for UX parity
+    but is not validated until a future phase.
+    """
+    if not payload.email:
+        raise HTTPException(status_code=400, detail="Email is required")
+    if not payload.display_name:
+        raise HTTPException(status_code=400, detail="Display name is required")
+    if not payload.netid:
+        raise HTTPException(status_code=400, detail="NetID is required")
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute(
+            """
+            SELECT user_id FROM User
+            WHERE email = %s OR netid = %s
+            LIMIT 1
+            """,
+            (payload.email, payload.netid),
+        )
+        existing = cursor.fetchone()
+        if existing:
+            raise HTTPException(
+                status_code=400,
+                detail="An account with this email or NetID already exists.",
+            )
+
+        cursor.execute("SELECT COALESCE(MAX(user_id), 0) + 1 AS next_id FROM User")
+        next_id = cursor.fetchone()["next_id"]
+
+        cursor.execute(
+            """
+            INSERT INTO User (
+                user_id, netid, email, phone_number, display_name,
+                avatar_url, bio, score, major, grade
+            ) VALUES (%s, %s, %s, NULL, %s, NULL, NULL, NULL, NULL, NULL)
+            """,
+            (next_id, payload.netid, payload.email, payload.display_name),
+        )
+        conn.commit()
+
+        user = AuthUser(
+            user_id=next_id,
+            display_name=payload.display_name,
+            email=payload.email,
+            netid=payload.netid,
+            avatar_url=None,
+        )
+        token = f"mock-token-{next_id}-{uuid.uuid4().hex[:6]}"
+        return AuthResponse(token=token, user=user)
+    except Error as e:
+        if conn:
+            conn.rollback()
+        print(f"[ERROR] Failed to register user: {e}")
+        raise HTTPException(status_code=500, detail="Failed to register user")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.post("/api/auth/login", response_model=AuthResponse)
+async def login_user(payload: LoginRequest):
+    """
+    Authenticate against the User table. Password input is ignored for now but kept
+    for consistent UX.
+    """
+    identifier = (payload.identifier or "").strip()
+    if not identifier:
+        raise HTTPException(status_code=400, detail="Email or NetID is required")
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        user_row = _fetch_user_by_identifier(cursor, identifier)
+        if not user_row:
+            raise HTTPException(status_code=401, detail="Account not found")
+
+        user = _build_auth_user(user_row)
+        token = f"mock-token-{user.user_id}-{uuid.uuid4().hex[:6]}"
+        return AuthResponse(token=token, user=user)
+    except Error as e:
+        print(f"[ERROR] Failed to login: {e}")
+        raise HTTPException(status_code=500, detail="Failed to login")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.post("/api/auth/logout")
+async def logout_user():
+    """Stateless logout endpoint."""
+    return {"message": "Logged out"}
+
+
+@app.get("/api/auth/me", response_model=AuthUser)
+async def get_current_user(
+    user_id: Optional[int] = None, identifier: Optional[str] = None
+):
+    """Fetch a user from the database by id or identifier."""
+    if not user_id and not identifier:
+        raise HTTPException(status_code=400, detail="user_id or identifier is required")
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        if user_id:
+            cursor.execute(
+                """
+                SELECT user_id, display_name, email, netid, avatar_url
+                FROM User
+                WHERE user_id = %s
+                LIMIT 1
+                """,
+                (user_id,),
+            )
+            row = cursor.fetchone()
+        else:
+            row = _fetch_user_by_identifier(cursor, identifier.strip())
+
+        if not row:
+            raise HTTPException(status_code=404, detail="User not found")
+        return _build_auth_user(row)
+    except Error as e:
+        print(f"[ERROR] Failed to fetch current user: {e}")
+        raise HTTPException(status_code=500, detail="Failed to fetch user")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/profile/me")
+async def get_profile(user_id: Optional[int] = None):
+    """Return profile payload hydrated with database information when available."""
+    payload = get_mock_profile_payload()
+    user_payload = AuthUser(**MOCK_USER).dict()
+
+    if not user_id:
+        payload["user"] = user_payload
+        return payload
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT user_id, display_name, email, netid, avatar_url, bio, major, grade
+            FROM User
+            WHERE user_id = %s
+            LIMIT 1
+            """,
+            (user_id,),
+        )
+        row = cursor.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user_payload = _build_auth_user(row).dict()
+        profile = payload["profile"]
+        profile["name"] = row.get("display_name") or profile["name"]
+        profile["bio"] = row.get("bio") or profile["bio"]
+        profile["major"] = row.get("major") or profile["major"]
+        profile["graduation"] = row.get("grade") or profile["graduation"]
+    except HTTPException:
+        raise
+    except Error as e:
+        print(f"[ERROR] Failed to load profile: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load profile")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+    payload["user"] = user_payload
+    return payload
+
+
 @app.get("/api/posts/popular")
 async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
     """
@@ -190,6 +544,7 @@ async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
             s.crn AS section_code,
             c.term_id,
             COUNT(DISTINCT mr.request_id) AS request_count,
+            COUNT(DISTINCT cm.comment_id) AS comment_count,
             0 AS view_count,
             t.status
         FROM Post p
@@ -198,6 +553,7 @@ async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
         LEFT JOIN Course c ON t.course_id = c.course_id
         LEFT JOIN Section s ON t.section_id = s.crn AND t.course_id = c.course_id
         LEFT JOIN MatchRequest mr ON p.post_id = mr.post_id
+        LEFT JOIN Comment cm ON p.post_id = cm.post_id
         WHERE (t.status IS NULL OR t.status = 'open')
         """
 
@@ -209,7 +565,7 @@ async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
         query += """
         GROUP BY p.post_id, p.title, p.content, p.created_at, t.target_size,
                  u.display_name, c.title, c.subject, c.number, s.crn, c.term_id, t.status
-        ORDER BY request_count DESC, p.created_at DESC
+        ORDER BY request_count DESC, comment_count DESC, p.created_at DESC
         LIMIT %s
         """
         params.append(limit)
@@ -470,6 +826,124 @@ async def get_post_by_id(post_id: int):
     except Error as e:
         print(f"Database error: {e}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/posts/{post_id}/comments", response_model=List[CommentResponse])
+async def get_post_comments(post_id: int):
+    """
+    Fetch all comments for a given post
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT post_id FROM Post WHERE post_id = %s", (post_id,))
+        if not cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Post not found")
+
+        comment_query = """
+        SELECT 
+            c.comment_id,
+            c.post_id,
+            c.user_id,
+            c.parent_comment_id,
+            c.content,
+            c.created_at,
+            u.display_name AS author_name,
+            u.avatar_url
+        FROM Comment c
+        LEFT JOIN User u ON c.user_id = u.user_id
+        WHERE c.post_id = %s
+        ORDER BY c.created_at ASC, c.comment_id ASC
+        """
+        cursor.execute(comment_query, (post_id,))
+        comments = cursor.fetchall()
+
+        for comment in comments:
+            if comment.get("created_at"):
+                comment["created_at"] = comment["created_at"].isoformat()
+
+        return comments
+    except HTTPException:
+        raise
+    except Error as e:
+        print(f"Database error while fetching comments: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load comments")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.post("/api/posts/{post_id}/comments", response_model=CommentResponse)
+async def create_post_comment(post_id: int, payload: CommentCreate):
+    """
+    Create a new comment for a post
+    """
+    if not payload.content or not payload.content.strip():
+        raise HTTPException(status_code=400, detail="Content cannot be empty")
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT post_id FROM Post WHERE post_id = %s", (post_id,))
+        if not cursor.fetchone():
+            raise HTTPException(status_code=404, detail="Post not found")
+
+        cursor.execute(
+            "SELECT user_id, display_name, avatar_url FROM User WHERE user_id = %s",
+            (payload.user_id,),
+        )
+        user_row = cursor.fetchone()
+        if not user_row:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        cursor.execute(
+            "SELECT COALESCE(MAX(comment_id), 0) + 1 AS next_id FROM Comment"
+        )
+        next_id_row = cursor.fetchone()
+        next_comment_id = next_id_row["next_id"] if next_id_row else 1
+
+        insert_query = """
+        INSERT INTO Comment (comment_id, post_id, user_id, parent_comment_id, content, status, created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s, 'visible', NOW(), NOW())
+        """
+        cursor.execute(
+            insert_query,
+            (
+                next_comment_id,
+                post_id,
+                payload.user_id,
+                payload.parent_comment_id,
+                payload.content.strip(),
+            ),
+        )
+        conn.commit()
+
+        from datetime import datetime
+
+        return CommentResponse(
+            comment_id=next_comment_id,
+            post_id=post_id,
+            user_id=payload.user_id,
+            author_name=user_row.get("display_name"),
+            avatar_url=user_row.get("avatar_url"),
+            content=payload.content.strip(),
+            parent_comment_id=payload.parent_comment_id,
+            created_at=datetime.utcnow().isoformat(),
+        )
+    except HTTPException:
+        raise
+    except Error as e:
+        print(f"Database error while creating comment: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create comment")
     finally:
         if conn and conn.is_connected():
             cursor.close()

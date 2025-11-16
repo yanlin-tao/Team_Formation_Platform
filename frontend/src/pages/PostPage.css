@@ -293,6 +293,128 @@
   padding: 1.5rem;
 }
 
+.comments-section {
+  border-top: 1px solid var(--uiuc-light-gray);
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  text-align: left;
+}
+
+.comments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.comments-header h3 {
+  margin: 0;
+  color: var(--uiuc-navy);
+  font-size: 1.2rem;
+}
+
+.comment-loading,
+.empty-comment {
+  padding: 1rem 0;
+  color: var(--uiuc-gray);
+  font-size: 0.95rem;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.comment-item {
+  display: flex;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--uiuc-light-gray);
+}
+
+.comment-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--uiuc-light-blue);
+  color: var(--uiuc-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.comment-body {
+  flex: 1;
+}
+
+.comment-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--uiuc-gray);
+  margin-bottom: 0.35rem;
+}
+
+.comment-meta strong {
+  color: var(--uiuc-navy);
+}
+
+.comment-body p {
+  margin: 0;
+  color: var(--uiuc-gray);
+  line-height: 1.5;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.comment-form textarea {
+  width: 100%;
+  border: 1px solid var(--uiuc-light-gray);
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 90px;
+  font-family: inherit;
+}
+
+.comment-form textarea:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.comment-form button {
+  align-self: flex-end;
+  background: var(--uiuc-orange);
+  color: var(--uiuc-white);
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comment-form button:disabled {
+  background: var(--uiuc-light-gray);
+  color: var(--uiuc-gray);
+  cursor: not-allowed;
+}
+
+.comment-error {
+  color: #D32F2F;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
   .post-content {
     margin-left: 0;

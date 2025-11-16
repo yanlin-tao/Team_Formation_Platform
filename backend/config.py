@@ -35,16 +35,13 @@ def get_db_config():
 
 
 def validate_config():
-    required_vars = ["DB_HOST", "DB_USER", "DB_NAME"]
-    missing = []
-
-    for var in required_vars:
-        if not os.getenv(var):
-            missing.append(var)
-
+    """Validate configuration. Falls back to defaults defined above when .env missing."""
+    missing = [var for var in ["DB_HOST", "DB_USER", "DB_NAME"] if not os.getenv(var)]
     if missing:
-        raise ValueError(
-            f"Missing required environment variables: {', '.join(missing)}"
+        print(
+            "[INFO] Using default values for: " + ", ".join(missing) +
+            ". To customize, create backend/.env."
         )
-
+    if not DB_CONFIG.get("host") or not DB_CONFIG.get("database"):
+        raise ValueError("Database configuration is incomplete.")
     return True
