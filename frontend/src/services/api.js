@@ -131,6 +131,16 @@ export async function fetchProfile(userId) {
   return apiRequest(`/profile/me${query}`)
 }
 
+export async function updateProfile(userId, payload) {
+  const params = new URLSearchParams()
+  if (userId) params.append('user_id', userId)
+  const query = params.toString() ? `?${params.toString()}` : ''
+  return apiRequest(`/profile/me${query}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
+}
+
 export async function logoutUser() {
   try {
     await apiRequest('/auth/logout', { method: 'POST' })
@@ -163,4 +173,34 @@ export function getStoredUser() {
     console.warn('Failed to parse stored user', err)
     return null
   }
+}
+
+export async function getSectionsByCourse(courseId) {
+  return apiRequest(`/courses/${courseId}/sections`)
+}
+
+export async function createPost(payload) {
+  return apiRequest('/posts', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function getUserTeams(userId) {
+  return apiRequest(`/users/${userId}/teams`)
+}
+
+export async function fetchUserMatchRequests(userId, status = null) {
+  const params = new URLSearchParams()
+  if (status) params.append('status', status)
+  const query = params.toString() ? `?${params.toString()}` : ''
+  return apiRequest(`/users/${userId}/match-requests${query}`)
+}
+
+export async function getUserPosts(userId) {
+  return apiRequest(`/users/${userId}/posts`)
+}
+
+export async function getUserCourses(userId) {
+  return apiRequest(`/users/${userId}/courses`)
 }

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HiUserGroup } from 'react-icons/hi2'
+import { HiUserGroup, HiPlus } from 'react-icons/hi2'
 import Sidebar from '../components/Sidebar'
 import TermSelector from '../components/TermSelector'
 import SearchBar from '../components/SearchBar'
 import CourseTags from '../components/CourseTags'
 import PostCard from '../components/PostCard'
-import { fetchTerms, fetchPopularPosts, searchPosts } from '../services/api'
+import { fetchTerms, fetchPopularPosts, searchPosts, getStoredUser } from '../services/api'
 import teamupLogo from '../assets/teamup-logo.png'
 import './EntryPage.css'
 
@@ -20,6 +20,7 @@ function EntryPage() {
   const [termsLoading, setTermsLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+  const storedUser = getStoredUser()
 
   useEffect(() => {
     const initializeTerms = async () => {
@@ -137,6 +138,14 @@ function EntryPage() {
     navigate(`/posts/${postId}`)
   }
 
+  const handleCreatePost = () => {
+    if (!storedUser) {
+      navigate('/auth')
+      return
+    }
+    navigate('/posts/create')
+  }
+
   return (
     <div className="entry-page">
       <Sidebar />
@@ -186,7 +195,14 @@ function EntryPage() {
                   : 'Popular Posts'}
               </span>
             </h2>
-            <div className="section-badge">{posts.length} posts</div>
+            <button 
+              className="section-badge create-post-btn"
+              onClick={handleCreatePost}
+              title="Create a new post"
+            >
+              <HiPlus className="create-post-icon" />
+              Create Post
+            </button>
           </div>
           
           {loading && (

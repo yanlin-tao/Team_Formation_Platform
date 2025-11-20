@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
-import { fetchProfile, logoutUser } from '../services/api'
+import { fetchProfile, logoutUser, updateProfile, getStoredUser } from '../services/api'
 import { useRequireAuth } from '../hooks/useRequireAuth'
 import { fallbackProfile } from '../utils/profileTemplates'
 import './ProfilePage.css'
@@ -13,6 +13,17 @@ function ProfilePage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [signingOut, setSigningOut] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editingProfile, setEditingProfile] = useState({
+    display_name: '',
+    phone_number: '',
+    avatar_url: '',
+    bio: '',
+    major: '',
+    grade: '',
+    score: '',
+  })
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     if (authLoading) return
@@ -45,6 +56,102 @@ function ProfilePage() {
     }
   }
 
+  const handleEditClick = () => {
+    if (profilePayload?.profile) {
+      const profile = profilePayload.profile
+      const profileUser = profilePayload.user || user
+      setEditingProfile({
+        display_name: profile.name || profileUser?.display_name || '',
+        phone_number: profileUser?.phone_number || '',
+        avatar_url: profileUser?.avatar_url || '',
+        bio: profile.bio || '',
+        major: profile.major || '',
+        grade: profile.graduation || '',
+        score: profileUser?.score !== null && profileUser?.score !== undefined ? String(profileUser.score) : '',
+      })
+      setIsEditing(true)
+      setError(null)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+    setError(null)
+  }
+
+  const handleSaveProfile = async () => {
+    if (!user) return
+    
+    try {
+      setSaving(true)
+      setError(null)
+      
+      const profileUser = profilePayload?.user || user
+      const updateData = {}
+      if (editingProfile.display_name !== (profilePayload?.profile?.name || profileUser?.display_name || '')) {
+        updateData.display_name = editingProfile.display_name
+      }
+      if (editingProfile.phone_number !== (profileUser?.phone_number || '')) {
+        updateData.phone_number = editingProfile.phone_number
+      }
+      if (editingProfile.avatar_url !== (profileUser?.avatar_url || '')) {
+        updateData.avatar_url = editingProfile.avatar_url
+      }
+      if (editingProfile.bio !== (profilePayload?.profile?.bio || '')) {
+        updateData.bio = editingProfile.bio
+      }
+      if (editingProfile.major !== (profilePayload?.profile?.major || '')) {
+        updateData.major = editingProfile.major
+      }
+      if (editingProfile.grade !== (profilePayload?.profile?.graduation || '')) {
+        updateData.grade = editingProfile.grade
+      }
+      const currentScore = profileUser?.score !== null && profileUser?.score !== undefined ? String(profileUser.score) : ''
+      if (editingProfile.score !== currentScore) {
+        if (editingProfile.score.trim() === '') {
+          updateData.score = null
+        } else {
+          const scoreValue = parseFloat(editingProfile.score)
+          if (!isNaN(scoreValue)) {
+            updateData.score = scoreValue
+          }
+        }
+      }
+
+      if (Object.keys(updateData).length === 0) {
+        setIsEditing(false)
+        return
+      }
+
+      await updateProfile(user.user_id, updateData)
+      
+      // Reload profile to get updated data
+      const updatedData = await fetchProfile(user.user_id)
+      setProfilePayload(updatedData || fallbackProfile)
+      
+      // Update stored user if display_name, avatar_url, phone_number, or score changed
+      const storedUser = getStoredUser()
+      if (storedUser) {
+        if (updateData.display_name) storedUser.display_name = updateData.display_name
+        if (updateData.avatar_url !== undefined) storedUser.avatar_url = updateData.avatar_url
+        if (updateData.phone_number !== undefined) storedUser.phone_number = updateData.phone_number
+        if (updateData.score !== undefined) storedUser.score = updateData.score
+        localStorage.setItem('teamup_user', JSON.stringify(storedUser))
+      }
+      
+      setIsEditing(false)
+    } catch (err) {
+      console.error('[ProfilePage] Failed to update profile:', err)
+      setError(err.message || 'Failed to update profile. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleProfileChange = (field, value) => {
+    setEditingProfile(prev => ({ ...prev, [field]: value }))
+  }
+
   if (authLoading || (loading && !profilePayload)) {
     return (
       <div className="profile-page">
@@ -61,8 +168,10 @@ function ProfilePage() {
   }
 
   const data = profilePayload || fallbackProfile
-  const { profile, stats, activeTeams, spotlightProjects, skills, recentActivity, learningTargets } = data
-  const displayName = profile?.name || user.display_name || 'TeamUp Member'
+  const { profile, stats, activeTeams, spotlightProjects, skills, recentActivity, learningTargets, user: profileUser } = data
+  // Use user from profile payload if available, otherwise fall back to auth user
+  const displayUser = profileUser || user
+  const displayName = profile?.name || displayUser?.display_name || 'TeamUp Member'
 
   return (
     <div className="profile-page">
@@ -70,37 +179,147 @@ function ProfilePage() {
       <div className="profile-content">
         {error && <div className="profile-error">{error}</div>}
         <section className="profile-hero">
-          <div className="profile-bio">
-            <div className="profile-avatar">
-              {displayName
-                .split(' ')
-                .map((part) => part[0])
-                .join('')
-                .slice(0, 2) || 'TU'}
-            </div>
-            <div className="profile-meta">
-              <h1>{displayName}</h1>
-              <p className="profile-title">{profile?.title}</p>
-              <div className="profile-tags">
-                {profile?.major && <span>{profile.major}</span>}
-                {profile?.graduation && <span>{profile.graduation}</span>}
-                {profile?.location && <span>{profile.location}</span>}
-              </div>
-              {profile?.bio && <p className="profile-description">{profile.bio}</p>}
-              {profile?.availability && (
-                <div className="profile-availability">
-                  <strong>Availability:</strong> {profile.availability}
+          {!isEditing ? (
+            <>
+              <div className="profile-bio">
+                <div className="profile-avatar">
+                  {displayUser?.avatar_url ? (
+                    <img src={displayUser.avatar_url} alt={displayName} />
+                  ) : (
+                    displayName
+                      .split(' ')
+                      .map((part) => part[0])
+                      .join('')
+                      .slice(0, 2) || 'TU'
+                  )}
                 </div>
-              )}
+                <div className="profile-meta">
+                  <h1>{displayName}</h1>
+                  <div className="profile-tags">
+                    {profile?.major && <span>{profile.major}</span>}
+                    {profile?.graduation && <span>{profile.graduation}</span>}
+                    {displayUser?.score !== null && displayUser?.score !== undefined && (
+                      <span>GPA: {displayUser.score}</span>
+                    )}
+                    {displayUser?.phone_number && (
+                      <span>TEL: {displayUser.phone_number}</span>
+                    )}
+                  </div>
+                  {profile?.bio && <p className="profile-description">{profile.bio}</p>}
+                  {displayUser?.avatar_url && (
+                    <div className="profile-contact-info">
+                      <div className="contact-item">
+                        <strong>Avatar URL:</strong>{' '}
+                        <a href={displayUser.avatar_url} target="_blank" rel="noopener noreferrer" className="avatar-link">
+                          {displayUser.avatar_url}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="profile-actions">
+                <button className="primary" onClick={handleEditClick}>Edit Profile</button>
+                <button className="ghost danger" onClick={handleLogout} disabled={signingOut}>
+                  {signingOut ? 'Signing out...' : 'Log out'}
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="profile-edit-form">
+              <h2>Edit Profile</h2>
+              <div className="edit-form-grid">
+                <div className="form-group">
+                  <label htmlFor="display_name">Display Name</label>
+                  <input
+                    id="display_name"
+                    type="text"
+                    value={editingProfile.display_name}
+                    onChange={(e) => handleProfileChange('display_name', e.target.value)}
+                    placeholder="Your display name"
+                    maxLength={128}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="phone_number">Phone Number</label>
+                  <input
+                    id="phone_number"
+                    type="tel"
+                    value={editingProfile.phone_number}
+                    onChange={(e) => handleProfileChange('phone_number', e.target.value)}
+                    placeholder="(123) 456-7890"
+                    maxLength={32}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="avatar_url">Avatar URL</label>
+                  <input
+                    id="avatar_url"
+                    type="url"
+                    value={editingProfile.avatar_url}
+                    onChange={(e) => handleProfileChange('avatar_url', e.target.value)}
+                    placeholder="https://example.com/avatar.jpg"
+                    maxLength={256}
+                  />
+                </div>
+                <div className="form-group full-width">
+                  <label htmlFor="bio">Bio</label>
+                  <textarea
+                    id="bio"
+                    value={editingProfile.bio}
+                    onChange={(e) => handleProfileChange('bio', e.target.value)}
+                    placeholder="Tell us about yourself..."
+                    maxLength={1024}
+                    rows={4}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="major">Major</label>
+                  <input
+                    id="major"
+                    type="text"
+                    value={editingProfile.major}
+                    onChange={(e) => handleProfileChange('major', e.target.value)}
+                    placeholder="e.g., Computer Science"
+                    maxLength={64}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="grade">Grade / Year</label>
+                  <input
+                    id="grade"
+                    type="text"
+                    value={editingProfile.grade}
+                    onChange={(e) => handleProfileChange('grade', e.target.value)}
+                    placeholder="e.g., Junior, Senior, Graduate"
+                    maxLength={16}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="score">GPA / Score</label>
+                  <input
+                    id="score"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="100"
+                    value={editingProfile.score}
+                    onChange={(e) => handleProfileChange('score', e.target.value)}
+                    placeholder="e.g., 3.5"
+                  />
+                </div>
+              </div>
+              {error && <div className="profile-error">{error}</div>}
+              <div className="edit-form-actions">
+                <button className="primary" onClick={handleSaveProfile} disabled={saving}>
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </button>
+                <button className="ghost" onClick={handleCancelEdit} disabled={saving}>
+                  Cancel
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="profile-actions">
-            <button className="primary">Share Availability</button>
-            <button className="ghost">Edit Profile</button>
-            <button className="ghost danger" onClick={handleLogout} disabled={signingOut}>
-              {signingOut ? 'Signing out...' : 'Log out'}
-            </button>
-          </div>
+          )}
         </section>
 
         <section className="profile-stats-grid">

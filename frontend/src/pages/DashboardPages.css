@@ -136,6 +136,44 @@
   font-weight: 600;
 }
 
+.dashboard-pill.status-pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #F57C00;
+}
+
+.dashboard-pill.status-accepted {
+  background: rgba(76, 175, 80, 0.15);
+  color: #2E7D32;
+}
+
+.dashboard-pill.status-rejected {
+  background: rgba(244, 67, 54, 0.15);
+  color: #C62828;
+}
+
+.dashboard-pill.status-withdrawn {
+  background: rgba(158, 158, 158, 0.15);
+  color: #616161;
+}
+
+.dashboard-pill.status-expired {
+  background: rgba(158, 158, 158, 0.15);
+  color: #616161;
+}
+
+.dashboard-pill.time-pill {
+  background: rgba(19, 41, 75, 0.05);
+  color: var(--uiuc-gray);
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.text-muted {
+  color: var(--uiuc-gray);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
 .empty-state {
   text-align: center;
   padding: 2rem 1rem;

@@ -127,8 +127,11 @@ if [ ! -d "$FRONTEND_DIR" ]; then
 fi
 
 # Check if virtual environment exists (optional, but recommended)
-# Check for common virtual environment names: venv, mytrend, env
-if [ -d "$BACKEND_DIR/mytrend" ]; then
+# First check if conda environment is active
+if [ -n "$CONDA_DEFAULT_ENV" ]; then
+    print_info "Found active conda environment: $CONDA_DEFAULT_ENV"
+    # Conda environment is already active, no need to activate again
+elif [ -d "$BACKEND_DIR/mytrend" ]; then
     print_info "Found mytrend virtual environment, activating it..."
     source "$BACKEND_DIR/mytrend/bin/activate"
 elif [ -d "$BACKEND_DIR/venv" ]; then
@@ -145,7 +148,7 @@ elif [ -d "env" ]; then
     source env/bin/activate
 else
     print_warning "No virtual environment found. Using system Python."
-    print_warning "It's recommended to use a virtual environment (venv, mytrend, or env)."
+    print_warning "It's recommended to use a virtual environment (conda, venv, mytrend, or env)."
 fi
 
 # Check if backend dependencies are installed

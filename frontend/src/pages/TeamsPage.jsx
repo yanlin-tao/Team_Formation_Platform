@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import { useRequireAuth } from '../hooks/useRequireAuth'
-import { fetchProfile } from '../services/api'
-import { fallbackProfile } from '../utils/profileTemplates'
+import { getUserTeams } from '../services/api'
 import './DashboardPages.css'
 
 function TeamsPage() {
   const { user, loading: authLoading } = useRequireAuth()
-  const [profilePayload, setProfilePayload] = useState(null)
+  const [teams, setTeams] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -15,11 +14,11 @@ function TeamsPage() {
     const load = async () => {
       try {
         setLoading(true)
-        const data = await fetchProfile(user.user_id)
-        setProfilePayload(data || fallbackProfile)
+        const data = await getUserTeams(user.user_id)
+        setTeams(data || [])
       } catch (error) {
-        console.warn('[TeamsPage] fallback profile used', error)
-        setProfilePayload(fallbackProfile)
+        console.warn('[TeamsPage] Failed to load teams:', error)
+        setTeams([])
       } finally {
         setLoading(false)
       }
@@ -27,7 +26,7 @@ function TeamsPage() {
     load()
   }, [authLoading, user])
 
-  if (authLoading || loading || !profilePayload) {
+  if (authLoading || loading) {
     return (
       <div className="dashboard-page">
         <Sidebar />
@@ -38,8 +37,11 @@ function TeamsPage() {
     )
   }
 
-  const teams = profilePayload.activeTeams || []
-  const targets = profilePayload.learningTargets || []
+  const formatDate = (timestamp) => {
+    if (!timestamp) return 'Unknown'
+    const date = new Date(timestamp)
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  }
 
   return (
     <div className="dashboard-page">
@@ -65,38 +67,27 @@ function TeamsPage() {
             <div className="empty-state">No teams yet. Start one to find teammates.</div>
           ) : (
             <ul className="dashboard-list">
-              {teams.map((team) => (
-                <li key={team.name}>
-                  <div>
-                    <h3>{team.name}</h3>
-                    <p>{team.focus}</p>
-                    <p>Progress: {team.progress}% • Open spots: {team.spots}</p>
-                  </div>
-                  <span className="dashboard-pill">{team.role}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="dashboard-section">
-          <div className="section-header">
-            <h2>Upcoming goals</h2>
-            <button>Share update</button>
-          </div>
-          {targets.length === 0 ? (
-            <div className="empty-state">No goals yet. Capture your next milestones.</div>
-          ) : (
-            <ul className="dashboard-list">
-              {targets.map((item) => (
-                <li key={item.topic}>
-                  <div>
-                    <h3>{item.topic}</h3>
-                    <p>{item.detail}</p>
-                  </div>
-                  <span className="dashboard-pill">Focus</span>
-                </li>
-              ))}
+              {teams.map((team) => {
+                const courseCode = `${team.subject || ''} ${team.number || ''}`.trim()
+                const courseName = team.course_title || 'Course'
+                const openSpots = Math.max(0, (team.target_size || 0) - (team.current_size || 0))
+                
+                return (
+                  <li key={team.team_id}>
+                    <div>
+                      <h3>{courseCode} • {team.team_name}</h3>
+                      <p>{courseName}</p>
+                      <p>
+                        Status: {team.status || 'open'} • 
+                        Size: {team.current_size || 0}/{team.target_size || 0} • 
+                        Open spots: {openSpots} • 
+                        Joined: {formatDate(team.joined_at)}
+                      </p>
+                    </div>
+                    <span className="dashboard-pill">{team.role || 'member'}</span>
+                  </li>
+                )
+              })}
             </ul>
           )}
         </div>

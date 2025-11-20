@@ -142,6 +142,27 @@ class CommentCreate(BaseModel):
     parent_comment_id: Optional[int] = None
 
 
+class ProfileUpdate(BaseModel):
+    display_name: Optional[str] = None
+    phone_number: Optional[str] = None
+    avatar_url: Optional[str] = None
+    bio: Optional[str] = None
+    major: Optional[str] = None
+    grade: Optional[str] = None
+    score: Optional[float] = None
+
+
+class PostCreate(BaseModel):
+    user_id: int
+    term_id: str
+    course_id: str
+    section_id: Optional[str] = None  # CRN
+    team_name: str
+    target_size: int
+    title: str
+    content: str
+
+
 MOCK_USER = {
     "user_id": 101,
     "display_name": "Avery Chen",
@@ -486,9 +507,11 @@ async def get_profile(user_id: Optional[int] = None):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+
+        # Get user basic info
         cursor.execute(
             """
-            SELECT user_id, display_name, email, netid, avatar_url, bio, major, grade
+            SELECT user_id, display_name, email, netid, avatar_url, bio, major, grade, phone_number, score
             FROM User
             WHERE user_id = %s
             LIMIT 1
@@ -500,15 +523,209 @@ async def get_profile(user_id: Optional[int] = None):
             raise HTTPException(status_code=404, detail="User not found")
 
         user_payload = _build_auth_user(row).dict()
+        # Add phone_number and score to user payload
+        user_payload["phone_number"] = row.get("phone_number")
+        user_payload["score"] = (
+            float(row.get("score")) if row.get("score") is not None else None
+        )
+
         profile = payload["profile"]
         profile["name"] = row.get("display_name") or profile["name"]
         profile["bio"] = row.get("bio") or profile["bio"]
         profile["major"] = row.get("major") or profile["major"]
         profile["graduation"] = row.get("grade") or profile["graduation"]
+
+        # Get user's teams
+        cursor.execute(
+            """
+            SELECT 
+                t.team_id,
+                t.team_name,
+                t.course_id,
+                t.target_size,
+                t.status,
+                c.subject,
+                c.number,
+                c.title AS course_title,
+                tm.role,
+                tm.joined_at,
+                (SELECT COUNT(*) FROM TeamMember WHERE team_id = t.team_id) AS current_size
+            FROM TeamMember tm
+            JOIN Team t ON tm.team_id = t.team_id
+            LEFT JOIN Course c ON t.course_id = c.course_id
+            WHERE tm.user_id = %s AND (t.status IS NULL OR t.status = 'open')
+            ORDER BY tm.joined_at DESC
+        """,
+            (user_id,),
+        )
+        teams_data = cursor.fetchall()
+
+        active_teams = []
+        for team in teams_data:
+            course_name = f"{team.get('subject', '')} {team.get('number', '')}"
+            active_teams.append(
+                {
+                    "name": f"{course_name} • {team.get('team_name', 'Team')}",
+                    "role": team.get("role") or "member",
+                    "focus": team.get("course_title") or "Course project",
+                    "progress": 0,  # Can be calculated later if needed
+                    "spots": max(
+                        0,
+                        (team.get("target_size") or 0)
+                        - (team.get("current_size") or 0),
+                    ),
+                    "team_id": team.get("team_id"),
+                    "course_id": team.get("course_id"),
+                }
+            )
+        payload["activeTeams"] = active_teams
+
+        # Get user's match requests (sent and received)
+        cursor.execute(
+            """
+            SELECT 
+                mr.request_id,
+                mr.from_user_id,
+                mr.to_team_id,
+                mr.post_id,
+                mr.message,
+                mr.status,
+                mr.created_at,
+                t.team_name,
+                c.subject,
+                c.number
+            FROM MatchRequest mr
+            LEFT JOIN Team t ON mr.to_team_id = t.team_id
+            LEFT JOIN Course c ON t.course_id = c.course_id
+            WHERE mr.from_user_id = %s
+            ORDER BY mr.created_at DESC
+            LIMIT 20
+        """,
+            (user_id,),
+        )
+        requests_data = cursor.fetchall()
+
+        # Count stats
+        open_requests = sum(1 for r in requests_data if r.get("status") == "pending")
+        successful_matches = sum(
+            1 for r in requests_data if r.get("status") == "accepted"
+        )
+
+        # Get courses from teams (user joined teams via TeamMember)
+        team_course_ids = set(
+            team.get("course_id") for team in teams_data if team.get("course_id")
+        )
+
+        # Get courses from posts (user created posts - each post automatically creates a team)
+        # Note: Creating a post automatically creates a team, but user may not be in TeamMember
+        # So we need to include courses from user's posts as well
+        cursor.execute(
+            """
+            SELECT DISTINCT c.course_id
+            FROM Post p
+            JOIN Team t ON p.team_id = t.team_id
+            JOIN Course c ON t.course_id = c.course_id
+            WHERE p.user_id = %s
+            """,
+            (user_id,),
+        )
+        post_courses = cursor.fetchall()
+        post_course_ids = set(
+            item["course_id"] for item in post_courses if item.get("course_id")
+        )
+
+        # Combine courses from teams and posts (union of both sets)
+        # This represents all courses user is associated with (via teams or posts)
+        unique_courses = len(team_course_ids.union(post_course_ids))
+
+        # Count user's posts
+        cursor.execute(
+            "SELECT COUNT(*) as post_count FROM Post WHERE user_id = %s", (user_id,)
+        )
+        user_post_count = cursor.fetchone().get("post_count", 0)
+
+        # Update stats - Active Courses = My Courses (same logic)
+        payload["stats"] = [
+            {
+                "label": "Active Courses",
+                "value": unique_courses,
+                "trend": f"{len(teams_data)} teams, {user_post_count} posts",
+            },
+            {
+                "label": "Open Requests",
+                "value": open_requests,
+                "trend": f"{len(requests_data)} total requests",
+            },
+            {
+                "label": "Successful Matches",
+                "value": successful_matches,
+                "trend": f"{len(requests_data)} total requests",
+            },
+            {
+                "label": "Collaboration Score",
+                "value": "4.8/5",
+                "trend": "Consistently high",
+            },  # Keep mock for now
+        ]
+
+        # Get user's skills
+        cursor.execute(
+            """
+            SELECT s.name, s.category, us.level
+            FROM UserSkill us
+            JOIN Skill s ON us.skill_id = s.skill_id
+            WHERE us.user_id = %s
+            ORDER BY s.category, s.name
+        """,
+            (user_id,),
+        )
+        skills_data = cursor.fetchall()
+
+        core_skills = [
+            s["name"]
+            for s in skills_data
+            if not s.get("category") or s.get("category") == "core"
+        ]
+        tool_skills = [s["name"] for s in skills_data if s.get("category") == "tool"]
+
+        if core_skills or tool_skills:
+            payload["skills"] = {
+                "core": core_skills or payload["skills"].get("core", []),
+                "tools": tool_skills or payload["skills"].get("tools", []),
+            }
+
+        # Get recent activity from match requests and posts
+        recent_activity = []
+        for req in requests_data[:5]:
+            course_code = f"{req.get('subject', '')} {req.get('number', '')}"
+            team_name = req.get("team_name", "team")
+            if req.get("status") == "pending":
+                recent_activity.append(
+                    {
+                        "title": f"Request sent to {course_code}",
+                        "detail": f"Waiting for response from {team_name}",
+                        "time": "Recently" if req.get("created_at") else "Unknown",
+                    }
+                )
+            elif req.get("status") == "accepted":
+                recent_activity.append(
+                    {
+                        "title": f"Match accepted: {course_code}",
+                        "detail": f"Joined {team_name}",
+                        "time": "Recently" if req.get("created_at") else "Unknown",
+                    }
+                )
+
+        if recent_activity:
+            payload["recentActivity"] = recent_activity[:5]
+
     except HTTPException:
         raise
     except Error as e:
         print(f"[ERROR] Failed to load profile: {e}")
+        import traceback
+
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail="Failed to load profile")
     finally:
         if conn and conn.is_connected():
@@ -517,6 +734,411 @@ async def get_profile(user_id: Optional[int] = None):
 
     payload["user"] = user_payload
     return payload
+
+
+@app.put("/api/profile/me")
+async def update_profile(user_id: int, payload: ProfileUpdate):
+    """
+    Update user profile information
+    Only updates fields that are provided in the payload
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Verify user exists
+        cursor.execute("SELECT user_id FROM User WHERE user_id = %s", (user_id,))
+        if not cursor.fetchone():
+            raise HTTPException(status_code=404, detail="User not found")
+
+        # Build update query dynamically based on provided fields
+        update_fields = []
+        update_values = []
+
+        if payload.display_name is not None:
+            if len(payload.display_name.strip()) > 128:
+                raise HTTPException(
+                    status_code=400, detail="Display name cannot exceed 128 characters"
+                )
+            update_fields.append("display_name = %s")
+            update_values.append(
+                payload.display_name.strip() if payload.display_name.strip() else None
+            )
+
+        if payload.phone_number is not None:
+            if payload.phone_number and len(payload.phone_number.strip()) > 32:
+                raise HTTPException(
+                    status_code=400, detail="Phone number cannot exceed 32 characters"
+                )
+            update_fields.append("phone_number = %s")
+            update_values.append(
+                payload.phone_number.strip()
+                if payload.phone_number and payload.phone_number.strip()
+                else None
+            )
+
+        if payload.avatar_url is not None:
+            if payload.avatar_url and len(payload.avatar_url.strip()) > 256:
+                raise HTTPException(
+                    status_code=400, detail="Avatar URL cannot exceed 256 characters"
+                )
+            update_fields.append("avatar_url = %s")
+            update_values.append(
+                payload.avatar_url.strip()
+                if payload.avatar_url and payload.avatar_url.strip()
+                else None
+            )
+
+        if payload.bio is not None:
+            if payload.bio and len(payload.bio.strip()) > 1024:
+                raise HTTPException(
+                    status_code=400, detail="Bio cannot exceed 1024 characters"
+                )
+            update_fields.append("bio = %s")
+            update_values.append(
+                payload.bio.strip() if payload.bio and payload.bio.strip() else None
+            )
+
+        if payload.major is not None:
+            if payload.major and len(payload.major.strip()) > 64:
+                raise HTTPException(
+                    status_code=400, detail="Major cannot exceed 64 characters"
+                )
+            update_fields.append("major = %s")
+            update_values.append(
+                payload.major.strip()
+                if payload.major and payload.major.strip()
+                else None
+            )
+
+        if payload.grade is not None:
+            if payload.grade and len(payload.grade.strip()) > 16:
+                raise HTTPException(
+                    status_code=400, detail="Grade cannot exceed 16 characters"
+                )
+            update_fields.append("grade = %s")
+            update_values.append(
+                payload.grade.strip()
+                if payload.grade and payload.grade.strip()
+                else None
+            )
+
+        if payload.score is not None:
+            # Score is a decimal(4,1), validate range (typically 0.0 to 100.0)
+            if payload.score is not None and (payload.score < 0 or payload.score > 100):
+                raise HTTPException(
+                    status_code=400, detail="Score must be between 0 and 100"
+                )
+            update_fields.append("score = %s")
+            update_values.append(payload.score if payload.score is not None else None)
+
+        if not update_fields:
+            raise HTTPException(status_code=400, detail="No fields to update")
+
+        # Execute update
+        update_values.append(user_id)
+        update_query = f"UPDATE User SET {', '.join(update_fields)} WHERE user_id = %s"
+        cursor.execute(update_query, tuple(update_values))
+        conn.commit()
+
+        # Fetch updated user data
+        cursor.execute(
+            """
+            SELECT user_id, display_name, email, netid, avatar_url, bio, major, grade, phone_number, score
+            FROM User
+            WHERE user_id = %s
+            LIMIT 1
+            """,
+            (user_id,),
+        )
+        updated_user = cursor.fetchone()
+
+        # Convert score to float if not None
+        if updated_user and updated_user.get("score") is not None:
+            updated_user["score"] = float(updated_user["score"])
+
+        return {"message": "Profile updated successfully", "user": updated_user}
+
+    except HTTPException:
+        raise
+    except Error as e:
+        print(f"Database error: {e}")
+        import traceback
+
+        traceback.print_exc()
+        if conn:
+            conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/users/{user_id}/teams")
+async def get_user_teams(user_id: int):
+    """
+    Get all teams for a specific user
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute(
+            """
+            SELECT 
+                t.team_id,
+                t.team_name,
+                t.course_id,
+                t.target_size,
+                t.status,
+                c.subject,
+                c.number,
+                c.title AS course_title,
+                c.term_id,
+                tm.role,
+                tm.joined_at,
+                (SELECT COUNT(*) FROM TeamMember WHERE team_id = t.team_id) AS current_size
+            FROM TeamMember tm
+            JOIN Team t ON tm.team_id = t.team_id
+            LEFT JOIN Course c ON t.course_id = c.course_id
+            WHERE tm.user_id = %s
+            ORDER BY tm.joined_at DESC
+        """,
+            (user_id,),
+        )
+
+        teams = cursor.fetchall()
+        return teams
+
+    except Error as e:
+        print(f"Database error: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/users/{user_id}/posts")
+async def get_user_posts(user_id: int, limit: int = 50):
+    """
+    Get all posts created by a user
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+            SELECT 
+                p.post_id,
+                p.title,
+                p.content,
+                p.created_at,
+                p.team_id,
+                t.course_id,
+                t.team_name,
+                c.subject,
+                c.number,
+                c.title AS course_title,
+                c.term_id,
+                s.crn AS section_code
+            FROM Post p
+            LEFT JOIN Team t ON p.team_id = t.team_id
+            LEFT JOIN Course c ON t.course_id = c.course_id
+            LEFT JOIN Section s ON t.section_id = s.crn AND t.course_id = c.course_id
+            WHERE p.user_id = %s
+            ORDER BY p.created_at DESC
+            LIMIT %s
+        """
+
+        cursor.execute(query, (user_id, limit))
+        posts = cursor.fetchall()
+
+        return posts
+
+    except Error as e:
+        print(f"Database error: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/users/{user_id}/courses")
+async def get_user_courses(user_id: int):
+    """
+    Get all courses associated with a user (through teams and posts)
+    Returns unique courses with their associated teams and posts
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Get courses from teams
+        query_teams = """
+            SELECT DISTINCT
+                c.course_id,
+                c.term_id,
+                c.subject,
+                c.number,
+                c.title AS course_title,
+                c.credits,
+                t.team_id,
+                t.team_name,
+                tm.role,
+                tm.joined_at
+            FROM TeamMember tm
+            JOIN Team t ON tm.team_id = t.team_id
+            JOIN Course c ON t.course_id = c.course_id
+            WHERE tm.user_id = %s
+        """
+
+        cursor.execute(query_teams, (user_id,))
+        team_courses = cursor.fetchall()
+
+        # Get courses from posts
+        query_posts = """
+            SELECT DISTINCT
+                c.course_id,
+                c.term_id,
+                c.subject,
+                c.number,
+                c.title AS course_title,
+                c.credits,
+                p.post_id,
+                p.title AS post_title,
+                p.created_at AS post_created_at
+            FROM Post p
+            JOIN Team t ON p.team_id = t.team_id
+            JOIN Course c ON t.course_id = c.course_id
+            WHERE p.user_id = %s
+        """
+
+        cursor.execute(query_posts, (user_id,))
+        post_courses = cursor.fetchall()
+
+        # Combine and deduplicate by course_id
+        courses_map = {}
+
+        # Add courses from teams
+        for item in team_courses:
+            course_id = item["course_id"]
+            if course_id not in courses_map:
+                courses_map[course_id] = {
+                    "course_id": course_id,
+                    "term_id": item["term_id"],
+                    "subject": item["subject"],
+                    "number": item["number"],
+                    "title": item["course_title"],
+                    "credits": item["credits"],
+                    "teams": [],
+                    "posts": [],
+                }
+            courses_map[course_id]["teams"].append(
+                {
+                    "team_id": item["team_id"],
+                    "team_name": item["team_name"],
+                    "role": item["role"],
+                    "joined_at": item["joined_at"],
+                }
+            )
+
+        # Add courses from posts
+        for item in post_courses:
+            course_id = item["course_id"]
+            if course_id not in courses_map:
+                courses_map[course_id] = {
+                    "course_id": course_id,
+                    "term_id": item["term_id"],
+                    "subject": item["subject"],
+                    "number": item["number"],
+                    "title": item["course_title"],
+                    "credits": item["credits"],
+                    "teams": [],
+                    "posts": [],
+                }
+            courses_map[course_id]["posts"].append(
+                {
+                    "post_id": item["post_id"],
+                    "post_title": item["post_title"],
+                    "created_at": item["post_created_at"],
+                }
+            )
+
+        # Convert to list and sort by course code
+        courses_list = list(courses_map.values())
+        courses_list.sort(key=lambda x: (x["subject"], x["number"]))
+
+        return courses_list
+
+    except Error as e:
+        print(f"Database error: {e}")
+        import traceback
+
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/users/{user_id}/match-requests")
+async def get_user_match_requests(user_id: int, status: Optional[str] = None):
+    """
+    Get match requests for a user (sent by the user)
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+            SELECT 
+                mr.request_id,
+                mr.from_user_id,
+                mr.to_team_id,
+                mr.post_id,
+                mr.message,
+                mr.status,
+                mr.created_at,
+                t.team_name,
+                c.subject,
+                c.number,
+                c.title AS course_title,
+                p.title AS post_title
+            FROM MatchRequest mr
+            LEFT JOIN Team t ON mr.to_team_id = t.team_id
+            LEFT JOIN Course c ON t.course_id = c.course_id
+            LEFT JOIN Post p ON mr.post_id = p.post_id
+            WHERE mr.from_user_id = %s
+        """
+
+        params = [user_id]
+        if status:
+            query += " AND mr.status = %s"
+            params.append(status)
+
+        query += " ORDER BY mr.created_at DESC"
+
+        cursor.execute(query, tuple(params))
+        requests = cursor.fetchall()
+
+        return requests
+
+    except Error as e:
+        print(f"Database error: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
 
 
 @app.get("/api/posts/popular")
@@ -1171,6 +1793,275 @@ async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
     except Error as e:
         print(f"Database error: {e}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/debug/courses-sections")
+async def debug_courses_sections(term_id: Optional[str] = None, limit: int = 10):
+    """
+    Debug endpoint to check courses and their sections
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+        SELECT 
+            c.course_id,
+            c.subject,
+            c.number,
+            c.title,
+            COUNT(s.crn) AS section_count
+        FROM Course c
+        LEFT JOIN Section s ON c.course_id = s.course_id
+        WHERE 1=1
+        """
+
+        params = []
+        if term_id:
+            query += " AND c.term_id = %s"
+            params.append(term_id)
+
+        query += """
+        GROUP BY c.course_id, c.subject, c.number, c.title
+        ORDER BY section_count DESC, c.subject, c.number
+        LIMIT %s
+        """
+        params.append(limit)
+
+        cursor.execute(query, tuple(params))
+        results = cursor.fetchall()
+
+        # Also get detailed section info for courses with sections
+        for course in results:
+            if course["section_count"] > 0:
+                cursor.execute(
+                    "SELECT crn, instructor, location, delivery_mode, meeting_time FROM Section WHERE course_id = %s LIMIT 5",
+                    (course["course_id"],),
+                )
+                course["sample_sections"] = cursor.fetchall()
+
+        return {
+            "courses": results,
+            "total_courses": len(results),
+            "courses_with_sections": sum(1 for c in results if c["section_count"] > 0),
+        }
+
+    except Error as e:
+        print(f"Database error: {e}")
+        import traceback
+
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/courses/{course_id}/sections")
+async def get_course_sections(course_id: str):
+    """
+    Get all sections for a specific course
+    """
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Debug: Check what sections exist for this course
+        print(f"[DEBUG] Fetching sections for course_id: {course_id}")
+
+        query = """
+        SELECT 
+            s.crn,
+            s.instructor,
+            s.location,
+            s.delivery_mode,
+            s.meeting_time,
+            s.course_id
+        FROM Section s
+        WHERE s.course_id = %s
+        ORDER BY s.crn ASC
+        """
+
+        cursor.execute(query, (course_id,))
+        sections = cursor.fetchall()
+
+        print(f"[DEBUG] Found {len(sections)} sections for course {course_id}")
+        for section in sections:
+            print(f"[DEBUG] Section: {section}")
+
+        return sections
+
+    except Error as e:
+        print(f"Database error: {e}")
+        import traceback
+
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.post("/api/posts")
+async def create_post(payload: PostCreate):
+    """
+    Create a new post with associated team
+    Creates a Team first, then creates a Post linked to that team
+    """
+    if not payload.title or not payload.title.strip():
+        raise HTTPException(status_code=400, detail="Title cannot be empty")
+    if not payload.content or not payload.content.strip():
+        raise HTTPException(status_code=400, detail="Content cannot be empty")
+    if payload.target_size < 1 or payload.target_size > 10:
+        raise HTTPException(
+            status_code=400, detail="Target size must be between 1 and 10"
+        )
+    if len(payload.title) > 128:
+        raise HTTPException(
+            status_code=400, detail="Title cannot exceed 128 characters"
+        )
+    if len(payload.content) > 4000:
+        raise HTTPException(
+            status_code=400, detail="Content cannot exceed 4000 characters"
+        )
+    if not payload.team_name or not payload.team_name.strip():
+        raise HTTPException(status_code=400, detail="Team name cannot be empty")
+    if len(payload.team_name.strip()) > 128:
+        raise HTTPException(
+            status_code=400, detail="Team name cannot exceed 128 characters"
+        )
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Verify user exists
+        cursor.execute(
+            "SELECT user_id FROM User WHERE user_id = %s", (payload.user_id,)
+        )
+        user = cursor.fetchone()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        # Verify course exists
+        cursor.execute(
+            "SELECT course_id FROM Course WHERE course_id = %s", (payload.course_id,)
+        )
+        course = cursor.fetchone()
+        if not course:
+            raise HTTPException(status_code=404, detail="Course not found")
+
+        # Verify section exists if provided
+        if payload.section_id:
+            cursor.execute(
+                "SELECT crn FROM Section WHERE crn = %s AND course_id = %s",
+                (payload.section_id, payload.course_id),
+            )
+            section = cursor.fetchone()
+            if not section:
+                raise HTTPException(
+                    status_code=404, detail="Section not found for this course"
+                )
+
+        # Check if team_name already exists
+        cursor.execute(
+            "SELECT team_id FROM Team WHERE team_name = %s",
+            (payload.team_name.strip(),),
+        )
+        existing_team = cursor.fetchone()
+        if existing_team:
+            raise HTTPException(
+                status_code=400,
+                detail="Team name already exists. Please choose a different name.",
+            )
+
+        # Get next team_id
+        cursor.execute("SELECT COALESCE(MAX(team_id), 0) + 1 AS next_id FROM Team")
+        next_team_id = cursor.fetchone()["next_id"]
+
+        # Create Team
+        # Handle section_id - if not provided and table requires it, we may need a default
+        # For now, try to insert with section_id (may be NULL if table allows)
+        team_insert_query = """
+        INSERT INTO Team (
+            team_id, course_id, section_id, team_name, target_size, status
+        ) VALUES (%s, %s, %s, %s, %s, 'open')
+        """
+
+        # If section_id is not provided, we'll try to insert NULL
+        # If the table requires NOT NULL, we may need to handle this differently
+        section_id_value = payload.section_id if payload.section_id else None
+
+        cursor.execute(
+            team_insert_query,
+            (
+                next_team_id,
+                payload.course_id,
+                section_id_value,  # CRN or NULL
+                payload.team_name.strip(),
+                payload.target_size,
+            ),
+        )
+
+        # Get next post_id
+        cursor.execute("SELECT COALESCE(MAX(post_id), 0) + 1 AS next_id FROM Post")
+        next_post_id = cursor.fetchone()["next_id"]
+
+        # Create Post
+        post_insert_query = """
+        INSERT INTO Post (
+            post_id, user_id, team_id, title, content, created_at, updated_at
+        ) VALUES (%s, %s, %s, %s, %s, NOW(), NOW())
+        """
+        cursor.execute(
+            post_insert_query,
+            (
+                next_post_id,
+                payload.user_id,
+                next_team_id,
+                payload.title.strip(),
+                payload.content.strip(),
+            ),
+        )
+
+        # Automatically add the post creator as a team member (owner/leader)
+        # This ensures that when someone creates a post, they automatically join the team
+        team_member_insert_query = """
+        INSERT INTO TeamMember (team_id, user_id, role, joined_at)
+        VALUES (%s, %s, 'owner', NOW())
+        ON DUPLICATE KEY UPDATE role = 'owner'
+        """
+        cursor.execute(
+            team_member_insert_query,
+            (next_team_id, payload.user_id),
+        )
+
+        conn.commit()
+
+        return {
+            "post_id": next_post_id,
+            "team_id": next_team_id,
+            "message": "Post created successfully",
+        }
+
+    except HTTPException:
+        if conn:
+            conn.rollback()
+        raise
+    except Error as e:
+        if conn:
+            conn.rollback()
+        print(f"Database error while creating post: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create post")
     finally:
         if conn and conn.is_connected():
             cursor.close()

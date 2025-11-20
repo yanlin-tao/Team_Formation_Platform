@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import EntryPage from './pages/EntryPage'
 import PostPage from './pages/PostPage'
+import CreatePostPage from './pages/CreatePostPage'
 import ProfilePage from './pages/ProfilePage'
 import AuthPage from './pages/AuthPage'
 import NotificationsPage from './pages/NotificationsPage'
@@ -21,6 +22,7 @@ function App() {
         <Route path="/messages" element={<MessagesPage />} />
         <Route path="/courses" element={<CoursesPage />} />
         <Route path="/teams" element={<TeamsPage />} />
+        <Route path="/posts/create" element={<CreatePostPage />} />
         <Route path="/posts/:postId" element={<PostPage />} />
       </Routes>
     </Router>

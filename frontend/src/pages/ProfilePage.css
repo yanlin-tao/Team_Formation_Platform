@@ -76,12 +76,6 @@
   color: var(--uiuc-navy);
 }
 
-.profile-title {
-  margin: 0.35rem 0 0;
-  color: var(--uiuc-gray);
-  font-size: 1.05rem;
-}
-
 .profile-tags {
   display: flex;
   gap: 0.75rem;
@@ -102,6 +96,39 @@
   margin: 0 0 0.75rem;
   color: var(--uiuc-gray);
   line-height: 1.6;
+}
+
+.profile-contact-info {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-item {
+  font-size: 0.9rem;
+  color: var(--uiuc-navy);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contact-item strong {
+  font-weight: 600;
+  color: var(--uiuc-gray);
+  min-width: 90px;
+}
+
+.contact-item .avatar-link {
+  color: var(--uiuc-orange);
+  text-decoration: none;
+  word-break: break-all;
+  transition: color 0.2s;
+}
+
+.contact-item .avatar-link:hover {
+  color: #E85400;
+  text-decoration: underline;
 }
 
 .profile-availability {
@@ -415,6 +442,99 @@
   }
 }
 
+.profile-edit-form {
+  width: 100%;
+}
+
+.profile-edit-form h2 {
+  margin: 0 0 1.5rem 0;
+  color: var(--uiuc-navy);
+  font-size: 1.5rem;
+}
+
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.edit-form-grid .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-form-grid .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.edit-form-grid label {
+  font-weight: 600;
+  color: var(--uiuc-navy);
+  font-size: 0.9rem;
+}
+
+.edit-form-grid input,
+.edit-form-grid textarea {
+  padding: 0.75rem;
+  border: 2px solid var(--uiuc-light-gray);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.edit-form-grid input:focus,
+.edit-form-grid textarea:focus {
+  outline: none;
+  border-color: var(--uiuc-orange);
+}
+
+.edit-form-grid textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.edit-form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.edit-form-actions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.edit-form-actions .primary {
+  background: var(--uiuc-orange);
+  color: var(--uiuc-white);
+}
+
+.edit-form-actions .primary:hover:not(:disabled) {
+  background: #E85400;
+}
+
+.edit-form-actions .ghost {
+  background: transparent;
+  color: var(--uiuc-navy);
+  border: 2px solid var(--uiuc-light-gray);
+}
+
+.edit-form-actions .ghost:hover:not(:disabled) {
+  border-color: var(--uiuc-gray);
+}
+
+.edit-form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 900px) {
   .profile-content {
     margin-left: 0;
@@ -429,5 +549,9 @@
   .profile-actions {
     flex-direction: row;
     flex-wrap: wrap;
+  }
+  
+  .edit-form-grid {
+    grid-template-columns: 1fr;
   }
 }
