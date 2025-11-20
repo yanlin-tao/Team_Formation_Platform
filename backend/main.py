@@ -26,7 +26,6 @@ app.add_middleware(
 
 
 def get_db_connection():
-    """Create and return a database connection"""
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         return conn
@@ -36,7 +35,6 @@ def get_db_connection():
 
 
 def get_default_terms():
-    """Get default terms if database is empty"""
     from datetime import date
 
     return [
@@ -264,7 +262,6 @@ def get_mock_profile_payload() -> Dict[str, Any]:
     }
 
 
-# API Routes
 @app.get("/")
 def root():
     return {"message": "TeamUp UIUC API", "version": "1.0.0"}
@@ -272,10 +269,6 @@ def root():
 
 @app.get("/api/terms")
 async def get_terms():
-    """
-    Get all available terms
-    Returns default terms if database is empty
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -290,27 +283,22 @@ async def get_terms():
         cursor.execute(query)
         terms = cursor.fetchall()
 
-        # Debug: Print database query results
         print(f"[DEBUG] Database query returned {len(terms)} terms")
         for term in terms:
             print(f"[DEBUG] Term: {term}")
 
-        # If no terms in database, return default terms
         if not terms:
             print("[DEBUG] No terms found in database, returning default terms")
             return get_default_terms()
 
-        # Convert datetime to string
         for term in terms:
             if term["start_date"]:
                 if isinstance(term["start_date"], str):
-                    # Already a string, keep as is
                     pass
                 else:
                     term["start_date"] = term["start_date"].isoformat()
             if term["end_date"]:
                 if isinstance(term["end_date"], str):
-                    # Already a string, keep as is
                     pass
                 else:
                     term["end_date"] = term["end_date"].isoformat()
@@ -323,7 +311,6 @@ async def get_terms():
         import traceback
 
         traceback.print_exc()
-        # If database error, return default terms as fallback
         return get_default_terms()
     finally:
         if conn and conn.is_connected():
@@ -354,10 +341,6 @@ def _fetch_user_by_identifier(cursor, identifier: str):
 
 @app.post("/api/auth/register", response_model=AuthResponse)
 async def register_user(payload: RegisterRequest):
-    """
-    Registration endpoint backed by the database. Password is collected for UX parity
-    but is not validated until a future phase.
-    """
     if not payload.email:
         raise HTTPException(status_code=400, detail="Email is required")
     if not payload.display_name:
@@ -421,10 +404,6 @@ async def register_user(payload: RegisterRequest):
 
 @app.post("/api/auth/login", response_model=AuthResponse)
 async def login_user(payload: LoginRequest):
-    """
-    Authenticate against the User table. Password input is ignored for now but kept
-    for consistent UX.
-    """
     identifier = (payload.identifier or "").strip()
     if not identifier:
         raise HTTPException(status_code=400, detail="Email or NetID is required")
@@ -451,7 +430,6 @@ async def login_user(payload: LoginRequest):
 
 @app.post("/api/auth/logout")
 async def logout_user():
-    """Stateless logout endpoint."""
     return {"message": "Logged out"}
 
 
@@ -459,7 +437,6 @@ async def logout_user():
 async def get_current_user(
     user_id: Optional[int] = None, identifier: Optional[str] = None
 ):
-    """Fetch a user from the database by id or identifier."""
     if not user_id and not identifier:
         raise HTTPException(status_code=400, detail="user_id or identifier is required")
 
@@ -495,7 +472,6 @@ async def get_current_user(
 
 @app.get("/api/profile/me")
 async def get_profile(user_id: Optional[int] = None):
-    """Return profile payload hydrated with database information when available."""
     payload = get_mock_profile_payload()
     user_payload = AuthUser(**MOCK_USER).dict()
 
@@ -523,7 +499,6 @@ async def get_profile(user_id: Optional[int] = None):
             raise HTTPException(status_code=404, detail="User not found")
 
         user_payload = _build_auth_user(row).dict()
-        # Add phone_number and score to user payload
         user_payload["phone_number"] = row.get("phone_number")
         user_payload["score"] = (
             float(row.get("score")) if row.get("score") is not None else None
@@ -535,7 +510,6 @@ async def get_profile(user_id: Optional[int] = None):
         profile["major"] = row.get("major") or profile["major"]
         profile["graduation"] = row.get("grade") or profile["graduation"]
 
-        # Get user's teams
         cursor.execute(
             """
             SELECT 
@@ -580,7 +554,6 @@ async def get_profile(user_id: Optional[int] = None):
             )
         payload["activeTeams"] = active_teams
 
-        # Get user's match requests (sent and received)
         cursor.execute(
             """
             SELECT 
@@ -605,20 +578,15 @@ async def get_profile(user_id: Optional[int] = None):
         )
         requests_data = cursor.fetchall()
 
-        # Count stats
         open_requests = sum(1 for r in requests_data if r.get("status") == "pending")
         successful_matches = sum(
             1 for r in requests_data if r.get("status") == "accepted"
         )
 
-        # Get courses from teams (user joined teams via TeamMember)
         team_course_ids = set(
             team.get("course_id") for team in teams_data if team.get("course_id")
         )
 
-        # Get courses from posts (user created posts - each post automatically creates a team)
-        # Note: Creating a post automatically creates a team, but user may not be in TeamMember
-        # So we need to include courses from user's posts as well
         cursor.execute(
             """
             SELECT DISTINCT c.course_id
@@ -634,17 +602,13 @@ async def get_profile(user_id: Optional[int] = None):
             item["course_id"] for item in post_courses if item.get("course_id")
         )
 
-        # Combine courses from teams and posts (union of both sets)
-        # This represents all courses user is associated with (via teams or posts)
         unique_courses = len(team_course_ids.union(post_course_ids))
 
-        # Count user's posts
         cursor.execute(
             "SELECT COUNT(*) as post_count FROM Post WHERE user_id = %s", (user_id,)
         )
         user_post_count = cursor.fetchone().get("post_count", 0)
 
-        # Update stats - Active Courses = My Courses (same logic)
         payload["stats"] = [
             {
                 "label": "Active Courses",
@@ -665,10 +629,9 @@ async def get_profile(user_id: Optional[int] = None):
                 "label": "Collaboration Score",
                 "value": "4.8/5",
                 "trend": "Consistently high",
-            },  # Keep mock for now
+            },
         ]
 
-        # Get user's skills
         cursor.execute(
             """
             SELECT s.name, s.category, us.level
@@ -694,7 +657,6 @@ async def get_profile(user_id: Optional[int] = None):
                 "tools": tool_skills or payload["skills"].get("tools", []),
             }
 
-        # Get recent activity from match requests and posts
         recent_activity = []
         for req in requests_data[:5]:
             course_code = f"{req.get('subject', '')} {req.get('number', '')}"
@@ -738,21 +700,15 @@ async def get_profile(user_id: Optional[int] = None):
 
 @app.put("/api/profile/me")
 async def update_profile(user_id: int, payload: ProfileUpdate):
-    """
-    Update user profile information
-    Only updates fields that are provided in the payload
-    """
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Verify user exists
         cursor.execute("SELECT user_id FROM User WHERE user_id = %s", (user_id,))
         if not cursor.fetchone():
             raise HTTPException(status_code=404, detail="User not found")
 
-        # Build update query dynamically based on provided fields
         update_fields = []
         update_values = []
 
@@ -825,7 +781,6 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
             )
 
         if payload.score is not None:
-            # Score is a decimal(4,1), validate range (typically 0.0 to 100.0)
             if payload.score is not None and (payload.score < 0 or payload.score > 100):
                 raise HTTPException(
                     status_code=400, detail="Score must be between 0 and 100"
@@ -836,13 +791,11 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
         if not update_fields:
             raise HTTPException(status_code=400, detail="No fields to update")
 
-        # Execute update
         update_values.append(user_id)
         update_query = f"UPDATE User SET {', '.join(update_fields)} WHERE user_id = %s"
         cursor.execute(update_query, tuple(update_values))
         conn.commit()
 
-        # Fetch updated user data
         cursor.execute(
             """
             SELECT user_id, display_name, email, netid, avatar_url, bio, major, grade, phone_number, score
@@ -854,7 +807,6 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
         )
         updated_user = cursor.fetchone()
 
-        # Convert score to float if not None
         if updated_user and updated_user.get("score") is not None:
             updated_user["score"] = float(updated_user["score"])
 
@@ -878,9 +830,6 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
 @app.get("/api/users/{user_id}/teams")
 async def get_user_teams(user_id: int):
-    """
-    Get all teams for a specific user
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -924,9 +873,6 @@ async def get_user_teams(user_id: int):
 
 @app.get("/api/users/{user_id}/posts")
 async def get_user_posts(user_id: int, limit: int = 50):
-    """
-    Get all posts created by a user
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -971,16 +917,11 @@ async def get_user_posts(user_id: int, limit: int = 50):
 
 @app.get("/api/users/{user_id}/courses")
 async def get_user_courses(user_id: int):
-    """
-    Get all courses associated with a user (through teams and posts)
-    Returns unique courses with their associated teams and posts
-    """
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Get courses from teams
         query_teams = """
             SELECT DISTINCT
                 c.course_id,
@@ -1002,7 +943,6 @@ async def get_user_courses(user_id: int):
         cursor.execute(query_teams, (user_id,))
         team_courses = cursor.fetchall()
 
-        # Get courses from posts
         query_posts = """
             SELECT DISTINCT
                 c.course_id,
@@ -1023,10 +963,8 @@ async def get_user_courses(user_id: int):
         cursor.execute(query_posts, (user_id,))
         post_courses = cursor.fetchall()
 
-        # Combine and deduplicate by course_id
         courses_map = {}
 
-        # Add courses from teams
         for item in team_courses:
             course_id = item["course_id"]
             if course_id not in courses_map:
@@ -1049,7 +987,6 @@ async def get_user_courses(user_id: int):
                 }
             )
 
-        # Add courses from posts
         for item in post_courses:
             course_id = item["course_id"]
             if course_id not in courses_map:
@@ -1071,7 +1008,6 @@ async def get_user_courses(user_id: int):
                 }
             )
 
-        # Convert to list and sort by course code
         courses_list = list(courses_map.values())
         courses_list.sort(key=lambda x: (x["subject"], x["number"]))
 
@@ -1091,9 +1027,6 @@ async def get_user_courses(user_id: int):
 
 @app.get("/api/users/{user_id}/match-requests")
 async def get_user_match_requests(user_id: int, status: Optional[str] = None):
-    """
-    Get match requests for a user (sent by the user)
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -1143,10 +1076,6 @@ async def get_user_match_requests(user_id: int, status: Optional[str] = None):
 
 @app.get("/api/posts/popular")
 async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
-    """
-    Get popular posts sorted by view count and request count
-    Optionally filter by term_id
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -1195,7 +1124,6 @@ async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
         cursor.execute(query, tuple(params))
         posts = cursor.fetchall()
 
-        # Get skills for each post
         for post in posts:
             skills_query = """
             SELECT s.name
@@ -1207,7 +1135,6 @@ async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
             skills = cursor.fetchall()
             post["skills"] = [skill["name"] for skill in skills]
 
-        # Convert datetime to string
         for post in posts:
             if post["created_at"]:
                 post["created_at"] = post["created_at"].isoformat()
@@ -1227,13 +1154,8 @@ async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
 async def search_posts(
     term_id: Optional[str] = None, course_id: Optional[str] = None, limit: int = 100
 ):
-    """
-    Search posts by term_id and course_id
-    Returns all posts for a specific course in a specific term
-    """
     conn = None
     try:
-        # Debug: Print input parameters
         print(
             f"[DEBUG] search_posts called with term_id={term_id}, course_id={course_id}, limit={limit}"
         )
@@ -1249,7 +1171,6 @@ async def search_posts(
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # First verify that the course exists and matches the term_id
         verify_query = """
         SELECT course_id, term_id, subject, number, title
         FROM Course
@@ -1260,15 +1181,12 @@ async def search_posts(
 
         if not course_info:
             print(f"[WARNING] Course {course_id} not found for term {term_id}")
-            # Try to find similar courses
             similar_query = """
             SELECT course_id, term_id, subject, number, title
             FROM Course
             WHERE course_id = %s OR (subject = %s AND number = %s)
             LIMIT 5
             """
-            # Extract subject and number from course_id if possible
-            # course_id format: sp25CS411 -> subject=CS, number=411
             import re
 
             match = re.match(r"^[a-z]+\d+([A-Z]+)(\d+)$", course_id)
@@ -1278,11 +1196,10 @@ async def search_posts(
                 cursor.execute(similar_query, (course_id, subject, number))
                 similar_courses = cursor.fetchall()
                 print(f"[DEBUG] Found similar courses: {similar_courses}")
-            return []  # Return empty list if course not found
+            return []
 
         print(f"[DEBUG] Verified course: {course_info}")
 
-        # Build the query to search for posts
         query = """
         SELECT 
             p.post_id,
@@ -1318,7 +1235,6 @@ async def search_posts(
 
         params = [term_id, course_id, limit]
 
-        # Debug: Print query and params
         print(f"[DEBUG] Executing query with params: {params}")
 
         cursor.execute(query, tuple(params))
@@ -1328,7 +1244,6 @@ async def search_posts(
             f"[DEBUG] Found {len(posts)} posts for term_id={term_id}, course_id={course_id}"
         )
 
-        # Get skills for each post
         for post in posts:
             try:
                 skills_query = """
@@ -1346,7 +1261,6 @@ async def search_posts(
                 )
                 post["skills"] = []
 
-        # Convert datetime to string
         for post in posts:
             if post["created_at"]:
                 if isinstance(post["created_at"], str):
@@ -1380,9 +1294,6 @@ async def search_posts(
 
 @app.get("/api/posts/{post_id}")
 async def get_post_by_id(post_id: int):
-    """
-    Get a specific post by ID
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -1434,10 +1345,6 @@ async def get_post_by_id(post_id: int):
         skills = cursor.fetchall()
         post["skills"] = [skill["name"] for skill in skills]
 
-        # Note: view_count is not stored in Post table,
-        # it's calculated on the fly or stored separately if needed
-
-        # Convert datetime to string
         if post["created_at"]:
             post["created_at"] = post["created_at"].isoformat()
 
@@ -1456,9 +1363,6 @@ async def get_post_by_id(post_id: int):
 
 @app.get("/api/posts/{post_id}/comments", response_model=List[CommentResponse])
 async def get_post_comments(post_id: int):
-    """
-    Fetch all comments for a given post
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -1504,9 +1408,6 @@ async def get_post_comments(post_id: int):
 
 @app.post("/api/posts/{post_id}/comments", response_model=CommentResponse)
 async def create_post_comment(post_id: int, payload: CommentCreate):
-    """
-    Create a new comment for a post
-    """
     if not payload.content or not payload.content.strip():
         raise HTTPException(status_code=400, detail="Content cannot be empty")
 
@@ -1574,15 +1475,11 @@ async def create_post_comment(post_id: int, payload: CommentCreate):
 
 @app.post("/api/requests")
 async def create_join_request(request: JoinRequest):
-    """
-    Create a join request for a post
-    """
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Get post and team information
         post_query = """
         SELECT p.user_id AS post_author_id, t.team_id
         FROM Post p
@@ -1597,10 +1494,8 @@ async def create_join_request(request: JoinRequest):
 
         post_author_id, team_id = post_info
 
-        # For now, we'll use a mock user_id (in production, get from JWT token)
         from_user_id = 1  # TODO: Get from authenticated user
 
-        # Check if request already exists
         check_query = """
         SELECT request_id
         FROM MatchRequest
@@ -1613,7 +1508,6 @@ async def create_join_request(request: JoinRequest):
         if existing:
             raise HTTPException(status_code=400, detail="Request already exists")
 
-        # Create the match request
         insert_query = """
         INSERT INTO MatchRequest (from_user_id, to_team_id, post_id, message, status, created_at)
         VALUES (%s, %s, %s, %s, 'pending', NOW())
@@ -1648,11 +1542,6 @@ async def create_join_request(request: JoinRequest):
 async def search_courses(
     term_id: Optional[str] = None, q: Optional[str] = None, limit: int = 50
 ):
-    """
-    Search courses by term_id and query string
-    Supports searching by course code (e.g., "CS 411") or course title
-    If q is not provided, returns all courses for the term (up to limit)
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -1673,15 +1562,13 @@ async def search_courses(
 
         params = []
 
-        # Filter by term_id if provided
         if term_id:
             query += " AND c.term_id = %s"
             params.append(term_id)
 
-        # Search by query if provided
         if q and q.strip():
             search_term = f"%{q.strip()}%"
-            exact_search = q.strip().upper()  # Case-insensitive exact match
+            exact_search = q.strip().upper()
             starts_with_term = f"{q.strip()}%"
             query += """
             AND (
@@ -1693,8 +1580,6 @@ async def search_courses(
             """
             params.extend([search_term, search_term, search_term, search_term])
 
-            # Order by match relevance: exact match first, then starts with, then contains
-            # Use UPPER() for case-insensitive comparison
             query += """
             ORDER BY
                 CASE 
@@ -1711,12 +1596,12 @@ async def search_courses(
             starts_with_term_upper = f"{q.strip().upper()}%"
             params.extend(
                 [
-                    exact_search,  # Exact match course code
-                    starts_with_term_upper,  # Starts with course code
-                    exact_search,  # Exact match title
-                    f"%{q.strip().upper()}%",  # Contains in title
-                    exact_search,  # Exact match subject
-                    exact_search,  # Exact match number
+                    exact_search,
+                    starts_with_term_upper,
+                    exact_search,
+                    f"%{q.strip().upper()}%",
+                    exact_search,
+                    exact_search,
                 ]
             )
         else:
@@ -1741,17 +1626,11 @@ async def search_courses(
 
 @app.get("/api/courses/popular")
 async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
-    """
-    Get popular courses for a term (courses that have posts)
-    Returns courses sorted by number of posts in descending order
-    Priority: Courses with the most posts in the specified term
-    """
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Ensure term_id is provided for popular courses
         if not term_id:
             return []
 
@@ -1781,7 +1660,6 @@ async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
         cursor.execute(query, tuple(params))
         courses = cursor.fetchall()
 
-        # Debug: Print popular courses with post counts
         print(f"[DEBUG] Popular courses for term {term_id}:")
         for course in courses:
             print(
@@ -1801,9 +1679,6 @@ async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
 
 @app.get("/api/debug/courses-sections")
 async def debug_courses_sections(term_id: Optional[str] = None, limit: int = 10):
-    """
-    Debug endpoint to check courses and their sections
-    """
     conn = None
     try:
         conn = get_db_connection()
@@ -1836,7 +1711,6 @@ async def debug_courses_sections(term_id: Optional[str] = None, limit: int = 10)
         cursor.execute(query, tuple(params))
         results = cursor.fetchall()
 
-        # Also get detailed section info for courses with sections
         for course in results:
             if course["section_count"] > 0:
                 cursor.execute(
@@ -1865,15 +1739,11 @@ async def debug_courses_sections(term_id: Optional[str] = None, limit: int = 10)
 
 @app.get("/api/courses/{course_id}/sections")
 async def get_course_sections(course_id: str):
-    """
-    Get all sections for a specific course
-    """
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Debug: Check what sections exist for this course
         print(f"[DEBUG] Fetching sections for course_id: {course_id}")
 
         query = """
@@ -1912,10 +1782,6 @@ async def get_course_sections(course_id: str):
 
 @app.post("/api/posts")
 async def create_post(payload: PostCreate):
-    """
-    Create a new post with associated team
-    Creates a Team first, then creates a Post linked to that team
-    """
     if not payload.title or not payload.title.strip():
         raise HTTPException(status_code=400, detail="Title cannot be empty")
     if not payload.content or not payload.content.strip():
@@ -1944,7 +1810,6 @@ async def create_post(payload: PostCreate):
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Verify user exists
         cursor.execute(
             "SELECT user_id FROM User WHERE user_id = %s", (payload.user_id,)
         )
@@ -1952,7 +1817,6 @@ async def create_post(payload: PostCreate):
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        # Verify course exists
         cursor.execute(
             "SELECT course_id FROM Course WHERE course_id = %s", (payload.course_id,)
         )
@@ -1960,7 +1824,6 @@ async def create_post(payload: PostCreate):
         if not course:
             raise HTTPException(status_code=404, detail="Course not found")
 
-        # Verify section exists if provided
         if payload.section_id:
             cursor.execute(
                 "SELECT crn FROM Section WHERE crn = %s AND course_id = %s",
@@ -1972,7 +1835,6 @@ async def create_post(payload: PostCreate):
                     status_code=404, detail="Section not found for this course"
                 )
 
-        # Check if team_name already exists
         cursor.execute(
             "SELECT team_id FROM Team WHERE team_name = %s",
             (payload.team_name.strip(),),
@@ -1984,21 +1846,15 @@ async def create_post(payload: PostCreate):
                 detail="Team name already exists. Please choose a different name.",
             )
 
-        # Get next team_id
         cursor.execute("SELECT COALESCE(MAX(team_id), 0) + 1 AS next_id FROM Team")
         next_team_id = cursor.fetchone()["next_id"]
 
-        # Create Team
-        # Handle section_id - if not provided and table requires it, we may need a default
-        # For now, try to insert with section_id (may be NULL if table allows)
         team_insert_query = """
         INSERT INTO Team (
             team_id, course_id, section_id, team_name, target_size, status
         ) VALUES (%s, %s, %s, %s, %s, 'open')
         """
 
-        # If section_id is not provided, we'll try to insert NULL
-        # If the table requires NOT NULL, we may need to handle this differently
         section_id_value = payload.section_id if payload.section_id else None
 
         cursor.execute(
@@ -2006,17 +1862,15 @@ async def create_post(payload: PostCreate):
             (
                 next_team_id,
                 payload.course_id,
-                section_id_value,  # CRN or NULL
+                section_id_value,
                 payload.team_name.strip(),
                 payload.target_size,
             ),
         )
 
-        # Get next post_id
         cursor.execute("SELECT COALESCE(MAX(post_id), 0) + 1 AS next_id FROM Post")
         next_post_id = cursor.fetchone()["next_id"]
 
-        # Create Post
         post_insert_query = """
         INSERT INTO Post (
             post_id, user_id, team_id, title, content, created_at, updated_at
@@ -2033,8 +1887,6 @@ async def create_post(payload: PostCreate):
             ),
         )
 
-        # Automatically add the post creator as a team member (owner/leader)
-        # This ensures that when someone creates a post, they automatically join the team
         team_member_insert_query = """
         INSERT INTO TeamMember (team_id, user_id, role, joined_at)
         VALUES (%s, %s, 'owner', NOW())
@@ -2070,7 +1922,6 @@ async def create_post(payload: PostCreate):
 
 @app.get("/api/health")
 def health_check():
-    """Health check endpoint"""
     try:
         conn = get_db_connection()
         conn.close()
