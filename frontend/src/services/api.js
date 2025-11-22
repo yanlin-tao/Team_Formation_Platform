@@ -66,13 +66,17 @@ export async function createComment(postId, payload) {
   })
 }
 
-export async function sendJoinRequest(postId, message) {
+export async function sendJoinRequest(postId, message, userId = null) {
+  const body = {
+    post_id: postId,
+    message,
+  }
+  if (userId) {
+    body.from_user_id = userId
+  }
   return apiRequest('/requests', {
     method: 'POST',
-    body: JSON.stringify({
-      post_id: postId,
-      message,
-    }),
+    body: JSON.stringify(body),
   })
 }
 
@@ -195,6 +199,30 @@ export async function fetchUserMatchRequests(userId, status = null) {
   if (status) params.append('status', status)
   const query = params.toString() ? `?${params.toString()}` : ''
   return apiRequest(`/users/${userId}/match-requests${query}`)
+}
+
+export async function fetchUserReceivedRequests(userId, status = null) {
+  const params = new URLSearchParams()
+  if (status) params.append('status', status)
+  const query = params.toString() ? `?${params.toString()}` : ''
+  return apiRequest(`/users/${userId}/received-requests${query}`)
+}
+
+export async function acceptJoinRequest(userId, requestId) {
+  return apiRequest(`/users/${userId}/requests/${requestId}/accept`, {
+    method: 'PUT',
+  })
+}
+
+export async function rejectJoinRequest(userId, requestId, rejectionReason = null) {
+  const body = {}
+  if (rejectionReason) {
+    body.rejection_reason = rejectionReason
+  }
+  return apiRequest(`/users/${userId}/requests/${requestId}/reject`, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  })
 }
 
 export async function getUserPosts(userId) {

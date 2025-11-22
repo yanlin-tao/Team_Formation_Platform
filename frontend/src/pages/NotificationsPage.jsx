@@ -1,30 +1,89 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import { useRequireAuth } from '../hooks/useRequireAuth'
-import { fetchUserMatchRequests } from '../services/api'
+import { fetchUserReceivedRequests, acceptJoinRequest, rejectJoinRequest } from '../services/api'
 import './DashboardPages.css'
 
 function NotificationsPage() {
   const { user, loading: authLoading } = useRequireAuth()
   const [matchRequests, setMatchRequests] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showRejectModal, setShowRejectModal] = useState(false)
+  const [selectedRequest, setSelectedRequest] = useState(null)
+  const [rejectionReason, setRejectionReason] = useState('')
+  const [processing, setProcessing] = useState(false)
+
+  const loadRequests = async () => {
+    if (!user) return
+    try {
+      setLoading(true)
+      // Only fetch pending requests to show in notifications
+      const data = await fetchUserReceivedRequests(user.user_id, 'pending')
+      setMatchRequests(data || [])
+    } catch (error) {
+      console.warn('[NotificationsPage] Failed to load received requests:', error)
+      setMatchRequests([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     if (authLoading || !user) return
-    const load = async () => {
-      try {
-        setLoading(true)
-        const data = await fetchUserMatchRequests(user.user_id)
-        setMatchRequests(data || [])
-      } catch (error) {
-        console.warn('[NotificationsPage] Failed to load match requests:', error)
-        setMatchRequests([])
-      } finally {
-        setLoading(false)
-      }
-    }
-    load()
+    loadRequests()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading, user])
+
+  const handleAccept = async (requestId) => {
+    if (!user || processing) return
+    
+    try {
+      setProcessing(true)
+      await acceptJoinRequest(user.user_id, requestId)
+      // Reload requests (will only show pending ones)
+      await loadRequests()
+    } catch (error) {
+      console.error('[NotificationsPage] Failed to accept request:', error)
+      alert(`Failed to accept request: ${error.message || 'Unknown error'}`)
+    } finally {
+      setProcessing(false)
+    }
+  }
+
+  const handleRejectClick = (request) => {
+    setSelectedRequest(request)
+    setRejectionReason('')
+    setShowRejectModal(true)
+  }
+
+  const handleRejectConfirm = async () => {
+    if (!user || !selectedRequest || processing) return
+    
+    try {
+      setProcessing(true)
+      await rejectJoinRequest(
+        user.user_id, 
+        selectedRequest.request_id, 
+        rejectionReason.trim() || null
+      )
+      setShowRejectModal(false)
+      setSelectedRequest(null)
+      setRejectionReason('')
+      // Reload requests (will only show pending ones)
+      await loadRequests()
+    } catch (error) {
+      console.error('[NotificationsPage] Failed to reject request:', error)
+      alert(`Failed to reject request: ${error.message || 'Unknown error'}`)
+    } finally {
+      setProcessing(false)
+    }
+  }
+
+  const handleRejectCancel = () => {
+    setShowRejectModal(false)
+    setSelectedRequest(null)
+    setRejectionReason('')
+  }
 
   if (authLoading || loading) {
     return (
@@ -103,32 +162,41 @@ function NotificationsPage() {
                 const courseCode = `${request.subject || ''} ${request.number || ''}`.trim()
                 const teamName = request.team_name || 'team'
                 const postTitle = request.post_title || 'post'
+                const senderName = request.sender_name || request.sender_netid || 'Someone'
                 
                 return (
                   <li key={request.request_id}>
                     <div>
                       <h3>
-                        {request.status === 'pending' && `Request to ${courseCode}`}
-                        {request.status === 'accepted' && `Match accepted: ${courseCode}`}
-                        {request.status === 'rejected' && `Request declined: ${courseCode}`}
-                        {request.status === 'withdrawn' && `Request withdrawn: ${courseCode}`}
-                        {request.status === 'expired' && `Request expired: ${courseCode}`}
-                        {!['pending', 'accepted', 'rejected', 'withdrawn', 'expired'].includes(request.status) && `Request: ${courseCode}`}
+                        {senderName} wants to join your post
                       </h3>
                       <p>
-                        {request.status === 'pending' && `Waiting for response from ${teamName}`}
-                        {request.status === 'accepted' && `You've been accepted to ${teamName}`}
-                        {request.status === 'rejected' && `Your request to ${teamName} was declined`}
-                        {request.status === 'withdrawn' && `You withdrew your request to ${teamName}`}
-                        {request.status === 'expired' && `Your request to ${teamName} has expired`}
+                        {senderName} sent a join request for your post: <strong>{postTitle}</strong>
+                        {courseCode && ` (${courseCode})`}
                         {request.message && ` • ${request.message.substring(0, 100)}${request.message.length > 100 ? '...' : ''}`}
                       </p>
                       {request.course_title && <p className="text-muted">{request.course_title}</p>}
+                      {postTitle && (
+                        <p className="text-muted">Post: {postTitle}</p>
+                      )}
                     </div>
-                    <div>
-                      <span className={`dashboard-pill ${getStatusClass(request.status)}`}>
-                        {getStatusLabel(request.status)}
-                      </span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'flex-end' }}>
+                      <div className="request-actions">
+                        <button
+                          className="request-action-button accept"
+                          onClick={() => handleAccept(request.request_id)}
+                          disabled={processing}
+                        >
+                          {processing ? 'Processing...' : 'Accept'}
+                        </button>
+                        <button
+                          className="request-action-button reject"
+                          onClick={() => handleRejectClick(request)}
+                          disabled={processing}
+                        >
+                          Reject
+                        </button>
+                      </div>
                       <span className="dashboard-pill time-pill">{formatTime(request.created_at)}</span>
                     </div>
                   </li>
@@ -138,6 +206,46 @@ function NotificationsPage() {
           )}
         </div>
       </div>
+
+      {/* Reject Modal */}
+      {showRejectModal && selectedRequest && (
+        <div className="modal-overlay" onClick={handleRejectCancel}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Reject Join Request</h2>
+            <p>
+              Are you sure you want to reject <strong>{selectedRequest.sender_name || selectedRequest.sender_netid || 'this user'}</strong>'s join request?
+            </p>
+            <div style={{ marginTop: '1rem' }}>
+              <label htmlFor="rejection-reason" className="modal-label">
+                Rejection Reason (Optional):
+              </label>
+              <textarea
+                id="rejection-reason"
+                className="modal-textarea"
+                value={rejectionReason}
+                onChange={(e) => setRejectionReason(e.target.value)}
+                placeholder="Enter a reason for rejection (optional)..."
+              />
+            </div>
+            <div className="modal-actions">
+              <button
+                className="modal-button ghost"
+                onClick={handleRejectCancel}
+                disabled={processing}
+              >
+                Cancel
+              </button>
+              <button
+                className="modal-button reject"
+                onClick={handleRejectConfirm}
+                disabled={processing}
+              >
+                {processing ? 'Processing...' : 'Confirm Reject'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

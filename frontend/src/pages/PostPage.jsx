@@ -67,21 +67,42 @@ function PostPage() {
 
   const handleSendRequest = async (e) => {
     e.preventDefault()
+    e.stopPropagation()
+    
     if (!requestMessage.trim()) {
       alert('Please enter a message')
       return
     }
 
+    const activeUser = sessionUser || getStoredUser()
+    if (!activeUser?.user_id) {
+      alert('Please sign in to send a join request')
+      navigate('/auth')
+      return
+    }
+
+    // Check if user is the post author - don't allow sending request to own post
+    if (post?.user_id === activeUser.user_id) {
+      alert('You cannot send a join request to your own post')
+      return
+    }
+
     try {
       setSendingRequest(true)
-      await sendJoinRequest(postId, requestMessage)
+      // Convert postId to number if it's a string
+      const postIdNum = typeof postId === 'string' ? parseInt(postId, 10) : postId
+      
+      console.log('Sending join request:', { postId: postIdNum, userId: activeUser.user_id, message: requestMessage })
+      
+      await sendJoinRequest(postIdNum, requestMessage, activeUser.user_id)
+      
       setRequestSent(true)
       setRequestMessage('')
       alert('Join request sent successfully!')
     } catch (err) {
-      alert('Failed to send request. Please try again.')
       console.error('Error sending request:', err)
-    } finally {
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to send request. Please try again.'
+      alert(errorMsg)
       setSendingRequest(false)
     }
   }
@@ -211,30 +232,68 @@ function PostPage() {
               </div>
             </div>
 
-            {!requestSent ? (
+            {/* Only show join request section if user is logged in and not the post author */}
+            {sessionUser && post?.user_id !== (sessionUser?.user_id || getStoredUser()?.user_id) && (
+              !requestSent ? (
+                <div className="join-request-section">
+                  <h3>Send Join Request</h3>
+                  <form onSubmit={handleSendRequest}>
+                    <textarea
+                      className="request-message-input"
+                      value={requestMessage}
+                      onChange={(e) => setRequestMessage(e.target.value)}
+                      placeholder="Tell them why you'd like to join..."
+                      rows="4"
+                      required
+                      disabled={sendingRequest}
+                    />
+                    <button
+                      type="submit"
+                      className="send-request-button"
+                      disabled={sendingRequest || !requestMessage.trim()}
+                    >
+                      {sendingRequest ? 'Sending...' : 'Send Join Request'}
+                    </button>
+                  </form>
+                </div>
+              ) : (
+                <div className="request-sent-message">
+                  ✓ Join request sent successfully!
+                </div>
+              )
+            )}
+            
+            {/* Show message if user is not logged in */}
+            {!sessionUser && (
               <div className="join-request-section">
                 <h3>Send Join Request</h3>
-                <form onSubmit={handleSendRequest}>
-                  <textarea
-                    className="request-message-input"
-                    value={requestMessage}
-                    onChange={(e) => setRequestMessage(e.target.value)}
-                    placeholder="Tell them why you'd like to join..."
-                    rows="4"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="send-request-button"
-                    disabled={sendingRequest}
-                  >
-                    {sendingRequest ? 'Sending...' : 'Send Join Request'}
-                  </button>
-                </form>
+                <p style={{ color: '#666', marginBottom: '10px' }}>
+                  Please <button onClick={() => navigate('/auth')} style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    color: '#0066cc', 
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}>sign in</button> to send a join request.
+                </p>
               </div>
-            ) : (
-              <div className="request-sent-message">
-                ✓ Join request sent successfully!
+            )}
+            
+            {/* Show message if user is the post author */}
+            {sessionUser && post?.user_id === (sessionUser?.user_id || getStoredUser()?.user_id) && (
+              <div className="join-request-section">
+                <h3>Join Requests</h3>
+                <p style={{ color: '#666' }}>
+                  You can view join requests for this post in your <button onClick={() => navigate('/notifications')} style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    color: '#0066cc', 
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}>notifications</button> page.
+                </p>
               </div>
             )}
 

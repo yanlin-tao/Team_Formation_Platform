@@ -96,6 +96,7 @@ class PostResponse(BaseModel):
 class JoinRequest(BaseModel):
     post_id: int
     message: str
+    from_user_id: Optional[int] = None  # Optional: can be passed from frontend or extracted from auth
 
 
 class RegisterRequest(BaseModel):
@@ -1027,6 +1028,7 @@ async def get_user_courses(user_id: int):
 
 @app.get("/api/users/{user_id}/match-requests")
 async def get_user_match_requests(user_id: int, status: Optional[str] = None):
+    """Get match requests sent by the user (outgoing requests)"""
     conn = None
     try:
         conn = get_db_connection()
@@ -1067,6 +1069,229 @@ async def get_user_match_requests(user_id: int, status: Optional[str] = None):
 
     except Error as e:
         print(f"Database error: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/users/{user_id}/received-requests")
+async def get_user_received_requests(user_id: int, status: Optional[str] = None):
+    """Get match requests received by the user (for posts they authored)"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+            SELECT 
+                mr.request_id,
+                mr.from_user_id,
+                mr.to_team_id,
+                mr.post_id,
+                mr.message,
+                mr.status,
+                mr.created_at,
+                t.team_name,
+                c.subject,
+                c.number,
+                c.title AS course_title,
+                p.title AS post_title,
+                p.user_id AS post_author_id,
+                u.display_name AS sender_name,
+                u.netid AS sender_netid
+            FROM MatchRequest mr
+            INNER JOIN Post p ON mr.post_id = p.post_id
+            LEFT JOIN Team t ON mr.to_team_id = t.team_id
+            LEFT JOIN Course c ON t.course_id = c.course_id
+            LEFT JOIN User u ON mr.from_user_id = u.user_id
+            WHERE p.user_id = %s
+        """
+
+        params = [user_id]
+        if status:
+            query += " AND mr.status = %s"
+            params.append(status)
+
+        query += " ORDER BY mr.created_at DESC"
+
+        cursor.execute(query, tuple(params))
+        requests = cursor.fetchall()
+
+        return requests
+
+    except Error as e:
+        print(f"Database error: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.put("/api/users/{user_id}/requests/{request_id}/accept")
+async def accept_join_request(user_id: int, request_id: int):
+    """Accept a join request - add user to team and update request status"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Verify the request exists and belongs to a post authored by the user
+        verify_query = """
+            SELECT 
+                mr.request_id,
+                mr.from_user_id,
+                mr.to_team_id,
+                mr.post_id,
+                mr.status,
+                p.user_id AS post_author_id
+            FROM MatchRequest mr
+            INNER JOIN Post p ON mr.post_id = p.post_id
+            WHERE mr.request_id = %s AND p.user_id = %s
+        """
+        cursor.execute(verify_query, (request_id, user_id))
+        request_info = cursor.fetchone()
+
+        if not request_info:
+            raise HTTPException(status_code=404, detail="Request not found or unauthorized")
+        
+        if request_info['status'] != 'pending':
+            raise HTTPException(status_code=400, detail=f"Request already {request_info['status']}")
+
+        from_user_id = request_info['from_user_id']
+        to_team_id = request_info['to_team_id']
+
+        # Check if user is already a member of the team
+        check_member_query = """
+            SELECT team_id, user_id FROM TeamMember 
+            WHERE team_id = %s AND user_id = %s
+        """
+        cursor.execute(check_member_query, (to_team_id, from_user_id))
+        existing_member = cursor.fetchone()
+
+        # Switch to regular cursor for updates
+        cursor.close()
+        cursor = conn.cursor()
+
+        if not existing_member:
+            # Add user to team
+            team_member_insert_query = """
+                INSERT INTO TeamMember (team_id, user_id, role, joined_at)
+                VALUES (%s, %s, 'member', NOW())
+                ON DUPLICATE KEY UPDATE role = 'member', joined_at = NOW()
+            """
+            cursor.execute(team_member_insert_query, (to_team_id, from_user_id))
+
+        # Update request status to accepted
+        update_request_query = """
+            UPDATE MatchRequest
+            SET status = 'accepted'
+            WHERE request_id = %s
+        """
+        cursor.execute(update_request_query, (request_id,))
+
+        conn.commit()
+
+        return {
+            "message": "Join request accepted successfully",
+            "request_id": request_id,
+            "status": "accepted",
+            "user_added_to_team": not existing_member
+        }
+
+    except HTTPException:
+        if conn:
+            conn.rollback()
+        raise
+    except Error as e:
+        print(f"Database error: {e}")
+        if conn:
+            conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+class RejectRequestPayload(BaseModel):
+    rejection_reason: Optional[str] = None
+
+
+@app.put("/api/users/{user_id}/requests/{request_id}/reject")
+async def reject_join_request(user_id: int, request_id: int, payload: Optional[RejectRequestPayload] = None):
+    """Reject a join request - update request status and optionally save rejection reason"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Verify the request exists and belongs to a post authored by the user
+        verify_query = """
+            SELECT 
+                mr.request_id,
+                mr.status,
+                mr.message,
+                p.user_id AS post_author_id
+            FROM MatchRequest mr
+            INNER JOIN Post p ON mr.post_id = p.post_id
+            WHERE mr.request_id = %s AND p.user_id = %s
+        """
+        cursor.execute(verify_query, (request_id, user_id))
+        request_info = cursor.fetchone()
+
+        if not request_info:
+            raise HTTPException(status_code=404, detail="Request not found or unauthorized")
+        
+        if request_info['status'] != 'pending':
+            raise HTTPException(status_code=400, detail=f"Request already {request_info['status']}")
+
+        # Switch to regular cursor for updates
+        cursor.close()
+        cursor = conn.cursor()
+
+        # Update request status to rejected
+        # If rejection_reason is provided, append it to the message
+        if payload and payload.rejection_reason:
+            # Append rejection reason to existing message
+            existing_message = request_info.get('message') or ''
+            if existing_message:
+                new_message = f"{existing_message}\n\n[Rejection reason: {payload.rejection_reason}]"
+            else:
+                new_message = f"[Rejection reason: {payload.rejection_reason}]"
+            
+            update_request_query = """
+                UPDATE MatchRequest
+                SET status = 'rejected', message = %s
+                WHERE request_id = %s
+            """
+            cursor.execute(update_request_query, (new_message, request_id))
+        else:
+            update_request_query = """
+                UPDATE MatchRequest
+                SET status = 'rejected'
+                WHERE request_id = %s
+            """
+            cursor.execute(update_request_query, (request_id,))
+
+        conn.commit()
+
+        return {
+            "message": "Join request rejected successfully",
+            "request_id": request_id,
+            "status": "rejected"
+        }
+
+    except HTTPException:
+        if conn:
+            conn.rollback()
+        raise
+    except Error as e:
+        print(f"Database error: {e}")
+        if conn:
+            conn.rollback()
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
@@ -1494,7 +1719,11 @@ async def create_join_request(request: JoinRequest):
 
         post_author_id, team_id = post_info
 
-        from_user_id = 1  # TODO: Get from authenticated user
+        # Get user_id from request body or default to 1 for now
+        # In production, this should come from authentication token
+        from_user_id = request.from_user_id if request.from_user_id else 1
+        if not from_user_id:
+            raise HTTPException(status_code=400, detail="User ID is required")
 
         check_query = """
         SELECT request_id
@@ -1508,16 +1737,25 @@ async def create_join_request(request: JoinRequest):
         if existing:
             raise HTTPException(status_code=400, detail="Request already exists")
 
+        # Generate next request_id (similar to how comment_id is generated)
+        cursor.execute(
+            "SELECT COALESCE(MAX(request_id), 0) + 1 AS next_id FROM MatchRequest"
+        )
+        next_id_row = cursor.fetchone()
+        # cursor.fetchone() returns a tuple when not using dictionary=True
+        # So we need to access by index
+        next_request_id = next_id_row[0] if next_id_row else 1
+
         insert_query = """
-        INSERT INTO MatchRequest (from_user_id, to_team_id, post_id, message, status, created_at)
-        VALUES (%s, %s, %s, %s, 'pending', NOW())
+        INSERT INTO MatchRequest (request_id, from_user_id, to_team_id, post_id, message, status, created_at)
+        VALUES (%s, %s, %s, %s, %s, 'pending', NOW())
         """
         cursor.execute(
-            insert_query, (from_user_id, team_id, request.post_id, request.message)
+            insert_query, (next_request_id, from_user_id, team_id, request.post_id, request.message)
         )
         conn.commit()
 
-        request_id = cursor.lastrowid
+        request_id = next_request_id
 
         return {
             "request_id": request_id,
