@@ -3,9 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import {
   fetchPostById,
+  updatePost,
+  deletePost,
   sendJoinRequest,
   fetchComments,
   createComment,
+  updateComment,
+  deleteComment,
   getStoredUser,
 } from '../services/api'
 import './PostPage.css'
@@ -26,6 +30,14 @@ function PostPage() {
   const [commentError, setCommentError] = useState(null)
   const [postingComment, setPostingComment] = useState(false)
   const [sessionUser, setSessionUser] = useState(() => getStoredUser())
+  const [editingCommentId, setEditingCommentId] = useState(null)
+  const [editingCommentContent, setEditingCommentContent] = useState('')
+  const [updatingComment, setUpdatingComment] = useState(false)
+  const [editingPost, setEditingPost] = useState(false)
+  const [editPostTitle, setEditPostTitle] = useState('')
+  const [editPostContent, setEditPostContent] = useState('')
+  const [updatingPost, setUpdatingPost] = useState(false)
+  const [deletingPost, setDeletingPost] = useState(false)
 
   useEffect(() => {
     const handleStorage = () => setSessionUser(getStoredUser())
@@ -82,7 +94,7 @@ function PostPage() {
     }
 
     // Check if user is the post author - don't allow sending request to own post
-    if (post?.user_id === activeUser.user_id) {
+    if (post?.author_id === activeUser.user_id) {
       alert('You cannot send a join request to your own post')
       return
     }
@@ -137,6 +149,139 @@ function PostPage() {
     }
   }
 
+  const handleEditComment = (comment) => {
+    setEditingCommentId(comment.comment_id)
+    setEditingCommentContent(comment.content)
+  }
+
+  const handleCancelEdit = () => {
+    setEditingCommentId(null)
+    setEditingCommentContent('')
+  }
+
+  const handleSaveEdit = async (commentId) => {
+    const activeUser = sessionUser || getStoredUser()
+    if (!activeUser?.user_id) {
+      alert('Please sign in to edit comments')
+      return
+    }
+
+    if (!editingCommentContent.trim()) {
+      alert('Comment cannot be empty')
+      return
+    }
+
+    try {
+      setUpdatingComment(true)
+      await updateComment(postId, commentId, editingCommentContent, activeUser.user_id)
+      setEditingCommentId(null)
+      setEditingCommentContent('')
+      await loadComments()
+    } catch (err) {
+      console.error('Error updating comment:', err)
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to update comment. Please try again.'
+      alert(errorMsg)
+    } finally {
+      setUpdatingComment(false)
+    }
+  }
+
+  const handleDeleteComment = async (commentId) => {
+    const activeUser = sessionUser || getStoredUser()
+    if (!activeUser?.user_id) {
+      alert('Please sign in to delete comments')
+      return
+    }
+
+    if (!window.confirm('Are you sure you want to delete this comment?')) {
+      return
+    }
+
+    try {
+      await deleteComment(postId, commentId, activeUser.user_id)
+      await loadComments()
+    } catch (err) {
+      console.error('Error deleting comment:', err)
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to delete comment. Please try again.'
+      alert(errorMsg)
+    }
+  }
+
+  const handleEditPost = () => {
+    setEditPostTitle(post.title)
+    setEditPostContent(post.content)
+    setEditingPost(true)
+  }
+
+  const handleCancelEditPost = () => {
+    setEditingPost(false)
+    setEditPostTitle('')
+    setEditPostContent('')
+  }
+
+  const handleSaveEditPost = async () => {
+    const activeUser = sessionUser || getStoredUser()
+    if (!activeUser?.user_id) {
+      alert('Please sign in to edit posts')
+      return
+    }
+
+    if (!editPostTitle.trim()) {
+      alert('Title cannot be empty')
+      return
+    }
+
+    if (!editPostContent.trim()) {
+      alert('Content cannot be empty')
+      return
+    }
+
+    try {
+      setUpdatingPost(true)
+      await updatePost(
+        postId,
+        {
+          title: editPostTitle.trim(),
+          content: editPostContent.trim(),
+        },
+        activeUser.user_id
+      )
+      setEditingPost(false)
+      await loadPost()
+    } catch (err) {
+      console.error('Error updating post:', err)
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to update post. Please try again.'
+      alert(errorMsg)
+    } finally {
+      setUpdatingPost(false)
+    }
+  }
+
+  const handleDeletePost = async () => {
+    const activeUser = sessionUser || getStoredUser()
+    if (!activeUser?.user_id) {
+      alert('Please sign in to delete posts')
+      return
+    }
+
+    const confirmMessage = 'Are you sure you want to delete this post? This action cannot be undone.'
+    if (!window.confirm(confirmMessage)) {
+      return
+    }
+
+    try {
+      setDeletingPost(true)
+      await deletePost(postId, activeUser.user_id)
+      alert('Post deleted successfully')
+      navigate('/')
+    } catch (err) {
+      console.error('Error deleting post:', err)
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to delete post. Please try again.'
+      alert(errorMsg)
+      setDeletingPost(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="post-page">
@@ -177,7 +322,38 @@ function PostPage() {
 
           <div className="post-detail">
             <div className="post-header">
-              <h1 className="post-title">{post.title}</h1>
+              <div className="post-header-top">
+                {editingPost ? (
+                  <input
+                    type="text"
+                    value={editPostTitle}
+                    onChange={(e) => setEditPostTitle(e.target.value)}
+                    className="post-edit-title-input"
+                    disabled={updatingPost}
+                  />
+                ) : (
+                  <h1 className="post-title">{post.title}</h1>
+                )}
+                {sessionUser && post?.author_id === (sessionUser?.user_id || getStoredUser()?.user_id) && !editingPost && (
+                  <div className="post-actions">
+                    <button
+                      className="edit-post-btn"
+                      onClick={handleEditPost}
+                      title="Edit post"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="delete-post-btn"
+                      onClick={handleDeletePost}
+                      disabled={deletingPost}
+                      title="Delete post"
+                    >
+                      {deletingPost ? 'Deleting...' : 'Delete'}
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className="post-meta">
                 <span className="post-author">By {post.author_name || 'Unknown'}</span>
                 <span className="post-date">
@@ -207,7 +383,35 @@ function PostPage() {
 
             <div className="post-body">
               <h3>Description</h3>
-              <p className="post-content-text">{post.content}</p>
+              {editingPost ? (
+                <div className="post-edit-form">
+                  <textarea
+                    value={editPostContent}
+                    onChange={(e) => setEditPostContent(e.target.value)}
+                    className="post-edit-content-textarea"
+                    rows="8"
+                    disabled={updatingPost}
+                  />
+                  <div className="post-edit-actions">
+                    <button
+                      className="save-post-btn"
+                      onClick={handleSaveEditPost}
+                      disabled={updatingPost || !editPostTitle.trim() || !editPostContent.trim()}
+                    >
+                      {updatingPost ? 'Saving...' : 'Save'}
+                    </button>
+                    <button
+                      className="cancel-post-btn"
+                      onClick={handleCancelEditPost}
+                      disabled={updatingPost}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="post-content-text">{post.content}</p>
+              )}
             </div>
 
             {post.skills && post.skills.length > 0 && (
@@ -233,7 +437,7 @@ function PostPage() {
             </div>
 
             {/* Only show join request section if user is logged in and not the post author */}
-            {sessionUser && post?.user_id !== (sessionUser?.user_id || getStoredUser()?.user_id) && (
+            {sessionUser && post?.author_id !== (sessionUser?.user_id || getStoredUser()?.user_id) && (
               !requestSent ? (
                 <div className="join-request-section">
                   <h3>Send Join Request</h3>
@@ -281,7 +485,7 @@ function PostPage() {
             )}
             
             {/* Show message if user is the post author */}
-            {sessionUser && post?.user_id === (sessionUser?.user_id || getStoredUser()?.user_id) && (
+            {sessionUser && post?.author_id === (sessionUser?.user_id || getStoredUser()?.user_id) && (
               <div className="join-request-section">
                 <h3>Join Requests</h3>
                 <p style={{ color: '#666' }}>
@@ -308,26 +512,77 @@ function PostPage() {
                 <div className="empty-comment">No comments yet.</div>
               ) : (
                 <ul className="comment-list">
-                  {comments.map((comment) => (
-                    <li key={comment.comment_id} className="comment-item">
-                      <div className="comment-avatar">
-                        {comment.author_name
-                          ? comment.author_name
-                              .split(' ')
-                              .map((part) => part[0])
-                              .join('')
-                              .slice(0, 2)
-                          : 'U'}
-                      </div>
-                      <div className="comment-body">
-                        <div className="comment-meta">
-                          <strong>{comment.author_name || 'Unknown'}</strong>
-                          <span>{comment.created_at ? new Date(comment.created_at).toLocaleString() : ''}</span>
+                  {comments.map((comment) => {
+                    const activeUser = sessionUser || getStoredUser()
+                    const isOwnComment = activeUser && comment.user_id === activeUser.user_id
+                    
+                    return (
+                      <li key={comment.comment_id} className="comment-item">
+                        <div className="comment-avatar">
+                          {comment.author_name
+                            ? comment.author_name
+                                .split(' ')
+                                .map((part) => part[0])
+                                .join('')
+                                .slice(0, 2)
+                            : 'U'}
                         </div>
-                        <p>{comment.content}</p>
-                      </div>
-                    </li>
-                  ))}
+                        <div className="comment-body">
+                          <div className="comment-meta">
+                            <strong>{comment.author_name || 'Unknown'}</strong>
+                            <span>{comment.created_at ? new Date(comment.created_at).toLocaleString() : ''}</span>
+                            {isOwnComment && editingCommentId !== comment.comment_id && (
+                              <div className="comment-actions">
+                                <button
+                                  className="edit-comment-btn"
+                                  onClick={() => handleEditComment(comment)}
+                                  title="Edit your comment"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  className="delete-comment-btn"
+                                  onClick={() => handleDeleteComment(comment.comment_id)}
+                                  title="Delete your comment"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          {editingCommentId === comment.comment_id ? (
+                            <div className="comment-edit-form">
+                              <textarea
+                                value={editingCommentContent}
+                                onChange={(e) => setEditingCommentContent(e.target.value)}
+                                rows="3"
+                                disabled={updatingComment}
+                                className="comment-edit-textarea"
+                              />
+                              <div className="comment-edit-actions">
+                                <button
+                                  className="save-comment-btn"
+                                  onClick={() => handleSaveEdit(comment.comment_id)}
+                                  disabled={updatingComment || !editingCommentContent.trim()}
+                                >
+                                  {updatingComment ? 'Saving...' : 'Save'}
+                                </button>
+                                <button
+                                  className="cancel-comment-btn"
+                                  onClick={handleCancelEdit}
+                                  disabled={updatingComment}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <p>{comment.content}</p>
+                          )}
+                        </div>
+                      </li>
+                    )
+                  })}
                 </ul>
               )}
 

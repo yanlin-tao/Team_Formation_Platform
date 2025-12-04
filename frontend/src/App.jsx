@@ -9,6 +9,7 @@ import NotificationsPage from './pages/NotificationsPage'
 import MessagesPage from './pages/MessagesPage'
 import CoursesPage from './pages/CoursesPage'
 import TeamsPage from './pages/TeamsPage'
+import TeamDetailPage from './pages/TeamDetailPage'
 import './App.css'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/messages" element={<MessagesPage />} />
         <Route path="/courses" element={<CoursesPage />} />
         <Route path="/teams" element={<TeamsPage />} />
+        <Route path="/teams/:teamId" element={<TeamDetailPage />} />
         <Route path="/posts/create" element={<CreatePostPage />} />
         <Route path="/posts/:postId" element={<PostPage />} />
       </Routes>

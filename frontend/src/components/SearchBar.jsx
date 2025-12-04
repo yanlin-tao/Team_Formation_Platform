@@ -143,11 +143,11 @@ function SearchBar({ termId, onSearch, onCourseSelect }) {
       <form onSubmit={handleSubmit} className="search-form">
         <div className="search-input-wrapper">
           <HiMagnifyingGlass className="search-icon" />
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search courses by name or code..."
-            value={searchQuery}
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search courses by name or code..."
+          value={searchQuery}
             onChange={handleInputChange}
             onFocus={() => {
               // Only show suggestions if user has typed at least 2 characters

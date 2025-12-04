@@ -181,31 +181,31 @@ function ProfilePage() {
         <section className="profile-hero">
           {!isEditing ? (
             <>
-              <div className="profile-bio">
-                <div className="profile-avatar">
+          <div className="profile-bio">
+            <div className="profile-avatar">
                   {displayUser?.avatar_url ? (
                     <img src={displayUser.avatar_url} alt={displayName} />
                   ) : (
                     displayName
-                      .split(' ')
-                      .map((part) => part[0])
-                      .join('')
+                .split(' ')
+                .map((part) => part[0])
+                .join('')
                       .slice(0, 2) || 'TU'
                   )}
-                </div>
-                <div className="profile-meta">
-                  <h1>{displayName}</h1>
-                  <div className="profile-tags">
-                    {profile?.major && <span>{profile.major}</span>}
-                    {profile?.graduation && <span>{profile.graduation}</span>}
+            </div>
+            <div className="profile-meta">
+              <h1>{displayName}</h1>
+              <div className="profile-tags">
+                {profile?.major && <span>{profile.major}</span>}
+                {profile?.graduation && <span>{profile.graduation}</span>}
                     {displayUser?.score !== null && displayUser?.score !== undefined && (
                       <span>GPA: {displayUser.score}</span>
                     )}
                     {displayUser?.phone_number && (
                       <span>TEL: {displayUser.phone_number}</span>
                     )}
-                  </div>
-                  {profile?.bio && <p className="profile-description">{profile.bio}</p>}
+              </div>
+              {profile?.bio && <p className="profile-description">{profile.bio}</p>}
                   {displayUser?.avatar_url && (
                     <div className="profile-contact-info">
                       <div className="contact-item">
@@ -214,16 +214,16 @@ function ProfilePage() {
                           {displayUser.avatar_url}
                         </a>
                       </div>
-                    </div>
-                  )}
                 </div>
-              </div>
-              <div className="profile-actions">
+              )}
+            </div>
+          </div>
+          <div className="profile-actions">
                 <button className="primary" onClick={handleEditClick}>Edit Profile</button>
-                <button className="ghost danger" onClick={handleLogout} disabled={signingOut}>
-                  {signingOut ? 'Signing out...' : 'Log out'}
-                </button>
-              </div>
+            <button className="ghost danger" onClick={handleLogout} disabled={signingOut}>
+              {signingOut ? 'Signing out...' : 'Log out'}
+            </button>
+          </div>
             </>
           ) : (
             <div className="profile-edit-form">

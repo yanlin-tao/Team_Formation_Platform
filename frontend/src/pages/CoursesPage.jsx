@@ -311,13 +311,13 @@ function CoursesPage() {
                 const courseCode = `${team.subject || ''} ${team.number || ''}`.trim()
                 return (
                   <li key={team.team_id}>
-                    <div>
+                  <div>
                       <h3>{courseCode} • {team.team_name}</h3>
                       <p>{team.course_title || 'Course project'}</p>
                       <p>Size: {team.current_size || 0}/{team.target_size || 0} • Status: {team.status || 'open'}</p>
-                    </div>
+                  </div>
                     <span className="dashboard-pill">{team.role || 'member'}</span>
-                  </li>
+                </li>
                 )
               })}
             </ul>

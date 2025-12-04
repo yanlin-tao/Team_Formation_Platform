@@ -51,15 +51,15 @@ function EntryPage() {
   useEffect(() => {
     // 只有在已选择学期且没有搜索时才加载popular posts
     if (selectedTermId !== null && !isSearchMode) {
-      const loadPopularPosts = async () => {
-        try {
-          setLoading(true)
+  const loadPopularPosts = async () => {
+    try {
+      setLoading(true)
           const data = await fetchPopularPosts(selectedTermId)
-          setPosts(data)
-          setError(null)
-        } catch (err) {
-          setError('Failed to load popular posts. Please try again later.')
-          console.error('Error loading posts:', err)
+      setPosts(data)
+      setError(null)
+    } catch (err) {
+      setError('Failed to load popular posts. Please try again later.')
+      console.error('Error loading posts:', err)
         } finally {
           setLoading(false)
         }
@@ -151,12 +151,12 @@ function EntryPage() {
       <Sidebar />
       <div className="entry-content">
         <div className="entry-top-bar">
-          <div className="entry-header">
+        <div className="entry-header">
             <h1 className="entry-title">
               <HiUserGroup className="title-icon" />
               TeamUp UIUC
             </h1>
-            <p className="entry-subtitle">Find your perfect teammates for course projects</p>
+          <p className="entry-subtitle">Find your perfect teammates for course projects</p>
           </div>
           <div className="entry-logo">
             <div className="logo-container">
@@ -208,7 +208,7 @@ function EntryPage() {
           {loading && (
             <div className="loading-container">
               <div className="loading-spinner"></div>
-              <div className="loading-message">Loading posts...</div>
+            <div className="loading-message">Loading posts...</div>
             </div>
           )}
 

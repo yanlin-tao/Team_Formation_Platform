@@ -55,6 +55,25 @@ export async function fetchPostById(postId) {
   return apiRequest(`/posts/${postId}`)
 }
 
+export async function updatePost(postId, payload, userId) {
+  const params = new URLSearchParams()
+  if (userId) params.append('user_id', userId)
+  const query = params.toString() ? `?${params.toString()}` : ''
+  return apiRequest(`/posts/${postId}${query}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function deletePost(postId, userId) {
+  const params = new URLSearchParams()
+  if (userId) params.append('user_id', userId)
+  const query = params.toString() ? `?${params.toString()}` : ''
+  return apiRequest(`/posts/${postId}${query}`, {
+    method: 'DELETE',
+  })
+}
+
 export async function fetchComments(postId) {
   return apiRequest(`/posts/${postId}/comments`)
 }
@@ -63,6 +82,25 @@ export async function createComment(postId, payload) {
   return apiRequest(`/posts/${postId}/comments`, {
     method: 'POST',
     body: JSON.stringify(payload),
+  })
+}
+
+export async function updateComment(postId, commentId, content, userId) {
+  const params = new URLSearchParams()
+  if (userId) params.append('user_id', userId)
+  const query = params.toString() ? `?${params.toString()}` : ''
+  return apiRequest(`/posts/${postId}/comments/${commentId}${query}`, {
+    method: 'PUT',
+    body: JSON.stringify({ content }),
+  })
+}
+
+export async function deleteComment(postId, commentId, userId) {
+  const params = new URLSearchParams()
+  if (userId) params.append('user_id', userId)
+  const query = params.toString() ? `?${params.toString()}` : ''
+  return apiRequest(`/posts/${postId}/comments/${commentId}${query}`, {
+    method: 'DELETE',
   })
 }
 
@@ -192,6 +230,10 @@ export async function createPost(payload) {
 
 export async function getUserTeams(userId) {
   return apiRequest(`/users/${userId}/teams`)
+}
+
+export async function getTeamDetails(teamId) {
+  return apiRequest(`/teams/${teamId}`)
 }
 
 export async function fetchUserMatchRequests(userId, status = null) {

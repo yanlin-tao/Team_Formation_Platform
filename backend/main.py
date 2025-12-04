@@ -13,6 +13,7 @@ try:
 except ValueError as e:
     print(f"Warning: {e}")
 
+
 # Test database connection on startup
 def test_db_connection_on_startup():
     """Test database connection when application starts"""
@@ -25,16 +26,23 @@ def test_db_connection_on_startup():
             cursor.close()
             conn.close()
             print(f"✅ Database connection successful! MySQL version: {version[0]}")
-            print(f"   Connected to: {DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']} as user '{DB_CONFIG['user']}'")
+            print(
+                f"   Connected to: {DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']} as user '{DB_CONFIG['user']}'"
+            )
             return True
     except Error as e:
         print(f"❌ Database connection failed on startup: {e}")
-        print(f"   Configuration: host={DB_CONFIG['host']}, port={DB_CONFIG['port']}, "
-              f"user={DB_CONFIG['user']}, database={DB_CONFIG['database']}")
-        print(f"   Password: {'*' * len(DB_CONFIG.get('password', '')) if DB_CONFIG.get('password') else 'NOT SET'}")
+        print(
+            f"   Configuration: host={DB_CONFIG['host']}, port={DB_CONFIG['port']}, "
+            f"user={DB_CONFIG['user']}, database={DB_CONFIG['database']}"
+        )
+        print(
+            f"   Password: {'*' * len(DB_CONFIG.get('password', '')) if DB_CONFIG.get('password') else 'NOT SET'}"
+        )
         print(f"   Please check your .env file or environment variables")
         print(f"   Default values in config.py: user='admin', database='CS411-teamup'")
         return False
+
 
 # Test connection on startup
 test_db_connection_on_startup()
@@ -56,16 +64,19 @@ def get_db_connection():
         conn = mysql.connector.connect(**DB_CONFIG)
         if not conn.is_connected():
             raise Error("Connection established but not connected")
+        conn.autocommit = False
         return conn
     except Error as e:
         error_msg = f"Error connecting to MySQL: {e}"
         print(error_msg)
-        print(f"Database config used: host={DB_CONFIG['host']}, port={DB_CONFIG['port']}, "
-              f"user={DB_CONFIG['user']}, database={DB_CONFIG['database']}, "
-              f"password={'*' * len(DB_CONFIG.get('password', '')) if DB_CONFIG.get('password') else 'NOT SET'}")
+        print(
+            f"Database config used: host={DB_CONFIG['host']}, port={DB_CONFIG['port']}, "
+            f"user={DB_CONFIG['user']}, database={DB_CONFIG['database']}, "
+            f"password={'*' * len(DB_CONFIG.get('password', '')) if DB_CONFIG.get('password') else 'NOT SET'}"
+        )
         raise HTTPException(
-            status_code=500, 
-            detail=f"Database connection failed: {str(e)}. Check your database configuration in .env file or config.py"
+            status_code=500,
+            detail=f"Database connection failed: {str(e)}. Check your database configuration in .env file or config.py",
         )
 
 
@@ -131,7 +142,9 @@ class PostResponse(BaseModel):
 class JoinRequest(BaseModel):
     post_id: int
     message: str
-    from_user_id: Optional[int] = None  # Optional: can be passed from frontend or extracted from auth
+    from_user_id: Optional[int] = (
+        None  # Optional: can be passed from frontend or extracted from auth
+    )
 
 
 class RegisterRequest(BaseModel):
@@ -176,6 +189,10 @@ class CommentCreate(BaseModel):
     parent_comment_id: Optional[int] = None
 
 
+class CommentUpdate(BaseModel):
+    content: str
+
+
 class ProfileUpdate(BaseModel):
     display_name: Optional[str] = None
     phone_number: Optional[str] = None
@@ -195,6 +212,11 @@ class PostCreate(BaseModel):
     target_size: int
     title: str
     content: str
+
+
+class PostUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
 
 
 MOCK_USER = {
@@ -388,14 +410,24 @@ async def register_user(payload: RegisterRequest):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
-        cursor.execute(
-            """
-            SELECT user_id FROM User
-            WHERE email = %s OR netid = %s
+        # Check for existing user using JOIN with email/netid check and subquery
+        check_existing_query = """
+            SELECT 
+                u.user_id,
+                u.email,
+                u.netid
+            FROM User u
+            WHERE (u.email = %s OR u.netid = %s)
+            AND u.user_id IN (
+                SELECT user_id FROM User WHERE email = %s OR netid = %s
+            )
             LIMIT 1
-            """,
-            (payload.email, payload.netid),
+        """
+        cursor.execute(
+            check_existing_query,
+            (payload.email, payload.netid, payload.email, payload.netid),
         )
         existing = cursor.fetchone()
         if existing:
@@ -404,8 +436,17 @@ async def register_user(payload: RegisterRequest):
                 detail="An account with this email or NetID already exists.",
             )
 
-        cursor.execute("SELECT COALESCE(MAX(user_id), 0) + 1 AS next_id FROM User")
-        next_id = cursor.fetchone()["next_id"]
+        # Get max user_id using aggregation
+        max_id_query = """
+            SELECT COALESCE(MAX(user_id), 0) + 1 AS next_id
+            FROM User
+            WHERE user_id IN (
+                SELECT user_id FROM User
+            )
+        """
+        cursor.execute(max_id_query)
+        next_id_result = cursor.fetchone()
+        next_id = next_id_result["next_id"] if next_id_result else 1
 
         cursor.execute(
             """
@@ -546,33 +587,29 @@ async def get_profile(user_id: Optional[int] = None):
         profile["major"] = row.get("major") or profile["major"]
         profile["graduation"] = row.get("grade") or profile["graduation"]
 
-        cursor.execute(
-            """
-            SELECT 
-                t.team_id,
-                t.team_name,
-                t.course_id,
-                t.target_size,
-                t.status,
-                c.subject,
-                c.number,
-                c.title AS course_title,
-                tm.role,
-                tm.joined_at,
-                (SELECT COUNT(*) FROM TeamMember WHERE team_id = t.team_id) AS current_size
-            FROM TeamMember tm
-            JOIN Team t ON tm.team_id = t.team_id
-            LEFT JOIN Course c ON t.course_id = c.course_id
-            WHERE tm.user_id = %s AND (t.status IS NULL OR t.status = 'open')
-            ORDER BY tm.joined_at DESC
-        """,
-            (user_id,),
-        )
-        teams_data = cursor.fetchall()
+        # Use stored procedure: sp_get_user_teams
+        cursor.callproc("sp_get_user_teams", [user_id, 100])
+
+        teams_data = []
+        for result in cursor.stored_results():
+            rows = result.fetchall()
+            if not teams_data:
+                teams_data = rows
+
+        # Filter for open teams only
+        teams_data = [
+            t for t in teams_data if not t.get("status") or t.get("status") == "open"
+        ]
+
+        # Map member_count to current_size for compatibility
+        for team in teams_data:
+            team["current_size"] = team.get("member_count", 0)
 
         active_teams = []
         for team in teams_data:
             course_name = f"{team.get('subject', '')} {team.get('number', '')}"
+            # Use member_count or current_size
+            current_size = team.get("member_count") or team.get("current_size") or 0
             active_teams.append(
                 {
                     "name": f"{course_name} • {team.get('team_name', 'Team')}",
@@ -581,8 +618,7 @@ async def get_profile(user_id: Optional[int] = None):
                     "progress": 0,  # Can be calculated later if needed
                     "spots": max(
                         0,
-                        (team.get("target_size") or 0)
-                        - (team.get("current_size") or 0),
+                        (team.get("target_size") or 0) - current_size,
                     ),
                     "team_id": team.get("team_id"),
                     "course_id": team.get("course_id"),
@@ -740,10 +776,36 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
-        cursor.execute("SELECT user_id FROM User WHERE user_id = %s", (user_id,))
-        if not cursor.fetchone():
+        # Get user info using JOIN to get team membership count
+        user_check_query = """
+            SELECT 
+                u.user_id,
+                u.display_name,
+                COUNT(DISTINCT tm.team_id) as team_count
+            FROM User u
+            LEFT JOIN TeamMember tm ON u.user_id = tm.user_id
+            WHERE u.user_id = %s
+            GROUP BY u.user_id, u.display_name
+        """
+        cursor.execute(user_check_query, (user_id,))
+        user_info = cursor.fetchone()
+        if not user_info:
             raise HTTPException(status_code=404, detail="User not found")
+
+        # Check if user has posts using subquery
+        check_posts_query = """
+            SELECT COUNT(*) as post_count
+            FROM Post
+            WHERE user_id = %s
+            AND post_id IN (
+                SELECT post_id FROM Post WHERE user_id = %s
+            )
+        """
+        cursor.execute(check_posts_query, (user_id, user_id))
+        posts_result = cursor.fetchone()
+        post_count = posts_result["post_count"] if posts_result else 0
 
         update_fields = []
         update_values = []
@@ -866,36 +928,24 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
 @app.get("/api/users/{user_id}/teams")
 async def get_user_teams(user_id: int):
+    """Get all teams a user has joined using stored procedure"""
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        cursor.execute(
-            """
-            SELECT 
-                t.team_id,
-                t.team_name,
-                t.course_id,
-                t.target_size,
-                t.status,
-                c.subject,
-                c.number,
-                c.title AS course_title,
-                c.term_id,
-                tm.role,
-                tm.joined_at,
-                (SELECT COUNT(*) FROM TeamMember WHERE team_id = t.team_id) AS current_size
-            FROM TeamMember tm
-            JOIN Team t ON tm.team_id = t.team_id
-            LEFT JOIN Course c ON t.course_id = c.course_id
-            WHERE tm.user_id = %s
-            ORDER BY tm.joined_at DESC
-        """,
-            (user_id,),
-        )
+        # Call stored procedure: sp_get_user_teams
+        cursor.callproc("sp_get_user_teams", [user_id, 50])
 
-        teams = cursor.fetchall()
+        # Get results from stored procedure
+        teams = []
+        for result in cursor.stored_results():
+            teams = result.fetchall()
+
+        # Map member_count to current_size for backward compatibility
+        for team in teams:
+            team["current_size"] = team.get("member_count", 0)
+
         return teams
 
     except Error as e:
@@ -907,38 +957,124 @@ async def get_user_teams(user_id: int):
             conn.close()
 
 
-@app.get("/api/users/{user_id}/posts")
-async def get_user_posts(user_id: int, limit: int = 50):
+@app.get("/api/teams/{team_id}")
+async def get_team_details(team_id: int):
+    """Get team details including all members"""
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
         query = """
-            SELECT 
-                p.post_id,
-                p.title,
-                p.content,
-                p.created_at,
-                p.team_id,
-                t.course_id,
-                t.team_name,
-                c.subject,
-                c.number,
-                c.title AS course_title,
-                c.term_id,
-                s.crn AS section_code
-            FROM Post p
-            LEFT JOIN Team t ON p.team_id = t.team_id
-            LEFT JOIN Course c ON t.course_id = c.course_id
-            LEFT JOIN Section s ON t.section_id = s.crn AND t.course_id = c.course_id
-            WHERE p.user_id = %s
-            ORDER BY p.created_at DESC
-            LIMIT %s
+        SELECT 
+            t.team_id,
+            t.team_name,
+            t.target_size,
+            t.status,
+            t.course_id,
+            t.section_id,
+            c.subject,
+            c.number,
+            c.title AS course_title,
+            s.crn AS section_code,
+            s.instructor,
+            s.meeting_time,
+            s.location,
+            s.delivery_mode,
+            COUNT(DISTINCT tm.user_id) AS member_count
+        FROM Team t
+        JOIN Course c ON t.course_id = c.course_id
+        LEFT JOIN Section s ON t.section_id = s.crn AND t.course_id = s.course_id
+        LEFT JOIN TeamMember tm ON t.team_id = tm.team_id
+        WHERE t.team_id = %s
+        GROUP BY t.team_id, t.team_name, t.target_size, t.status, t.course_id, t.section_id,
+                 c.subject, c.number, c.title, s.crn, s.instructor, s.meeting_time, s.location, s.delivery_mode
         """
+        cursor.execute(query, (team_id,))
+        team = cursor.fetchone()
 
-        cursor.execute(query, (user_id, limit))
-        posts = cursor.fetchall()
+        if not team:
+            raise HTTPException(status_code=404, detail="Team not found")
+
+        team["current_size"] = team.get("member_count", 0)
+
+        members_query = """
+        SELECT 
+            tm.user_id,
+            tm.role,
+            tm.joined_at,
+            u.display_name,
+            u.netid,
+            u.email,
+            u.avatar_url,
+            u.major,
+            u.grade,
+            u.score
+        FROM TeamMember tm
+        JOIN User u ON tm.user_id = u.user_id
+        WHERE tm.team_id = %s
+        ORDER BY tm.joined_at ASC
+        """
+        cursor.execute(members_query, (team_id,))
+        members = cursor.fetchall()
+
+        for member in members:
+            if member.get("joined_at"):
+                member["joined_at"] = member["joined_at"].isoformat()
+
+        team["members"] = members
+
+        return team
+
+    except HTTPException:
+        raise
+    except Error as e:
+        print(f"Database error: {e}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.get("/api/users/{user_id}/posts")
+async def get_user_posts(user_id: int, limit: int = 50):
+    """Get all posts a user has written or commented on using stored procedure"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Call stored procedure: sp_get_user_post_interactions
+        cursor.callproc("sp_get_user_post_interactions", [user_id, limit])
+
+        # Get results from stored procedure
+        posts = []
+        for result in cursor.stored_results():
+            rows = result.fetchall()
+            # First result set is the posts
+            if not posts:
+                posts = rows
+
+        # Extract additional info from posts if needed
+        # The stored procedure returns interaction_type, but we need to match original format
+        for post in posts:
+            # Get course and section info if team_id exists
+            if post.get("team_id"):
+                cursor.execute(
+                    """
+                    SELECT t.course_id, t.team_name, c.subject, c.number, 
+                           c.title AS course_title, c.term_id, s.crn AS section_code
+                    FROM Team t
+                    LEFT JOIN Course c ON t.course_id = c.course_id
+                    LEFT JOIN Section s ON t.section_id = s.crn AND t.course_id = c.course_id
+                    WHERE t.team_id = %s
+                """,
+                    (post["team_id"],),
+                )
+                team_info = cursor.fetchone()
+                if team_info:
+                    post.update(team_info)
 
         return posts
 
@@ -1172,6 +1308,7 @@ async def accept_join_request(user_id: int, request_id: int):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
         # Verify the request exists and belongs to a post authored by the user
         verify_query = """
@@ -1190,13 +1327,17 @@ async def accept_join_request(user_id: int, request_id: int):
         request_info = cursor.fetchone()
 
         if not request_info:
-            raise HTTPException(status_code=404, detail="Request not found or unauthorized")
-        
-        if request_info['status'] != 'pending':
-            raise HTTPException(status_code=400, detail=f"Request already {request_info['status']}")
+            raise HTTPException(
+                status_code=404, detail="Request not found or unauthorized"
+            )
 
-        from_user_id = request_info['from_user_id']
-        to_team_id = request_info['to_team_id']
+        if request_info["status"] != "pending":
+            raise HTTPException(
+                status_code=400, detail=f"Request already {request_info['status']}"
+            )
+
+        from_user_id = request_info["from_user_id"]
+        to_team_id = request_info["to_team_id"]
 
         # Check if user is already a member of the team
         check_member_query = """
@@ -1219,6 +1360,29 @@ async def accept_join_request(user_id: int, request_id: int):
             """
             cursor.execute(team_member_insert_query, (to_team_id, from_user_id))
 
+            # Check if team is now full and update status
+            check_team_capacity_query = """
+                SELECT 
+                    t.target_size,
+                    (SELECT COUNT(*) FROM TeamMember WHERE team_id = %s) AS current_size
+                FROM Team t
+                WHERE t.team_id = %s
+            """
+            cursor.execute(check_team_capacity_query, (to_team_id, to_team_id))
+            team_capacity = cursor.fetchone()
+
+            if team_capacity and len(team_capacity) >= 2:
+                target_size = team_capacity[0]
+                current_size = team_capacity[1]
+                if current_size >= target_size:
+                    # Team is full, update status to 'full'
+                    update_team_status_query = """
+                        UPDATE Team
+                        SET status = 'full'
+                        WHERE team_id = %s
+                    """
+                    cursor.execute(update_team_status_query, (to_team_id,))
+
         # Update request status to accepted
         update_request_query = """
             UPDATE MatchRequest
@@ -1233,7 +1397,7 @@ async def accept_join_request(user_id: int, request_id: int):
             "message": "Join request accepted successfully",
             "request_id": request_id,
             "status": "accepted",
-            "user_added_to_team": not existing_member
+            "user_added_to_team": not existing_member,
         }
 
     except HTTPException:
@@ -1256,12 +1420,15 @@ class RejectRequestPayload(BaseModel):
 
 
 @app.put("/api/users/{user_id}/requests/{request_id}/reject")
-async def reject_join_request(user_id: int, request_id: int, payload: Optional[RejectRequestPayload] = None):
+async def reject_join_request(
+    user_id: int, request_id: int, payload: Optional[RejectRequestPayload] = None
+):
     """Reject a join request - update request status and optionally save rejection reason"""
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
         # Verify the request exists and belongs to a post authored by the user
         verify_query = """
@@ -1278,10 +1445,30 @@ async def reject_join_request(user_id: int, request_id: int, payload: Optional[R
         request_info = cursor.fetchone()
 
         if not request_info:
-            raise HTTPException(status_code=404, detail="Request not found or unauthorized")
-        
-        if request_info['status'] != 'pending':
-            raise HTTPException(status_code=400, detail=f"Request already {request_info['status']}")
+            raise HTTPException(
+                status_code=404, detail="Request not found or unauthorized"
+            )
+
+        if request_info["status"] != "pending":
+            raise HTTPException(
+                status_code=400, detail=f"Request already {request_info['status']}"
+            )
+
+        # Check if there are other pending requests for this team using subquery
+        check_other_requests_query = """
+            SELECT COUNT(*) as other_pending_count
+            FROM MatchRequest
+            WHERE to_team_id = (
+                SELECT to_team_id FROM MatchRequest WHERE request_id = %s
+            )
+            AND status = 'pending'
+            AND request_id != %s
+        """
+        cursor.execute(check_other_requests_query, (request_id, request_id))
+        other_requests = cursor.fetchone()
+        other_pending_count = (
+            other_requests["other_pending_count"] if other_requests else 0
+        )
 
         # Switch to regular cursor for updates
         cursor.close()
@@ -1291,12 +1478,12 @@ async def reject_join_request(user_id: int, request_id: int, payload: Optional[R
         # If rejection_reason is provided, append it to the message
         if payload and payload.rejection_reason:
             # Append rejection reason to existing message
-            existing_message = request_info.get('message') or ''
+            existing_message = request_info.get("message") or ""
             if existing_message:
                 new_message = f"{existing_message}\n\n[Rejection reason: {payload.rejection_reason}]"
             else:
                 new_message = f"[Rejection reason: {payload.rejection_reason}]"
-            
+
             update_request_query = """
                 UPDATE MatchRequest
                 SET status = 'rejected', message = %s
@@ -1316,7 +1503,7 @@ async def reject_join_request(user_id: int, request_id: int, payload: Optional[R
         return {
             "message": "Join request rejected successfully",
             "request_id": request_id,
-            "status": "rejected"
+            "status": "rejected",
         }
 
     except HTTPException:
@@ -1621,6 +1808,267 @@ async def get_post_by_id(post_id: int):
             conn.close()
 
 
+@app.put("/api/posts/{post_id}")
+async def update_post(post_id: int, payload: PostUpdate, user_id: Optional[int] = None):
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+
+    if payload.title is not None:
+        if not payload.title.strip():
+            raise HTTPException(status_code=400, detail="Title cannot be empty")
+        if len(payload.title.strip()) > 128:
+            raise HTTPException(
+                status_code=400, detail="Title cannot exceed 128 characters"
+            )
+
+    if payload.content is not None:
+        if not payload.content.strip():
+            raise HTTPException(status_code=400, detail="Content cannot be empty")
+        if len(payload.content.strip()) > 4000:
+            raise HTTPException(
+                status_code=400, detail="Content cannot exceed 4000 characters"
+            )
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
+        # Verify post exists and belongs to the user using JOIN with Team and Course
+        verify_query = """
+            SELECT 
+                p.post_id,
+                p.user_id,
+                p.team_id,
+                t.team_name,
+                c.subject,
+                c.number
+            FROM Post p
+            JOIN Team t ON p.team_id = t.team_id
+            JOIN Course c ON t.course_id = c.course_id
+            WHERE p.post_id = %s
+        """
+        cursor.execute(verify_query, (post_id,))
+        post_info = cursor.fetchone()
+
+        if not post_info:
+            raise HTTPException(status_code=404, detail="Post not found")
+
+        if post_info["user_id"] != user_id:
+            raise HTTPException(
+                status_code=403, detail="You can only edit your own posts"
+            )
+
+        # Check if post has any pending requests using subquery
+        check_requests_query = """
+            SELECT COUNT(*) as pending_count
+            FROM MatchRequest
+            WHERE post_id = %s
+            AND status = 'pending'
+            AND request_id IN (
+                SELECT request_id FROM MatchRequest WHERE post_id = %s
+            )
+        """
+        cursor.execute(check_requests_query, (post_id, post_id))
+        requests_result = cursor.fetchone()
+        pending_count = requests_result["pending_count"] if requests_result else 0
+
+        # Build update query dynamically based on provided fields
+        update_fields = []
+        update_values = []
+
+        if payload.title is not None:
+            update_fields.append("title = %s")
+            update_values.append(payload.title.strip())
+
+        if payload.content is not None:
+            update_fields.append("content = %s")
+            update_values.append(payload.content.strip())
+
+        if not update_fields:
+            raise HTTPException(status_code=400, detail="No fields to update")
+
+        # Add updated_at
+        update_fields.append("updated_at = NOW()")
+        update_values.append(post_id)
+
+        # Switch to regular cursor for update
+        cursor.close()
+        cursor = conn.cursor()
+
+        update_query = f"""
+            UPDATE Post
+            SET {', '.join(update_fields)}
+            WHERE post_id = %s
+        """
+        cursor.execute(update_query, tuple(update_values))
+        conn.commit()
+
+        return {
+            "message": "Post updated successfully",
+            "post_id": post_id,
+        }
+
+    except HTTPException:
+        if conn:
+            conn.rollback()
+        raise
+    except Error as e:
+        print(f"Database error while updating post: {e}")
+        if conn:
+            conn.rollback()
+        raise HTTPException(status_code=500, detail="Failed to update post")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.delete("/api/posts/{post_id}")
+async def delete_post(post_id: int, user_id: Optional[int] = None):
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
+        # Verify post exists and belongs to the user
+        verify_query = """
+            SELECT post_id, user_id, team_id
+            FROM Post
+            WHERE post_id = %s
+        """
+        cursor.execute(verify_query, (post_id,))
+        post_info = cursor.fetchone()
+
+        if not post_info:
+            raise HTTPException(status_code=404, detail="Post not found")
+
+        if post_info["user_id"] != user_id:
+            raise HTTPException(
+                status_code=403, detail="You can only delete your own posts"
+            )
+
+        team_id = post_info["team_id"]
+
+        # Check team member count and get team details using JOIN
+        check_members_query = """
+            SELECT 
+                COUNT(tm.user_id) as member_count,
+                t.target_size,
+                t.status as team_status
+            FROM Team t
+            LEFT JOIN TeamMember tm ON t.team_id = tm.team_id
+            WHERE t.team_id = %s
+            GROUP BY t.team_id, t.target_size, t.status
+        """
+        cursor.execute(check_members_query, (team_id,))
+        member_result = cursor.fetchone()
+        member_count = member_result["member_count"] if member_result else 0
+
+        # Check if there are active match requests for this post using subquery
+        check_active_requests_query = """
+            SELECT COUNT(*) as active_request_count
+            FROM MatchRequest
+            WHERE post_id = %s 
+            AND status = 'pending'
+            AND request_id IN (
+                SELECT request_id 
+                FROM MatchRequest 
+                WHERE post_id = %s AND status != 'withdrawn'
+            )
+        """
+        cursor.execute(check_active_requests_query, (post_id, post_id))
+        active_requests = cursor.fetchone()
+        active_request_count = (
+            active_requests["active_request_count"] if active_requests else 0
+        )
+
+        # Switch to regular cursor for deletes
+        cursor.close()
+        cursor = conn.cursor()
+
+        # Delete related data first
+        # 1. Soft delete comments (set status to 'deleted')
+        cursor.execute(
+            """
+            UPDATE Comment
+            SET status = 'deleted', updated_at = NOW()
+            WHERE post_id = %s
+            """,
+            (post_id,),
+        )
+
+        # 2. Update pending match requests to 'withdrawn'
+        cursor.execute(
+            """
+            UPDATE MatchRequest
+            SET status = 'withdrawn'
+            WHERE post_id = %s AND status = 'pending'
+            """,
+            (post_id,),
+        )
+
+        # 3. Delete PostSkill relationships
+        cursor.execute("DELETE FROM PostSkill WHERE post_id = %s", (post_id,))
+
+        # 4. Delete the Post
+        cursor.execute("DELETE FROM Post WHERE post_id = %s", (post_id,))
+
+        # 5. If team has only 1 member (the owner), delete the team and team members
+        if member_count == 1:
+            # Withdraw all pending requests for this team
+            cursor.execute(
+                """
+                UPDATE MatchRequest
+                SET status = 'withdrawn'
+                WHERE to_team_id = %s AND status = 'pending'
+                """,
+                (team_id,),
+            )
+            cursor.execute("DELETE FROM TeamMember WHERE team_id = %s", (team_id,))
+            cursor.execute("DELETE FROM Team WHERE team_id = %s", (team_id,))
+            team_deleted = True
+        else:
+            # If team has other members, keep the team but update any pending requests
+            cursor.execute(
+                """
+                UPDATE MatchRequest
+                SET status = 'withdrawn'
+                WHERE to_team_id = %s AND status = 'pending'
+                """,
+                (team_id,),
+            )
+            team_deleted = False
+
+        conn.commit()
+
+        return {
+            "message": "Post deleted successfully",
+            "post_id": post_id,
+            "team_deleted": team_deleted,
+            "team_id": team_id if not team_deleted else None,
+        }
+
+    except HTTPException:
+        if conn:
+            conn.rollback()
+        raise
+    except Error as e:
+        print(f"Database error while deleting post: {e}")
+        if conn:
+            conn.rollback()
+        raise HTTPException(status_code=500, detail="Failed to delete post")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
 @app.get("/api/posts/{post_id}/comments", response_model=List[CommentResponse])
 async def get_post_comments(post_id: int):
     conn = None
@@ -1644,7 +2092,7 @@ async def get_post_comments(post_id: int):
             u.avatar_url
         FROM Comment c
         LEFT JOIN User u ON c.user_id = u.user_id
-        WHERE c.post_id = %s
+        WHERE c.post_id = %s AND (c.status IS NULL OR c.status != 'deleted')
         ORDER BY c.created_at ASC, c.comment_id ASC
         """
         cursor.execute(comment_query, (post_id,))
@@ -1675,15 +2123,38 @@ async def create_post_comment(post_id: int, payload: CommentCreate):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
-        cursor.execute("SELECT post_id FROM Post WHERE post_id = %s", (post_id,))
-        if not cursor.fetchone():
+        # Verify post exists and get post details using JOIN
+        post_check_query = """
+            SELECT 
+                p.post_id,
+                p.title,
+                p.user_id as post_author_id,
+                t.team_id,
+                t.team_name,
+                c.subject,
+                c.number
+            FROM Post p
+            JOIN Team t ON p.team_id = t.team_id
+            JOIN Course c ON t.course_id = c.course_id
+            WHERE p.post_id = %s
+        """
+        cursor.execute(post_check_query, (post_id,))
+        post_info = cursor.fetchone()
+        if not post_info:
             raise HTTPException(status_code=404, detail="Post not found")
 
-        cursor.execute(
-            "SELECT user_id, display_name, avatar_url FROM User WHERE user_id = %s",
-            (payload.user_id,),
-        )
+        # Get user info using subquery to verify user exists
+        user_check_query = """
+            SELECT user_id, display_name, avatar_url
+            FROM User
+            WHERE user_id = %s
+            AND user_id IN (
+                SELECT user_id FROM User WHERE user_id = %s
+            )
+        """
+        cursor.execute(user_check_query, (payload.user_id, payload.user_id))
         user_row = cursor.fetchone()
         if not user_row:
             raise HTTPException(status_code=404, detail="User not found")
@@ -1733,12 +2204,209 @@ async def create_post_comment(post_id: int, payload: CommentCreate):
             conn.close()
 
 
+@app.put("/api/posts/{post_id}/comments/{comment_id}")
+async def update_comment(
+    post_id: int, comment_id: int, payload: CommentUpdate, user_id: Optional[int] = None
+):
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+
+    if not payload.content or not payload.content.strip():
+        raise HTTPException(status_code=400, detail="Content cannot be empty")
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
+        # Verify comment exists and belongs to the user using JOIN with Post
+        verify_query = """
+            SELECT 
+                c.comment_id,
+                c.user_id,
+                c.status,
+                c.content,
+                p.post_id,
+                p.title as post_title
+            FROM Comment c
+            JOIN Post p ON c.post_id = p.post_id
+            WHERE c.comment_id = %s AND c.post_id = %s
+        """
+        cursor.execute(verify_query, (comment_id, post_id))
+        comment_info = cursor.fetchone()
+
+        if not comment_info:
+            raise HTTPException(status_code=404, detail="Comment not found")
+
+        if comment_info["user_id"] != user_id:
+            raise HTTPException(
+                status_code=403, detail="You can only edit your own comments"
+            )
+
+        if comment_info["status"] == "deleted":
+            raise HTTPException(status_code=400, detail="Cannot edit deleted comment")
+
+        # Check if comment has child comments using subquery
+        check_children_query = """
+            SELECT COUNT(*) as child_count
+            FROM Comment
+            WHERE parent_comment_id = %s
+            AND comment_id IN (
+                SELECT comment_id FROM Comment WHERE parent_comment_id = %s
+            )
+        """
+        cursor.execute(check_children_query, (comment_id, comment_id))
+        children_result = cursor.fetchone()
+        has_children = children_result["child_count"] > 0 if children_result else False
+
+        # Switch to regular cursor for update
+        cursor.close()
+        cursor = conn.cursor()
+
+        # Update comment content
+        update_query = """
+            UPDATE Comment
+            SET content = %s, updated_at = NOW()
+            WHERE comment_id = %s
+        """
+        cursor.execute(update_query, (payload.content.strip(), comment_id))
+        conn.commit()
+
+        return {
+            "message": "Comment updated successfully",
+            "comment_id": comment_id,
+        }
+
+    except HTTPException:
+        if conn:
+            conn.rollback()
+        raise
+    except Error as e:
+        print(f"Database error while updating comment: {e}")
+        if conn:
+            conn.rollback()
+        raise HTTPException(status_code=500, detail="Failed to update comment")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
+@app.delete("/api/posts/{post_id}/comments/{comment_id}")
+async def delete_comment(post_id: int, comment_id: int, user_id: Optional[int] = None):
+    if not user_id:
+        raise HTTPException(status_code=400, detail="user_id is required")
+
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
+
+        # Verify comment exists and belongs to the user
+        verify_query = """
+            SELECT comment_id, user_id, status
+            FROM Comment
+            WHERE comment_id = %s AND post_id = %s
+        """
+        cursor.execute(verify_query, (comment_id, post_id))
+        comment_info = cursor.fetchone()
+
+        if not comment_info:
+            raise HTTPException(status_code=404, detail="Comment not found")
+
+        if comment_info["user_id"] != user_id:
+            raise HTTPException(
+                status_code=403, detail="You can only delete your own comments"
+            )
+
+        if comment_info["status"] == "deleted":
+            raise HTTPException(status_code=400, detail="Comment already deleted")
+
+        # Check if comment has child comments using JOIN and aggregation
+        check_child_query = """
+            SELECT 
+                c.comment_id,
+                COUNT(child.comment_id) as child_count,
+                c.post_id
+            FROM Comment c
+            LEFT JOIN Comment child ON c.comment_id = child.parent_comment_id
+            WHERE c.comment_id = %s AND c.post_id = %s
+            GROUP BY c.comment_id, c.post_id
+        """
+        cursor.execute(check_child_query, (comment_id, post_id))
+        child_result = cursor.fetchone()
+        has_children = (
+            (child_result and child_result["child_count"] > 0)
+            if child_result
+            else False
+        )
+
+        # Get comment author info using subquery for validation
+        author_check_query = """
+            SELECT user_id, display_name
+            FROM User
+            WHERE user_id = %s 
+            AND user_id IN (
+                SELECT user_id FROM Comment WHERE comment_id = %s
+            )
+        """
+        cursor.execute(author_check_query, (user_id, comment_id))
+        author_info = cursor.fetchone()
+
+        # Switch to regular cursor for updates/deletes
+        cursor.close()
+        cursor = conn.cursor()
+
+        if has_children:
+            # Has child comments: soft delete (set status to 'deleted')
+            update_query = """
+                UPDATE Comment
+                SET status = 'deleted', updated_at = NOW()
+                WHERE comment_id = %s
+            """
+            cursor.execute(update_query, (comment_id,))
+            delete_type = "soft"
+        else:
+            # No child comments: hard delete (remove from database)
+            delete_query = """
+                DELETE FROM Comment
+                WHERE comment_id = %s
+            """
+            cursor.execute(delete_query, (comment_id,))
+            delete_type = "hard"
+
+        conn.commit()
+
+        return {
+            "message": "Comment deleted successfully",
+            "comment_id": comment_id,
+            "delete_type": delete_type,
+        }
+
+    except HTTPException:
+        if conn:
+            conn.rollback()
+        raise
+    except Error as e:
+        print(f"Database error while deleting comment: {e}")
+        if conn:
+            conn.rollback()
+        raise HTTPException(status_code=500, detail="Failed to delete comment")
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
 @app.post("/api/requests")
 async def create_join_request(request: JoinRequest):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
         post_query = """
         SELECT p.user_id AS post_author_id, t.team_id
@@ -1760,13 +2428,45 @@ async def create_join_request(request: JoinRequest):
         if not from_user_id:
             raise HTTPException(status_code=400, detail="User ID is required")
 
+        # Check if user is the post author - cannot send request to own post
+        if post_author_id == from_user_id:
+            raise HTTPException(
+                status_code=400,
+                detail="You cannot send a join request to your own post",
+            )
+
+        # Check if user is already a member of the team using JOIN
+        check_member_query = """
+        SELECT tm.team_id, tm.user_id, t.status as team_status
+        FROM TeamMember tm
+        JOIN Team t ON tm.team_id = t.team_id
+        WHERE tm.team_id = %s AND tm.user_id = %s
+        """
+        cursor.execute(check_member_query, (team_id, from_user_id))
+        existing_member = cursor.fetchone()
+
+        if existing_member:
+            raise HTTPException(
+                status_code=400, detail="You are already a member of this team"
+            )
+
+        # Check for existing pending request using subquery
         check_query = """
         SELECT request_id
         FROM MatchRequest
-        WHERE from_user_id = %s AND to_team_id = %s AND post_id = %s 
+        WHERE from_user_id = %s 
+        AND to_team_id = %s 
+        AND post_id = %s 
         AND status = 'pending'
+        AND request_id IN (
+            SELECT request_id 
+            FROM MatchRequest 
+            WHERE post_id = %s AND status != 'withdrawn'
+        )
         """
-        cursor.execute(check_query, (from_user_id, team_id, request.post_id))
+        cursor.execute(
+            check_query, (from_user_id, team_id, request.post_id, request.post_id)
+        )
         existing = cursor.fetchone()
 
         if existing:
@@ -1786,7 +2486,8 @@ async def create_join_request(request: JoinRequest):
         VALUES (%s, %s, %s, %s, %s, 'pending', NOW())
         """
         cursor.execute(
-            insert_query, (next_request_id, from_user_id, team_id, request.post_id, request.message)
+            insert_query,
+            (next_request_id, from_user_id, team_id, request.post_id, request.message),
         )
         conn.commit()
 
@@ -2082,6 +2783,7 @@ async def create_post(payload: PostCreate):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+        cursor.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
 
         cursor.execute(
             "SELECT user_id FROM User WHERE user_id = %s", (payload.user_id,)
@@ -2090,17 +2792,38 @@ async def create_post(payload: PostCreate):
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        cursor.execute(
-            "SELECT course_id FROM Course WHERE course_id = %s", (payload.course_id,)
-        )
+        # Verify course exists and get course details using JOIN
+        course_check_query = """
+            SELECT 
+                c.course_id,
+                c.subject,
+                c.number,
+                c.title,
+                COUNT(s.crn) as section_count
+            FROM Course c
+            LEFT JOIN Section s ON c.course_id = s.course_id
+            WHERE c.course_id = %s
+            GROUP BY c.course_id, c.subject, c.number, c.title
+        """
+        cursor.execute(course_check_query, (payload.course_id,))
         course = cursor.fetchone()
         if not course:
             raise HTTPException(status_code=404, detail="Course not found")
 
         if payload.section_id:
+            # Verify section belongs to the course using subquery
+            section_check_query = """
+                SELECT crn, course_id
+                FROM Section
+                WHERE crn = %s 
+                AND course_id = %s
+                AND crn IN (
+                    SELECT crn FROM Section WHERE course_id = %s
+                )
+            """
             cursor.execute(
-                "SELECT crn FROM Section WHERE crn = %s AND course_id = %s",
-                (payload.section_id, payload.course_id),
+                section_check_query,
+                (payload.section_id, payload.course_id, payload.course_id),
             )
             section = cursor.fetchone()
             if not section:
@@ -2108,10 +2831,18 @@ async def create_post(payload: PostCreate):
                     status_code=404, detail="Section not found for this course"
                 )
 
-        cursor.execute(
-            "SELECT team_id FROM Team WHERE team_name = %s",
-            (payload.team_name.strip(),),
-        )
+        # Check for existing team name using JOIN to get team details
+        existing_team_query = """
+            SELECT 
+                t.team_id,
+                t.team_name,
+                c.subject,
+                c.number
+            FROM Team t
+            JOIN Course c ON t.course_id = c.course_id
+            WHERE t.team_name = %s
+        """
+        cursor.execute(existing_team_query, (payload.team_name.strip(),))
         existing_team = cursor.fetchone()
         if existing_team:
             raise HTTPException(

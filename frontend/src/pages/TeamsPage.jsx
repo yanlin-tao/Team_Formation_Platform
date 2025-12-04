@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import { useRequireAuth } from '../hooks/useRequireAuth'
 import { getUserTeams } from '../services/api'
 import './DashboardPages.css'
 
 function TeamsPage() {
+  const navigate = useNavigate()
   const { user, loading: authLoading } = useRequireAuth()
   const [teams, setTeams] = useState([])
   const [loading, setLoading] = useState(true)
@@ -73,8 +75,12 @@ function TeamsPage() {
                 const openSpots = Math.max(0, (team.target_size || 0) - (team.current_size || 0))
                 
                 return (
-                  <li key={team.team_id}>
-                    <div>
+                  <li 
+                    key={team.team_id}
+                    onClick={() => navigate(`/teams/${team.team_id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                  <div>
                       <h3>{courseCode} • {team.team_name}</h3>
                       <p>{courseName}</p>
                       <p>
@@ -83,9 +89,9 @@ function TeamsPage() {
                         Open spots: {openSpots} • 
                         Joined: {formatDate(team.joined_at)}
                       </p>
-                    </div>
+                  </div>
                     <span className="dashboard-pill">{team.role || 'member'}</span>
-                  </li>
+                </li>
                 )
               })}
             </ul>
