@@ -7,7 +7,10 @@
 
 ## I. Project video link: https://youtu.be/-jaM2hMnwcA
 
+----------
+
 ## II. Changes from the original proposal  
+
 Our TeamUp UIUC platform successfully achieved its core mission of providing a centralized, course-based teammate finder for UIUC students. The overall direction and functionality still align with our original plan, but several concrete changes were made during implementation:
 
 - **Unchanged core direction**:  
@@ -22,7 +25,10 @@ Our TeamUp UIUC platform successfully achieved its core mission of providing a c
 - **Newly emphasized user flows**:  
   In practice we added more concrete, rubric‑driven flows that were only loosely described in the proposal, including **My Teams**, **My Courses**, **Team Detail**, and a **Notifications** page for join requests. These improve day‑to‑day usability even without the more ambitious visualization and recommendation features.
 
+----------
+
 ## III. Usefulness and achievement
+
 **Achievements regarding usefulness**  
 
 - **Course-based organization**: Our platform is fundamentally course‑centric. Students begin by searching a course from the integrated catalog, which contains over 1,260 courses and 4,377 sections from real UIUC Spring 2025 schedule data. The dedicated posts and comments system are organized inside each course. Students can directly find the relevant courses and posts they want. 
@@ -41,14 +47,26 @@ Our TeamUp UIUC platform successfully achieved its core mission of providing a c
 
 - **Limited keyword search scope**: The platform organizes all features strictly around courses and sections. We support keyword search for **courses** (by subject/number/title) and course‑scoped post search, but we do not offer a global free‑text search across all posts, comments, or skills. This restricts discovery for cross‑course topics that share similar content but live under different course spaces.
 
-### IV. Schema change
+----------
+
+## IV. Schema change
 
 After applying the fixes from **Stage 2 revisions** (e.g., making `UserSkill(user_id, skill_id)` a composite primary key and cleaning conceptual vs. logical details), the final physical schema we implemented in MySQL matches that logical design.  
 We did not introduce new tables or drop entities between Stage 2 and Stage 4; instead, we focused on adding indexes, stored procedures, transactions, and triggers on top of the existing table definitions.
 
-### V. ER diagram and table implementation change
+----------
+
+## V. ER diagram and table implementation change
 
 Our final table implementations closely follow the revised UML/ER model from Stage 2, with only minor pragmatic adjustments:
+
+- The conceptual UML for this project are **identical to the final versions documented in Stage 2**. We directly reused those diagrams for Stage 4, as the entities and relationships did not change. For reference:
+
+  <p align="center">
+      <img src="./img_src/modified_UML_diagram.png" alt="UML Diagram"
+          style="width:100%; height:auto; max-width:100%;">
+    <br><em>Figure 2. Final UML / Logical Design Diagram (reused from Stage 2)</em>
+  </p>
 
 - The **core entities and relationships** (Term, Course, Section, User, Team, TeamMember, Post, Comment, MatchRequest, Skill, UserSkill, PostSkill) are implemented exactly as in the logical schema and support all current application flows.
 - Some entities such as **Endorsement** and the richer parts of the reputation system are present in the ER design and DDL but are not yet actively used by the current UI; we intentionally deferred those features while keeping the schema ready for future extensions.
@@ -56,7 +74,9 @@ Our final table implementations closely follow the revised UML/ER model from Sta
 
 Overall, we believe the **implemented schema is a suitable and robust realization** of our conceptual design: it keeps the normalization and flexibility of the original ER diagram, while slightly simplifying how some optional relationships are exercised in this first version of the application.
 
-### VI. Functionality changes
+----------
+
+## VI. Functionality changes
 
 **Functionalities added (beyond the original proposal):**
 
@@ -84,6 +104,8 @@ Overall, we believe the **implemented schema is a suitable and robust realizatio
   Features like drag‑and‑drop team management, real‑time heatmaps of skill coverage, and more advanced analytics dashboards were not implemented. While they could enhance the user experience and decision‑making, they were considered lower priority than building solid transactional and stored‑procedure support.
 
 Although these advanced functionalities were not implemented due to time and resources constraints, the platform prioritizes **reliable database design, correct transactional workflows, and clear core pages**. This provides a smooth and dependable user experience today, while leaving room for more sophisticated features in future iterations.
+
+----------
 
 ## VII. Advanced database features
 
@@ -403,6 +425,8 @@ FOREIGN KEY (user_id) REFERENCES User(user_id);
 FOREIGN KEY (post_id) REFERENCES Post(post_id);
 ```
 
+----------
+
 ## VIII. Technical challenges and advice
 
 **Ning Wei (ningwei3)**  
@@ -417,6 +441,8 @@ One major challenge we faced on the frontend was managing asynchronous state upd
 **Yanlin Tao (tao17)**  
 One of the technical challenge we met is the cross platform environment setup as I am a Windows system while my teammates are all MacOS. Many of the shell scripts behaved differently across these platforms due to differences in path formats, executable permissions, and default shell behavior. The environemnt setup and the frontend-backend connection is also different. Our advice is to create a containerized environments for better consistency.
 
+----------
+
 ## IX. Future work
 
 - **Skills Matching Algorithm Implementation**  
@@ -428,6 +454,7 @@ We would create a more comprehensive system for feedback. We may develop a weigh
 - **Communication System**  
 Current communications are delivered mainly through posts, comments, and match request, which are either short or public message. In the future work, our platform will implement a direct message system to support more private one-to-one ongoing conversations. We may also update the notification part according the messages preference. 
 
+----------
 
 ## X. Division of Labor
 
@@ -437,3 +464,35 @@ Current communications are delivered mainly through posts, comments, and match r
 - **Yanlin Tao (tao17)**: real data design, advanced database logic, writing design and report documents
 
 Overall, the team collaboration is very effective. Each member takes different components at each stage and maintain well communication through weekly meetings. All the responsibilities are well divided, and the communication is smooth. 
+
+----------
+
+## XI. Stage 4 Requirements Checklist
+
+To summarize, our final application and database satisfy all required Stage 4 items:
+
+- **CRUD Operations (non‑user table)**  
+  - Implemented full CRUD for `Post` (create / read / update / delete) via `POST /api/posts`, `GET /api/posts/popular`, `GET /api/posts/search`, `GET /api/posts/{post_id}`, `PUT /api/posts/{post_id}`, and `DELETE /api/posts/{post_id}`, connected to `CreatePostPage`, `EntryPage`, and `PostPage`.  
+  - Implemented full CRUD for `Comment` on posts via `GET/POST/PUT/DELETE /api/posts/{post_id}/comments/...` with soft‑delete behavior when a comment has replies.
+
+- **Keyword Search**  
+  - **Course search**: `GET /api/courses/search` + `CoursesPage` support keyword search by subject/number/title.  
+  - **Post search within a course**: `GET /api/posts/search?term_id=&course_id=` + `EntryPage` allow users to search posts scoped to a selected term and course.
+
+- **Stored Procedures**  
+  - Implemented 4 stored procedures in MySQL (`sp_get_user_teams`, `sp_get_available_teams_in_section`, `sp_get_user_post_interactions`, `sp_get_section_team_stats`) using JOINs, GROUP BY, subqueries, and control structures.  
+  - `sp_get_user_teams` and `sp_get_user_post_interactions` are called by backend endpoints such as `GET /api/users/{user_id}/teams`, `GET /api/profile/me`, and `GET /api/users/{user_id}/posts`, which are used on **TeamsPage**, **ProfilePage**, and **My Courses**.
+
+- **Transactions**  
+  - Several endpoints use explicit transactions with `SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED`, including user registration, profile update, post creation, post deletion, comment create/update/delete, and accepting join requests.  
+  - Each transaction includes advanced queries (JOIN, GROUP BY, subqueries) combined with multiple writes to keep user/team/post/match data consistent.
+
+- **Triggers**  
+  - `trg_team_status_full` and `trg_team_status_open` maintain `Team.status` automatically when members join or leave a team.  
+  - `trg_post_updated_at` and `trg_comment_updated_at` automatically update `updated_at` when post or comment content changes.  
+  - These triggers are actively exercised by our application’s team membership and post/comment editing flows.
+
+- **Constraints**  
+  - All tables define primary keys and foreign keys consistent with our ER design (e.g., `FOREIGN KEY (course_id, section_id) REFERENCES Section(course_id, crn)`, `FOREIGN KEY (user_id) REFERENCES User(user_id)`, `FOREIGN KEY (post_id) REFERENCES Post(post_id)`), as well as NOT NULL, UNIQUE, and length constraints where appropriate.
+
+Together with our deployed GCP MySQL instance and working React + FastAPI front end, this checklist reflects that the project implementation and this final report jointly cover the full Stage 4 specification.
