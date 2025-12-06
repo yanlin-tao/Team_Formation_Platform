@@ -8,48 +8,15 @@ import mysql.connector
 from mysql.connector import Error
 from config import DB_CONFIG, CORS_ORIGINS, API_HOST, API_PORT, validate_config
 
+# checking the configuration: if the error msg is printed, check the requirement.txt, config.py
 try:
     validate_config()
 except ValueError as e:
     print(f"Warning: {e}")
 
-
-# Test database connection on startup
-def test_db_connection_on_startup():
-    """Test database connection when application starts"""
-    try:
-        conn = mysql.connector.connect(**DB_CONFIG)
-        if conn.is_connected():
-            cursor = conn.cursor()
-            cursor.execute("SELECT VERSION();")
-            version = cursor.fetchone()
-            cursor.close()
-            conn.close()
-            print(f"✅ Database connection successful! MySQL version: {version[0]}")
-            print(
-                f"   Connected to: {DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']} as user '{DB_CONFIG['user']}'"
-            )
-            return True
-    except Error as e:
-        print(f"❌ Database connection failed on startup: {e}")
-        print(
-            f"   Configuration: host={DB_CONFIG['host']}, port={DB_CONFIG['port']}, "
-            f"user={DB_CONFIG['user']}, database={DB_CONFIG['database']}"
-        )
-        print(
-            f"   Password: {'*' * len(DB_CONFIG.get('password', '')) if DB_CONFIG.get('password') else 'NOT SET'}"
-        )
-        print(f"   Please check your .env file or environment variables")
-        print(f"   Default values in config.py: user='admin', database='CS411-teamup'")
-        return False
-
-
-# Test connection on startup
-test_db_connection_on_startup()
-
 app = FastAPI(title="TeamUp UIUC API", version="1.0.0")
 
-# CORS middleware
+# CORS middleware, connect frontend and backend, config.py
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
@@ -58,7 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# connect with MySQL
 def get_db_connection():
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
@@ -67,63 +34,13 @@ def get_db_connection():
         conn.autocommit = False
         return conn
     except Error as e:
-        error_msg = f"Error connecting to MySQL: {e}"
-        print(error_msg)
-        print(
-            f"Database config used: host={DB_CONFIG['host']}, port={DB_CONFIG['port']}, "
-            f"user={DB_CONFIG['user']}, database={DB_CONFIG['database']}, "
-            f"password={'*' * len(DB_CONFIG.get('password', '')) if DB_CONFIG.get('password') else 'NOT SET'}"
-        )
+        print(f"Error connecting to MySQL: {e}")
         raise HTTPException(
             status_code=500,
-            detail=f"Database connection failed: {str(e)}. Check your database configuration in .env file or config.py",
+            detail=f"Database connection failed: {str(e)}.",
         )
 
-
-def get_default_terms():
-    from datetime import date
-
-    return [
-        {
-            "term_id": "SP25",
-            "name": "Spring 2025",
-            "start_date": date(2025, 1, 21).isoformat(),
-            "end_date": date(2025, 5, 14).isoformat(),
-        },
-        {
-            "term_id": "FA25",
-            "name": "Fall 2025",
-            "start_date": date(2025, 8, 25).isoformat(),
-            "end_date": date(2025, 12, 18).isoformat(),
-        },
-        {
-            "term_id": "SP24",
-            "name": "Spring 2024",
-            "start_date": date(2024, 1, 16).isoformat(),
-            "end_date": date(2024, 5, 10).isoformat(),
-        },
-        {
-            "term_id": "FA24",
-            "name": "Fall 2024",
-            "start_date": date(2024, 8, 26).isoformat(),
-            "end_date": date(2024, 12, 19).isoformat(),
-        },
-        {
-            "term_id": "SP23",
-            "name": "Spring 2023",
-            "start_date": date(2023, 1, 17).isoformat(),
-            "end_date": date(2023, 5, 12).isoformat(),
-        },
-        {
-            "term_id": "FA23",
-            "name": "Fall 2023",
-            "start_date": date(2023, 8, 21).isoformat(),
-            "end_date": date(2023, 12, 14).isoformat(),
-        },
-    ]
-
-
-# Pydantic models
+# Pydantic models, restrictions
 class PostResponse(BaseModel):
     post_id: int
     title: str
@@ -137,41 +54,27 @@ class PostResponse(BaseModel):
     status: Optional[str] = None
     created_at: Optional[str] = None
     skills: Optional[List[str]] = []
-
-
 class JoinRequest(BaseModel):
     post_id: int
     message: str
-    from_user_id: Optional[int] = (
-        None  # Optional: can be passed from frontend or extracted from auth
-    )
-
-
+    from_user_id: Optional[int] = (None)
 class RegisterRequest(BaseModel):
     display_name: str
     email: EmailStr
     netid: Optional[str] = None
     password: Optional[str] = None
-
-
 class LoginRequest(BaseModel):
     identifier: str  # email or netid
     password: Optional[str] = None
-
-
 class AuthUser(BaseModel):
     user_id: int
     display_name: str
     email: EmailStr
     netid: Optional[str] = None
     avatar_url: Optional[str] = None
-
-
 class AuthResponse(BaseModel):
     token: str
     user: AuthUser
-
-
 class CommentResponse(BaseModel):
     comment_id: int
     post_id: int
@@ -181,18 +84,12 @@ class CommentResponse(BaseModel):
     content: str
     parent_comment_id: Optional[int] = None
     created_at: Optional[str] = None
-
-
 class CommentCreate(BaseModel):
     user_id: int
     content: str
     parent_comment_id: Optional[int] = None
-
-
 class CommentUpdate(BaseModel):
     content: str
-
-
 class ProfileUpdate(BaseModel):
     display_name: Optional[str] = None
     phone_number: Optional[str] = None
@@ -201,8 +98,6 @@ class ProfileUpdate(BaseModel):
     major: Optional[str] = None
     grade: Optional[str] = None
     score: Optional[float] = None
-
-
 class PostCreate(BaseModel):
     user_id: int
     term_id: str
@@ -212,13 +107,13 @@ class PostCreate(BaseModel):
     target_size: int
     title: str
     content: str
-
-
 class PostUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
-
-
+class RejectRequestPayload(BaseModel):
+    rejection_reason: Optional[str] = None
+    
+# just for testing
 MOCK_USER = {
     "user_id": 101,
     "display_name": "Avery Chen",
@@ -226,8 +121,6 @@ MOCK_USER = {
     "netid": "achen12",
     "avatar_url": "https://avatars.githubusercontent.com/u/1763434?v=4",
 }
-
-
 def get_mock_profile_payload() -> Dict[str, Any]:
     return {
         "profile": {
@@ -324,7 +217,6 @@ def get_mock_profile_payload() -> Dict[str, Any]:
 def root():
     return {"message": "TeamUp UIUC API", "version": "1.0.0"}
 
-
 @app.get("/api/terms")
 async def get_terms():
     conn = None
@@ -341,14 +233,6 @@ async def get_terms():
         cursor.execute(query)
         terms = cursor.fetchall()
 
-        print(f"[DEBUG] Database query returned {len(terms)} terms")
-        for term in terms:
-            print(f"[DEBUG] Term: {term}")
-
-        if not terms:
-            print("[DEBUG] No terms found in database, returning default terms")
-            return get_default_terms()
-
         for term in terms:
             if term["start_date"]:
                 if isinstance(term["start_date"], str):
@@ -361,20 +245,15 @@ async def get_terms():
                 else:
                     term["end_date"] = term["end_date"].isoformat()
 
-        print(f"[DEBUG] Returning {len(terms)} terms to client")
+        # print(f"[DEBUG] Returning {len(terms)} terms to client")
         return terms
 
     except Error as e:
         print(f"[ERROR] Database error: {e}")
-        import traceback
-
-        traceback.print_exc()
-        return get_default_terms()
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
-
 
 def _build_auth_user(row: Dict[str, Any]) -> AuthUser:
     return AuthUser(
@@ -384,7 +263,6 @@ def _build_auth_user(row: Dict[str, Any]) -> AuthUser:
         netid=row.get("netid"),
         avatar_url=row.get("avatar_url"),
     )
-
 
 def _fetch_user_by_identifier(cursor, identifier: str):
     query = """
@@ -396,7 +274,7 @@ def _fetch_user_by_identifier(cursor, identifier: str):
     cursor.execute(query, (identifier, identifier))
     return cursor.fetchone()
 
-
+# register new user
 @app.post("/api/auth/register", response_model=AuthResponse)
 async def register_user(payload: RegisterRequest):
     if not payload.email:
@@ -471,14 +349,13 @@ async def register_user(payload: RegisterRequest):
     except Error as e:
         if conn:
             conn.rollback()
-        print(f"[ERROR] Failed to register user: {e}")
         raise HTTPException(status_code=500, detail="Failed to register user")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# user login
 @app.post("/api/auth/login", response_model=AuthResponse)
 async def login_user(payload: LoginRequest):
     identifier = (payload.identifier or "").strip()
@@ -497,19 +374,18 @@ async def login_user(payload: LoginRequest):
         token = f"mock-token-{user.user_id}-{uuid.uuid4().hex[:6]}"
         return AuthResponse(token=token, user=user)
     except Error as e:
-        print(f"[ERROR] Failed to login: {e}")
         raise HTTPException(status_code=500, detail="Failed to login")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# user logout
 @app.post("/api/auth/logout")
 async def logout_user():
     return {"message": "Logged out"}
 
-
+# user profile: get the user's information
 @app.get("/api/auth/me", response_model=AuthUser)
 async def get_current_user(
     user_id: Optional[int] = None, identifier: Optional[str] = None
@@ -540,13 +416,13 @@ async def get_current_user(
         return _build_auth_user(row)
     except Error as e:
         print(f"[ERROR] Failed to fetch current user: {e}")
-        raise HTTPException(status_code=500, detail="Failed to fetch user")
+        raise HTTPException(status_code=500)
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# user profile: establish all the information of the user
 @app.get("/api/profile/me")
 async def get_profile(user_id: Optional[int] = None):
     payload = get_mock_profile_payload()
@@ -769,7 +645,7 @@ async def get_profile(user_id: Optional[int] = None):
     payload["user"] = user_payload
     return payload
 
-
+# update function in the user profile page
 @app.put("/api/profile/me")
 async def update_profile(user_id: int, payload: ProfileUpdate):
     conn = None
@@ -822,9 +698,7 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
         if payload.phone_number is not None:
             if payload.phone_number and len(payload.phone_number.strip()) > 32:
-                raise HTTPException(
-                    status_code=400, detail="Phone number cannot exceed 32 characters"
-                )
+                raise HTTPException(status_code=400, detail="Phone number cannot exceed 32 characters")
             update_fields.append("phone_number = %s")
             update_values.append(
                 payload.phone_number.strip()
@@ -846,9 +720,7 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
         if payload.bio is not None:
             if payload.bio and len(payload.bio.strip()) > 1024:
-                raise HTTPException(
-                    status_code=400, detail="Bio cannot exceed 1024 characters"
-                )
+                raise HTTPException(status_code=400, detail="Bio cannot exceed 1024 characters")
             update_fields.append("bio = %s")
             update_values.append(
                 payload.bio.strip() if payload.bio and payload.bio.strip() else None
@@ -856,9 +728,7 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
         if payload.major is not None:
             if payload.major and len(payload.major.strip()) > 64:
-                raise HTTPException(
-                    status_code=400, detail="Major cannot exceed 64 characters"
-                )
+                raise HTTPException(status_code=400, detail="Major cannot exceed 64 characters")
             update_fields.append("major = %s")
             update_values.append(
                 payload.major.strip()
@@ -868,9 +738,7 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
         if payload.grade is not None:
             if payload.grade and len(payload.grade.strip()) > 16:
-                raise HTTPException(
-                    status_code=400, detail="Grade cannot exceed 16 characters"
-                )
+                raise HTTPException(status_code=400, detail="Grade cannot exceed 16 characters")
             update_fields.append("grade = %s")
             update_values.append(
                 payload.grade.strip()
@@ -879,10 +747,6 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
             )
 
         if payload.score is not None:
-            if payload.score is not None and (payload.score < 0 or payload.score > 100):
-                raise HTTPException(
-                    status_code=400, detail="Score must be between 0 and 100"
-                )
             update_fields.append("score = %s")
             update_values.append(payload.score if payload.score is not None else None)
 
@@ -909,26 +773,15 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
             updated_user["score"] = float(updated_user["score"])
 
         return {"message": "Profile updated successfully", "user": updated_user}
-
-    except HTTPException:
-        raise
-    except Error as e:
-        print(f"Database error: {e}")
-        import traceback
-
-        traceback.print_exc()
-        if conn:
-            conn.rollback()
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# user's teams page
 @app.get("/api/users/{user_id}/teams")
 async def get_user_teams(user_id: int):
-    """Get all teams a user has joined using stored procedure"""
+    # Get all teams a user has joined using stored procedure
     conn = None
     try:
         conn = get_db_connection()
@@ -947,19 +800,15 @@ async def get_user_teams(user_id: int):
             team["current_size"] = team.get("member_count", 0)
 
         return teams
-
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# get the user's team information -> My teams page backend(team members etc.)
 @app.get("/api/teams/{team_id}")
 async def get_team_details(team_id: int):
-    """Get team details including all members"""
     conn = None
     try:
         conn = get_db_connection()
@@ -1025,21 +874,15 @@ async def get_team_details(team_id: int):
         team["members"] = members
 
         return team
-
-    except HTTPException:
-        raise
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# Get all posts a user has written or commented
 @app.get("/api/users/{user_id}/posts")
 async def get_user_posts(user_id: int, limit: int = 50):
-    """Get all posts a user has written or commented on using stored procedure"""
+    # Get all posts a user has written or commented on using stored procedure
     conn = None
     try:
         conn = get_db_connection()
@@ -1063,8 +906,7 @@ async def get_user_posts(user_id: int, limit: int = 50):
             if post.get("team_id"):
                 cursor.execute(
                     """
-                    SELECT t.course_id, t.team_name, c.subject, c.number, 
-                           c.title AS course_title, c.term_id, s.crn AS section_code
+                    SELECT t.course_id, t.team_name, c.subject, c.number, c.title AS course_title, c.term_id, s.crn AS section_code
                     FROM Team t
                     LEFT JOIN Course c ON t.course_id = c.course_id
                     LEFT JOIN Section s ON t.section_id = s.crn AND t.course_id = c.course_id
@@ -1077,16 +919,12 @@ async def get_user_posts(user_id: int, limit: int = 50):
                     post.update(team_info)
 
         return posts
-
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# My course page backend
 @app.get("/api/users/{user_id}/courses")
 async def get_user_courses(user_id: int):
     conn = None
@@ -1184,27 +1022,18 @@ async def get_user_courses(user_id: int):
         courses_list.sort(key=lambda x: (x["subject"], x["number"]))
 
         return courses_list
-
-    except Error as e:
-        print(f"Database error: {e}")
-        import traceback
-
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# send out(create new) match requests -> send in the post page to a user's notification page
 @app.get("/api/users/{user_id}/match-requests")
 async def get_user_match_requests(user_id: int, status: Optional[str] = None):
-    """Get match requests sent by the user (outgoing requests)"""
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-
         query = """
             SELECT 
                 mr.request_id,
@@ -1237,19 +1066,14 @@ async def get_user_match_requests(user_id: int, status: Optional[str] = None):
         requests = cursor.fetchall()
 
         return requests
-
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# receive the match requests -> notification page
 @app.get("/api/users/{user_id}/received-requests")
 async def get_user_received_requests(user_id: int, status: Optional[str] = None):
-    """Get match requests received by the user (for posts they authored)"""
     conn = None
     try:
         conn = get_db_connection()
@@ -1289,18 +1113,14 @@ async def get_user_received_requests(user_id: int, status: Optional[str] = None)
 
         cursor.execute(query, tuple(params))
         requests = cursor.fetchall()
-
         return requests
 
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# accept match request in notification page: if accept, update user's teams and team table
 @app.put("/api/users/{user_id}/requests/{request_id}/accept")
 async def accept_join_request(user_id: int, request_id: int):
     """Accept a join request - add user to team and update request status"""
@@ -1327,14 +1147,10 @@ async def accept_join_request(user_id: int, request_id: int):
         request_info = cursor.fetchone()
 
         if not request_info:
-            raise HTTPException(
-                status_code=404, detail="Request not found or unauthorized"
-            )
+            raise HTTPException(status_code=404, detail="Request not found")
 
         if request_info["status"] != "pending":
-            raise HTTPException(
-                status_code=400, detail=f"Request already {request_info['status']}"
-            )
+            raise HTTPException(status_code=400, detail=f"Request already {request_info['status']}")
 
         from_user_id = request_info["from_user_id"]
         to_team_id = request_info["to_team_id"]
@@ -1399,26 +1215,13 @@ async def accept_join_request(user_id: int, request_id: int):
             "status": "accepted",
             "user_added_to_team": not existing_member,
         }
-
-    except HTTPException:
-        if conn:
-            conn.rollback()
-        raise
-    except Error as e:
-        print(f"Database error: {e}")
-        if conn:
-            conn.rollback()
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+        
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
-class RejectRequestPayload(BaseModel):
-    rejection_reason: Optional[str] = None
-
-
+# reject match request in notification page: if reject, update the request msg and delete
 @app.put("/api/users/{user_id}/requests/{request_id}/reject")
 async def reject_join_request(
     user_id: int, request_id: int, payload: Optional[RejectRequestPayload] = None
@@ -1506,21 +1309,12 @@ async def reject_join_request(
             "status": "rejected",
         }
 
-    except HTTPException:
-        if conn:
-            conn.rollback()
-        raise
-    except Error as e:
-        print(f"Database error: {e}")
-        if conn:
-            conn.rollback()
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# home page: popular posts(10 -> influenced in frontend) will be show at the home
 @app.get("/api/posts/popular")
 async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
     conn = None
@@ -1588,32 +1382,21 @@ async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
 
         return posts
 
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# search the posts: based on term_id and course_id
 @app.get("/api/posts/search")
 async def search_posts(
     term_id: Optional[str] = None, course_id: Optional[str] = None, limit: int = 100
 ):
     conn = None
     try:
-        print(
-            f"[DEBUG] search_posts called with term_id={term_id}, course_id={course_id}, limit={limit}"
-        )
-
         if not term_id or not course_id:
-            print(
-                f"[ERROR] Missing required parameters: term_id={term_id}, course_id={course_id}"
-            )
-            raise HTTPException(
-                status_code=400, detail="Both term_id and course_id are required"
-            )
+            print(f"Missing required parameters: term_id={term_id}, course_id={course_id}")
+            raise HTTPException(status_code=400)
 
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
@@ -1642,10 +1425,7 @@ async def search_posts(
                 number = match.group(2)
                 cursor.execute(similar_query, (course_id, subject, number))
                 similar_courses = cursor.fetchall()
-                print(f"[DEBUG] Found similar courses: {similar_courses}")
             return []
-
-        print(f"[DEBUG] Verified course: {course_info}")
 
         query = """
         SELECT 
@@ -1682,14 +1462,8 @@ async def search_posts(
 
         params = [term_id, course_id, limit]
 
-        print(f"[DEBUG] Executing query with params: {params}")
-
         cursor.execute(query, tuple(params))
         posts = cursor.fetchall()
-
-        print(
-            f"[DEBUG] Found {len(posts)} posts for term_id={term_id}, course_id={course_id}"
-        )
 
         for post in posts:
             try:
@@ -1738,7 +1512,7 @@ async def search_posts(
             cursor.close()
             conn.close()
 
-
+# search the posts: based on post_id -> then we can get access to a specific post
 @app.get("/api/posts/{post_id}")
 async def get_post_by_id(post_id: int):
     conn = None
@@ -1797,17 +1571,12 @@ async def get_post_by_id(post_id: int):
 
         return post
 
-    except HTTPException:
-        raise
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# update the post information by the owner of the post
 @app.put("/api/posts/{post_id}")
 async def update_post(post_id: int, payload: PostUpdate, user_id: Optional[int] = None):
     if not user_id:
@@ -1817,9 +1586,7 @@ async def update_post(post_id: int, payload: PostUpdate, user_id: Optional[int] 
         if not payload.title.strip():
             raise HTTPException(status_code=400, detail="Title cannot be empty")
         if len(payload.title.strip()) > 128:
-            raise HTTPException(
-                status_code=400, detail="Title cannot exceed 128 characters"
-            )
+            raise HTTPException(status_code=400, detail="Title cannot exceed 128 characters")
 
     if payload.content is not None:
         if not payload.content.strip():
@@ -1910,21 +1677,12 @@ async def update_post(post_id: int, payload: PostUpdate, user_id: Optional[int] 
             "post_id": post_id,
         }
 
-    except HTTPException:
-        if conn:
-            conn.rollback()
-        raise
-    except Error as e:
-        print(f"Database error while updating post: {e}")
-        if conn:
-            conn.rollback()
-        raise HTTPException(status_code=500, detail="Failed to update post")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# delete a post
 @app.delete("/api/posts/{post_id}")
 async def delete_post(post_id: int, user_id: Optional[int] = None):
     if not user_id:
@@ -2054,21 +1812,12 @@ async def delete_post(post_id: int, user_id: Optional[int] = None):
             "team_id": team_id if not team_deleted else None,
         }
 
-    except HTTPException:
-        if conn:
-            conn.rollback()
-        raise
-    except Error as e:
-        print(f"Database error while deleting post: {e}")
-        if conn:
-            conn.rollback()
-        raise HTTPException(status_code=500, detail="Failed to delete post")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# establish post comments 
 @app.get("/api/posts/{post_id}/comments", response_model=List[CommentResponse])
 async def get_post_comments(post_id: int):
     conn = None
@@ -2103,17 +1852,12 @@ async def get_post_comments(post_id: int):
                 comment["created_at"] = comment["created_at"].isoformat()
 
         return comments
-    except HTTPException:
-        raise
-    except Error as e:
-        print(f"Database error while fetching comments: {e}")
-        raise HTTPException(status_code=500, detail="Failed to load comments")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# add comments
 @app.post("/api/posts/{post_id}/comments", response_model=CommentResponse)
 async def create_post_comment(post_id: int, payload: CommentCreate):
     if not payload.content or not payload.content.strip():
@@ -2193,17 +1937,13 @@ async def create_post_comment(post_id: int, payload: CommentCreate):
             parent_comment_id=payload.parent_comment_id,
             created_at=datetime.utcnow().isoformat(),
         )
-    except HTTPException:
-        raise
-    except Error as e:
-        print(f"Database error while creating comment: {e}")
-        raise HTTPException(status_code=500, detail="Failed to create comment")
+
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# add then update comment
 @app.put("/api/posts/{post_id}/comments/{comment_id}")
 async def update_comment(
     post_id: int, comment_id: int, payload: CommentUpdate, user_id: Optional[int] = None
@@ -2278,21 +2018,12 @@ async def update_comment(
             "comment_id": comment_id,
         }
 
-    except HTTPException:
-        if conn:
-            conn.rollback()
-        raise
-    except Error as e:
-        print(f"Database error while updating comment: {e}")
-        if conn:
-            conn.rollback()
-        raise HTTPException(status_code=500, detail="Failed to update comment")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# delete a comment
 @app.delete("/api/posts/{post_id}/comments/{comment_id}")
 async def delete_comment(post_id: int, comment_id: int, user_id: Optional[int] = None):
     if not user_id:
@@ -2384,22 +2115,12 @@ async def delete_comment(post_id: int, comment_id: int, user_id: Optional[int] =
             "comment_id": comment_id,
             "delete_type": delete_type,
         }
-
-    except HTTPException:
-        if conn:
-            conn.rollback()
-        raise
-    except Error as e:
-        print(f"Database error while deleting comment: {e}")
-        if conn:
-            conn.rollback()
-        raise HTTPException(status_code=500, detail="Failed to delete comment")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# join request create
 @app.post("/api/requests")
 async def create_join_request(request: JoinRequest):
     conn = None
@@ -2423,12 +2144,11 @@ async def create_join_request(request: JoinRequest):
         post_author_id, team_id = post_info
 
         # Get user_id from request body or default to 1 for now
-        # In production, this should come from authentication token
         from_user_id = request.from_user_id if request.from_user_id else 1
         if not from_user_id:
             raise HTTPException(status_code=400, detail="User ID is required")
 
-        # Check if user is the post author - cannot send request to own post
+        # Check if user is the post author
         if post_author_id == from_user_id:
             raise HTTPException(
                 status_code=400,
@@ -2472,13 +2192,10 @@ async def create_join_request(request: JoinRequest):
         if existing:
             raise HTTPException(status_code=400, detail="Request already exists")
 
-        # Generate next request_id (similar to how comment_id is generated)
         cursor.execute(
             "SELECT COALESCE(MAX(request_id), 0) + 1 AS next_id FROM MatchRequest"
         )
         next_id_row = cursor.fetchone()
-        # cursor.fetchone() returns a tuple when not using dictionary=True
-        # So we need to access by index
         next_request_id = next_id_row[0] if next_id_row else 1
 
         insert_query = """
@@ -2499,19 +2216,12 @@ async def create_join_request(request: JoinRequest):
             "status": "pending",
         }
 
-    except HTTPException:
-        raise
-    except Error as e:
-        print(f"Database error: {e}")
-        if conn:
-            conn.rollback()
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# fn: search course
 @app.get("/api/courses/search")
 async def search_courses(
     term_id: Optional[str] = None, q: Optional[str] = None, limit: int = 50
@@ -2589,15 +2299,12 @@ async def search_courses(
 
         return courses
 
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# popular course: home page(5 -> frontend)
 @app.get("/api/courses/popular")
 async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
     conn = None
@@ -2634,7 +2341,6 @@ async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
         cursor.execute(query, tuple(params))
         courses = cursor.fetchall()
 
-        print(f"[DEBUG] Popular courses for term {term_id}:")
         for course in courses:
             print(
                 f"  - {course['subject']} {course['number']}: {course['post_count']} posts"
@@ -2642,83 +2348,18 @@ async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
 
         return courses
 
-    except Error as e:
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
-@app.get("/api/debug/courses-sections")
-async def debug_courses_sections(term_id: Optional[str] = None, limit: int = 10):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        query = """
-        SELECT 
-            c.course_id,
-            c.subject,
-            c.number,
-            c.title,
-            COUNT(s.crn) AS section_count
-        FROM Course c
-        LEFT JOIN Section s ON c.course_id = s.course_id
-        WHERE 1=1
-        """
-
-        params = []
-        if term_id:
-            query += " AND c.term_id = %s"
-            params.append(term_id)
-
-        query += """
-        GROUP BY c.course_id, c.subject, c.number, c.title
-        ORDER BY section_count DESC, c.subject, c.number
-        LIMIT %s
-        """
-        params.append(limit)
-
-        cursor.execute(query, tuple(params))
-        results = cursor.fetchall()
-
-        for course in results:
-            if course["section_count"] > 0:
-                cursor.execute(
-                    "SELECT crn, instructor, location, delivery_mode, meeting_time FROM Section WHERE course_id = %s LIMIT 5",
-                    (course["course_id"],),
-                )
-                course["sample_sections"] = cursor.fetchall()
-
-        return {
-            "courses": results,
-            "total_courses": len(results),
-            "courses_with_sections": sum(1 for c in results if c["section_count"] > 0),
-        }
-
-    except Error as e:
-        print(f"Database error: {e}")
-        import traceback
-
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
-    finally:
-        if conn and conn.is_connected():
-            cursor.close()
-            conn.close()
-
-
+# when create post -> choose specific section needed
 @app.get("/api/courses/{course_id}/sections")
 async def get_course_sections(course_id: str):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-
-        print(f"[DEBUG] Fetching sections for course_id: {course_id}")
 
         query = """
         SELECT 
@@ -2735,25 +2376,14 @@ async def get_course_sections(course_id: str):
 
         cursor.execute(query, (course_id,))
         sections = cursor.fetchall()
-
-        print(f"[DEBUG] Found {len(sections)} sections for course {course_id}")
-        for section in sections:
-            print(f"[DEBUG] Section: {section}")
-
         return sections
 
-    except Error as e:
-        print(f"Database error: {e}")
-        import traceback
-
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# create new post
 @app.post("/api/posts")
 async def create_post(payload: PostCreate):
     if not payload.title or not payload.title.strip():
@@ -2909,21 +2539,12 @@ async def create_post(payload: PostCreate):
             "message": "Post created successfully",
         }
 
-    except HTTPException:
-        if conn:
-            conn.rollback()
-        raise
-    except Error as e:
-        if conn:
-            conn.rollback()
-        print(f"Database error while creating post: {e}")
-        raise HTTPException(status_code=500, detail="Failed to create post")
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
 
-
+# just for safe connection debugging here...
 @app.get("/api/health")
 def health_check():
     try:
