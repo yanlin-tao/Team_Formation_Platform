@@ -64,7 +64,7 @@ Our final table implementations closely follow the revised UML/ER model from Sta
 
   <p align="center">
       <img src="./img_src/modified_UML_diagram.png" alt="UML Diagram"
-          style="width:100%; height:auto; max-width:100%;">
+          style="width:50%; height:auto; max-width:100%;">
     <br><em>Figure 2. Final UML / Logical Design Diagram (reused from Stage 2)</em>
   </p>
 
