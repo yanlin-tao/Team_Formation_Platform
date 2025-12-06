@@ -5,9 +5,9 @@
         style="width:300px; height:auto; max-width:30%;">
 </p>
 
-## Project video link: https://youtu.be/-jaM2hMnwcA
+## I. Project video link: https://youtu.be/-jaM2hMnwcA
 
-## Changes from the original proposal  
+## II. Changes from the original proposal  
 Our TeamUp UIUC platform successfully achieved its core mission of providing a centralized, course-based teammate finder for UIUC students. The overall direction and functionality still align with our original plan, but several concrete changes were made during implementation:
 
 - **Unchanged core direction**:  
@@ -22,7 +22,7 @@ Our TeamUp UIUC platform successfully achieved its core mission of providing a c
 - **Newly emphasized user flows**:  
   In practice we added more concrete, rubric‑driven flows that were only loosely described in the proposal, including **My Teams**, **My Courses**, **Team Detail**, and a **Notifications** page for join requests. These improve day‑to‑day usability even without the more ambitious visualization and recommendation features.
 
-## Usefulness and achievement
+## III. Usefulness and achievement
 **Achievements regarding usefulness**  
 
 - **Course-based organization**: Our platform is fundamentally course‑centric. Students begin by searching a course from the integrated catalog, which contains over 1,260 courses and 4,377 sections from real UIUC Spring 2025 schedule data. The dedicated posts and comments system are organized inside each course. Students can directly find the relevant courses and posts they want. 
@@ -41,12 +41,12 @@ Our TeamUp UIUC platform successfully achieved its core mission of providing a c
 
 - **Limited keyword search scope**: The platform organizes all features strictly around courses and sections. We support keyword search for **courses** (by subject/number/title) and course‑scoped post search, but we do not offer a global free‑text search across all posts, comments, or skills. This restricts discovery for cross‑course topics that share similar content but live under different course spaces.
 
-### Schema change
+### IV. Schema change
 
 After applying the fixes from **Stage 2 revisions** (e.g., making `UserSkill(user_id, skill_id)` a composite primary key and cleaning conceptual vs. logical details), the final physical schema we implemented in MySQL matches that logical design.  
 We did not introduce new tables or drop entities between Stage 2 and Stage 4; instead, we focused on adding indexes, stored procedures, transactions, and triggers on top of the existing table definitions.
 
-### ER diagram and table implementation change
+### V. ER diagram and table implementation change
 
 Our final table implementations closely follow the revised UML/ER model from Stage 2, with only minor pragmatic adjustments:
 
@@ -56,7 +56,7 @@ Our final table implementations closely follow the revised UML/ER model from Sta
 
 Overall, we believe the **implemented schema is a suitable and robust realization** of our conceptual design: it keeps the normalization and flexibility of the original ER diagram, while slightly simplifying how some optional relationships are exercised in this first version of the application.
 
-### Functionality changes
+### VI. Functionality changes
 
 **Functionalities added (beyond the original proposal):**
 
@@ -85,7 +85,7 @@ Overall, we believe the **implemented schema is a suitable and robust realizatio
 
 Although these advanced functionalities were not implemented due to time and resources constraints, the platform prioritizes **reliable database design, correct transactional workflows, and clear core pages**. This provides a smooth and dependable user experience today, while leaving room for more sophisticated features in future iterations.
 
-## Advanced database features
+## VII. Advanced database features
 
 Our application incorporates several advanced database features that complement and enhance the platform:
 
@@ -403,7 +403,7 @@ FOREIGN KEY (user_id) REFERENCES User(user_id);
 FOREIGN KEY (post_id) REFERENCES Post(post_id);
 ```
 
-## Technical challenges and advice
+## VIII. Technical challenges and advice
 
 **Ning Wei (ningwei3)**  
 One major challenge we faced was ensuring that our backend could reliably connect to the database hosted on Google Cloud Platform (GCP). A Cloud SQL instance lives inside a controlled network environment. The backend cannot connect unless your client machine or server has an approved IP address. This resulted in significant time spent connecting everyone to the backend, and required extensive team communication. Our recommendation is to get this step right before starting the design and always remember to maintain effective team communication.
@@ -417,7 +417,7 @@ One major challenge we faced on the frontend was managing asynchronous state upd
 **Yanlin Tao (tao17)**  
 One of the technical challenge we met is the cross platform environment setup as I am a Windows system while my teammates are all MacOS. Many of the shell scripts behaved differently across these platforms due to differences in path formats, executable permissions, and default shell behavior. The environemnt setup and the frontend-backend connection is also different. Our advice is to create a containerized environments for better consistency.
 
-## Future work
+## IX. Future work
 
 - **Skills Matching Algorithm Implementation**  
 We could complete the skill matching algorithm, which integrates deep learning or LLM to review skill overlap, skill levels, and required vs. possessed skills. The ideal implementation is to generate a "synergy scores", considering collaboration preferences, skill match and work styles. This creates a more personalized user experience. 
@@ -429,7 +429,7 @@ We would create a more comprehensive system for feedback. We may develop a weigh
 Current communications are delivered mainly through posts, comments, and match request, which are either short or public message. In the future work, our platform will implement a direct message system to support more private one-to-one ongoing conversations. We may also update the notification part according the messages preference. 
 
 
-## Division of Labor
+## X. Division of Labor
 
 - **Ning Wei (ningwei3)**: GCP database and environment setup, backend CRUD management and debugging
 - **Jack Jiang (jackj6)**: synthetic data design, backend–frontend API connections, final video recording 
