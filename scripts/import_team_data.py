@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""
-Script to import Team and TeamMember data from CSV files into MySQL database.
-"""
 
 import csv
 import mysql.connector
 from mysql.connector import Error
 
-# Database configuration
 DB_CONFIG = {
     "host": "34.172.159.62",
     "port": 3306,
@@ -18,7 +14,6 @@ DB_CONFIG = {
 
 
 def connect_db():
-    """Establish database connection."""
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         print("✓ Successfully connected to database")
@@ -29,7 +24,6 @@ def connect_db():
 
 
 def import_teams(cursor, conn, csv_file):
-    """Import team data from CSV file."""
     print(f"\n--- Importing Teams from {csv_file} ---")
 
     teams = []
@@ -78,7 +72,6 @@ def import_teams(cursor, conn, csv_file):
 
 
 def import_team_members(cursor, conn, csv_file):
-    """Import team member data from CSV file."""
     print(f"\n--- Importing TeamMembers from {csv_file} ---")
 
     members = []
@@ -122,20 +115,16 @@ def import_team_members(cursor, conn, csv_file):
 
 
 def verify_data(cursor):
-    """Verify the imported data."""
     print("\n--- Verification ---")
 
-    # Count teams
     cursor.execute("SELECT COUNT(*) FROM Team")
     team_count = cursor.fetchone()[0]
     print(f"Total Teams: {team_count}")
 
-    # Count team members
     cursor.execute("SELECT COUNT(*) FROM TeamMember")
     member_count = cursor.fetchone()[0]
     print(f"Total TeamMembers: {member_count}")
 
-    # Show sample data
     print("\nSample Teams:")
     cursor.execute("SELECT team_id, team_name, status, course_id FROM Team LIMIT 5")
     for row in cursor.fetchall():
@@ -152,7 +141,6 @@ def main():
     print("Team Data Import Script")
     print("=" * 60)
 
-    # Connect to database
     conn = connect_db()
     if not conn:
         return
@@ -160,13 +148,10 @@ def main():
     cursor = conn.cursor()
 
     try:
-        # Import teams
         import_teams(cursor, conn, "data/team.csv")
 
-        # Import team members
         import_team_members(cursor, conn, "data/team_member.csv")
 
-        # Verify data
         verify_data(cursor)
 
         print("\n" + "=" * 60)

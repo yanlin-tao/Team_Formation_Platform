@@ -25,6 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # connect with MySQL
 def get_db_connection():
     try:
@@ -40,6 +41,7 @@ def get_db_connection():
             detail=f"Database connection failed: {str(e)}.",
         )
 
+
 # Pydantic models, restrictions
 class PostResponse(BaseModel):
     post_id: int
@@ -54,27 +56,39 @@ class PostResponse(BaseModel):
     status: Optional[str] = None
     created_at: Optional[str] = None
     skills: Optional[List[str]] = []
+
+
 class JoinRequest(BaseModel):
     post_id: int
     message: str
-    from_user_id: Optional[int] = (None)
+    from_user_id: Optional[int] = None
+
+
 class RegisterRequest(BaseModel):
     display_name: str
     email: EmailStr
     netid: Optional[str] = None
     password: Optional[str] = None
+
+
 class LoginRequest(BaseModel):
     identifier: str  # email or netid
     password: Optional[str] = None
+
+
 class AuthUser(BaseModel):
     user_id: int
     display_name: str
     email: EmailStr
     netid: Optional[str] = None
     avatar_url: Optional[str] = None
+
+
 class AuthResponse(BaseModel):
     token: str
     user: AuthUser
+
+
 class CommentResponse(BaseModel):
     comment_id: int
     post_id: int
@@ -84,12 +98,18 @@ class CommentResponse(BaseModel):
     content: str
     parent_comment_id: Optional[int] = None
     created_at: Optional[str] = None
+
+
 class CommentCreate(BaseModel):
     user_id: int
     content: str
     parent_comment_id: Optional[int] = None
+
+
 class CommentUpdate(BaseModel):
     content: str
+
+
 class ProfileUpdate(BaseModel):
     display_name: Optional[str] = None
     phone_number: Optional[str] = None
@@ -98,6 +118,8 @@ class ProfileUpdate(BaseModel):
     major: Optional[str] = None
     grade: Optional[str] = None
     score: Optional[float] = None
+
+
 class PostCreate(BaseModel):
     user_id: int
     term_id: str
@@ -107,12 +129,17 @@ class PostCreate(BaseModel):
     target_size: int
     title: str
     content: str
+
+
 class PostUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
+
+
 class RejectRequestPayload(BaseModel):
     rejection_reason: Optional[str] = None
-    
+
+
 # just for testing
 MOCK_USER = {
     "user_id": 101,
@@ -121,6 +148,8 @@ MOCK_USER = {
     "netid": "achen12",
     "avatar_url": "https://avatars.githubusercontent.com/u/1763434?v=4",
 }
+
+
 def get_mock_profile_payload() -> Dict[str, Any]:
     return {
         "profile": {
@@ -217,6 +246,7 @@ def get_mock_profile_payload() -> Dict[str, Any]:
 def root():
     return {"message": "TeamUp UIUC API", "version": "1.0.0"}
 
+
 @app.get("/api/terms")
 async def get_terms():
     conn = None
@@ -255,6 +285,7 @@ async def get_terms():
             cursor.close()
             conn.close()
 
+
 def _build_auth_user(row: Dict[str, Any]) -> AuthUser:
     return AuthUser(
         user_id=row["user_id"],
@@ -263,6 +294,7 @@ def _build_auth_user(row: Dict[str, Any]) -> AuthUser:
         netid=row.get("netid"),
         avatar_url=row.get("avatar_url"),
     )
+
 
 def _fetch_user_by_identifier(cursor, identifier: str):
     query = """
@@ -273,6 +305,7 @@ def _fetch_user_by_identifier(cursor, identifier: str):
     """
     cursor.execute(query, (identifier, identifier))
     return cursor.fetchone()
+
 
 # register new user
 @app.post("/api/auth/register", response_model=AuthResponse)
@@ -355,6 +388,7 @@ async def register_user(payload: RegisterRequest):
             cursor.close()
             conn.close()
 
+
 # user login
 @app.post("/api/auth/login", response_model=AuthResponse)
 async def login_user(payload: LoginRequest):
@@ -380,10 +414,12 @@ async def login_user(payload: LoginRequest):
             cursor.close()
             conn.close()
 
+
 # user logout
 @app.post("/api/auth/logout")
 async def logout_user():
     return {"message": "Logged out"}
+
 
 # user profile: get the user's information
 @app.get("/api/auth/me", response_model=AuthUser)
@@ -421,6 +457,7 @@ async def get_current_user(
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # user profile: establish all the information of the user
 @app.get("/api/profile/me")
@@ -645,6 +682,7 @@ async def get_profile(user_id: Optional[int] = None):
     payload["user"] = user_payload
     return payload
 
+
 # update function in the user profile page
 @app.put("/api/profile/me")
 async def update_profile(user_id: int, payload: ProfileUpdate):
@@ -698,7 +736,9 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
         if payload.phone_number is not None:
             if payload.phone_number and len(payload.phone_number.strip()) > 32:
-                raise HTTPException(status_code=400, detail="Phone number cannot exceed 32 characters")
+                raise HTTPException(
+                    status_code=400, detail="Phone number cannot exceed 32 characters"
+                )
             update_fields.append("phone_number = %s")
             update_values.append(
                 payload.phone_number.strip()
@@ -720,7 +760,9 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
         if payload.bio is not None:
             if payload.bio and len(payload.bio.strip()) > 1024:
-                raise HTTPException(status_code=400, detail="Bio cannot exceed 1024 characters")
+                raise HTTPException(
+                    status_code=400, detail="Bio cannot exceed 1024 characters"
+                )
             update_fields.append("bio = %s")
             update_values.append(
                 payload.bio.strip() if payload.bio and payload.bio.strip() else None
@@ -728,7 +770,9 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
         if payload.major is not None:
             if payload.major and len(payload.major.strip()) > 64:
-                raise HTTPException(status_code=400, detail="Major cannot exceed 64 characters")
+                raise HTTPException(
+                    status_code=400, detail="Major cannot exceed 64 characters"
+                )
             update_fields.append("major = %s")
             update_values.append(
                 payload.major.strip()
@@ -738,7 +782,9 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
 
         if payload.grade is not None:
             if payload.grade and len(payload.grade.strip()) > 16:
-                raise HTTPException(status_code=400, detail="Grade cannot exceed 16 characters")
+                raise HTTPException(
+                    status_code=400, detail="Grade cannot exceed 16 characters"
+                )
             update_fields.append("grade = %s")
             update_values.append(
                 payload.grade.strip()
@@ -778,6 +824,7 @@ async def update_profile(user_id: int, payload: ProfileUpdate):
             cursor.close()
             conn.close()
 
+
 # user's teams page
 @app.get("/api/users/{user_id}/teams")
 async def get_user_teams(user_id: int):
@@ -800,11 +847,12 @@ async def get_user_teams(user_id: int):
             team["current_size"] = team.get("member_count", 0)
 
         return teams
-    
+
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # get the user's team information -> My teams page backend(team members etc.)
 @app.get("/api/teams/{team_id}")
@@ -879,6 +927,7 @@ async def get_team_details(team_id: int):
             cursor.close()
             conn.close()
 
+
 # Get all posts a user has written or commented
 @app.get("/api/users/{user_id}/posts")
 async def get_user_posts(user_id: int, limit: int = 50):
@@ -923,6 +972,7 @@ async def get_user_posts(user_id: int, limit: int = 50):
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # My course page backend
 @app.get("/api/users/{user_id}/courses")
@@ -1027,6 +1077,7 @@ async def get_user_courses(user_id: int):
             cursor.close()
             conn.close()
 
+
 # send out(create new) match requests -> send in the post page to a user's notification page
 @app.get("/api/users/{user_id}/match-requests")
 async def get_user_match_requests(user_id: int, status: Optional[str] = None):
@@ -1070,6 +1121,7 @@ async def get_user_match_requests(user_id: int, status: Optional[str] = None):
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # receive the match requests -> notification page
 @app.get("/api/users/{user_id}/received-requests")
@@ -1120,6 +1172,7 @@ async def get_user_received_requests(user_id: int, status: Optional[str] = None)
             cursor.close()
             conn.close()
 
+
 # accept match request in notification page: if accept, update user's teams and team table
 @app.put("/api/users/{user_id}/requests/{request_id}/accept")
 async def accept_join_request(user_id: int, request_id: int):
@@ -1150,7 +1203,9 @@ async def accept_join_request(user_id: int, request_id: int):
             raise HTTPException(status_code=404, detail="Request not found")
 
         if request_info["status"] != "pending":
-            raise HTTPException(status_code=400, detail=f"Request already {request_info['status']}")
+            raise HTTPException(
+                status_code=400, detail=f"Request already {request_info['status']}"
+            )
 
         from_user_id = request_info["from_user_id"]
         to_team_id = request_info["to_team_id"]
@@ -1215,11 +1270,12 @@ async def accept_join_request(user_id: int, request_id: int):
             "status": "accepted",
             "user_added_to_team": not existing_member,
         }
-        
+
     finally:
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # reject match request in notification page: if reject, update the request msg and delete
 @app.put("/api/users/{user_id}/requests/{request_id}/reject")
@@ -1314,6 +1370,7 @@ async def reject_join_request(
             cursor.close()
             conn.close()
 
+
 # home page: popular posts(10 -> influenced in frontend) will be show at the home
 @app.get("/api/posts/popular")
 async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
@@ -1387,6 +1444,7 @@ async def get_popular_posts(limit: int = 10, term_id: Optional[str] = None):
             cursor.close()
             conn.close()
 
+
 # search the posts: based on term_id and course_id
 @app.get("/api/posts/search")
 async def search_posts(
@@ -1395,7 +1453,9 @@ async def search_posts(
     conn = None
     try:
         if not term_id or not course_id:
-            print(f"Missing required parameters: term_id={term_id}, course_id={course_id}")
+            print(
+                f"Missing required parameters: term_id={term_id}, course_id={course_id}"
+            )
             raise HTTPException(status_code=400)
 
         conn = get_db_connection()
@@ -1512,6 +1572,7 @@ async def search_posts(
             cursor.close()
             conn.close()
 
+
 # search the posts: based on post_id -> then we can get access to a specific post
 @app.get("/api/posts/{post_id}")
 async def get_post_by_id(post_id: int):
@@ -1576,6 +1637,7 @@ async def get_post_by_id(post_id: int):
             cursor.close()
             conn.close()
 
+
 # update the post information by the owner of the post
 @app.put("/api/posts/{post_id}")
 async def update_post(post_id: int, payload: PostUpdate, user_id: Optional[int] = None):
@@ -1586,7 +1648,9 @@ async def update_post(post_id: int, payload: PostUpdate, user_id: Optional[int] 
         if not payload.title.strip():
             raise HTTPException(status_code=400, detail="Title cannot be empty")
         if len(payload.title.strip()) > 128:
-            raise HTTPException(status_code=400, detail="Title cannot exceed 128 characters")
+            raise HTTPException(
+                status_code=400, detail="Title cannot exceed 128 characters"
+            )
 
     if payload.content is not None:
         if not payload.content.strip():
@@ -1681,6 +1745,7 @@ async def update_post(post_id: int, payload: PostUpdate, user_id: Optional[int] 
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # delete a post
 @app.delete("/api/posts/{post_id}")
@@ -1817,7 +1882,8 @@ async def delete_post(post_id: int, user_id: Optional[int] = None):
             cursor.close()
             conn.close()
 
-# establish post comments 
+
+# establish post comments
 @app.get("/api/posts/{post_id}/comments", response_model=List[CommentResponse])
 async def get_post_comments(post_id: int):
     conn = None
@@ -1856,6 +1922,7 @@ async def get_post_comments(post_id: int):
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # add comments
 @app.post("/api/posts/{post_id}/comments", response_model=CommentResponse)
@@ -1943,6 +2010,7 @@ async def create_post_comment(post_id: int, payload: CommentCreate):
             cursor.close()
             conn.close()
 
+
 # add then update comment
 @app.put("/api/posts/{post_id}/comments/{comment_id}")
 async def update_comment(
@@ -2022,6 +2090,7 @@ async def update_comment(
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # delete a comment
 @app.delete("/api/posts/{post_id}/comments/{comment_id}")
@@ -2119,6 +2188,7 @@ async def delete_comment(post_id: int, comment_id: int, user_id: Optional[int] =
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # join request create
 @app.post("/api/requests")
@@ -2221,6 +2291,7 @@ async def create_join_request(request: JoinRequest):
             cursor.close()
             conn.close()
 
+
 # fn: search course
 @app.get("/api/courses/search")
 async def search_courses(
@@ -2304,6 +2375,7 @@ async def search_courses(
             cursor.close()
             conn.close()
 
+
 # popular course: home page(5 -> frontend)
 @app.get("/api/courses/popular")
 async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
@@ -2353,6 +2425,7 @@ async def get_popular_courses(term_id: Optional[str] = None, limit: int = 5):
             cursor.close()
             conn.close()
 
+
 # when create post -> choose specific section needed
 @app.get("/api/courses/{course_id}/sections")
 async def get_course_sections(course_id: str):
@@ -2382,6 +2455,7 @@ async def get_course_sections(course_id: str):
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # create new post
 @app.post("/api/posts")
@@ -2543,6 +2617,7 @@ async def create_post(payload: PostCreate):
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
 
 # just for safe connection debugging here...
 @app.get("/api/health")

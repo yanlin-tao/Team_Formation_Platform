@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
-"""
-Import Course Data Script
-This script imports course catalog data from CSV into MySQL database.
-"""
 
 import csv
 import mysql.connector
 from datetime import datetime
 import sys
 
-# Database configuration
 DB_CONFIG = {
     "host": "34.172.159.62",
     "port": 3306,
@@ -18,12 +13,10 @@ DB_CONFIG = {
     "database": "CS411-teamup",
 }
 
-# CSV file path
 CSV_FILE = "data/course-catalog.csv"
 
 
 def connect_db():
-    """Connect to MySQL database"""
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor()
@@ -35,7 +28,6 @@ def connect_db():
 
 
 def insert_term(cursor, conn):
-    """Insert term data"""
     term_data = {
         "term_id": "2025-sp",
         "name": "Spring 2025",
@@ -54,16 +46,15 @@ def insert_term(cursor, conn):
         conn.commit()
         print(f"✓ Inserted term: {term_data['name']}")
     except mysql.connector.Error as err:
-        if err.errno == 1062:  # Duplicate entry
+        if err.errno == 1062:
             print(f"⊘ Term already exists: {term_data['name']}")
         else:
             print(f"✗ Error inserting term: {err}")
 
 
 def process_course_data(csv_file, subject_filter=None):
-    """Process CSV file and extract course/section data"""
-    courses = {}  # Dictionary to store unique courses
-    sections = []  # List to store all sections
+    courses = {}
+    sections = []
 
     print(f"Reading CSV file: {csv_file}")
     if subject_filter:
@@ -73,15 +64,12 @@ def process_course_data(csv_file, subject_filter=None):
         reader = csv.DictReader(f)
 
         for row in reader:
-            # Extract course information
             subject = row["Subject"]
             number = row["Number"]
 
-            # Skip if essential fields are missing
             if not subject or not number:
                 continue
 
-            # Filter by subject if specified (can be single string or list)
             if subject_filter:
                 if isinstance(subject_filter, list):
                     if subject not in subject_filter:
@@ -89,21 +77,16 @@ def process_course_data(csv_file, subject_filter=None):
                 elif subject != subject_filter:
                     continue
 
-            # Generate course_id in format: sp25 + subject + number (e.g., sp25AAS100)
             course_id = f"sp25{subject}{number}"
 
-            # Create course entry if not exists
             if course_id not in courses:
-                title = (
-                    row["Name"][:128] if row["Name"] else ""
-                )  # Truncate to 128 chars
+                title = row["Name"][:128] if row["Name"] else ""
 
-                # Extract credits (handle "3 hours." format)
                 credits_str = row["Credit Hours"].replace(" hours.", "").strip()
                 try:
                     credits = float(credits_str)
                 except ValueError:
-                    credits = 3.0  # Default if parsing fails
+                    credits = 3.0
 
                 courses[course_id] = {
                     "course_id": course_id,
@@ -114,10 +97,8 @@ def process_course_data(csv_file, subject_filter=None):
                     "credits": credits,
                 }
 
-            # Create section entry
             crn = row["CRN"]
-            if crn:  # Only add if CRN exists
-                # Build meeting_time
+            if crn:
                 start_time = row["Start Time"] if row["Start Time"] else ""
                 end_time = row["End Time"] if row["End Time"] else ""
                 days = row["Days of Week"] if row["Days of Week"] else ""
@@ -126,15 +107,12 @@ def process_course_data(csv_file, subject_filter=None):
                 if not meeting_time or meeting_time == "-":
                     meeting_time = "ARRANGED" if row["Type"] == "Online" else None
 
-                # Build location
                 room = row["Room"] if row["Room"] else ""
                 building = row["Building"] if row["Building"] else ""
                 location = f"{building} {room}".strip() if building or room else None
 
-                # Instructor
                 instructor = row["Instructors"][:128] if row["Instructors"] else None
 
-                # Delivery mode
                 delivery_mode = row["Type"][:32] if row["Type"] else None
 
                 sections.append(
@@ -155,7 +133,6 @@ def process_course_data(csv_file, subject_filter=None):
 
 
 def insert_courses(cursor, conn, courses):
-    """Insert course data into database"""
     print("\nInserting courses...")
 
     inserted = 0
@@ -172,7 +149,7 @@ def insert_courses(cursor, conn, courses):
             )
             inserted += 1
         except mysql.connector.Error as err:
-            if err.errno == 1062:  # Duplicate entry
+            if err.errno == 1062:
                 skipped += 1
             else:
                 print(f"✗ Error inserting course {course_id}: {err}")
@@ -184,7 +161,6 @@ def insert_courses(cursor, conn, courses):
 
 
 def insert_sections(cursor, conn, sections):
-    """Insert section data into database"""
     print("\nInserting sections...")
 
     inserted = 0
@@ -201,7 +177,7 @@ def insert_sections(cursor, conn, sections):
             )
             inserted += 1
         except mysql.connector.Error as err:
-            if err.errno == 1062:  # Duplicate entry
+            if err.errno == 1062:
                 skipped += 1
             else:
                 print(
@@ -215,7 +191,6 @@ def insert_sections(cursor, conn, sections):
 
 
 def verify_data(cursor):
-    """Verify inserted data"""
     print("\n" + "=" * 50)
     print("Verifying inserted data...")
     print("=" * 50)
@@ -232,7 +207,6 @@ def verify_data(cursor):
     section_count = cursor.fetchone()[0]
     print(f"Section records: {section_count}")
 
-    # Show sample data
     print("\nSample Course:")
     cursor.execute("SELECT * FROM Course LIMIT 3")
     for row in cursor.fetchall():
@@ -245,22 +219,17 @@ def verify_data(cursor):
 
 
 def main():
-    """Main execution function"""
     print("=" * 50)
     print("Course Data Import Script")
     print("=" * 50)
 
-    # Connect to database
     conn, cursor = connect_db()
 
     try:
-        # Step 1: Insert term
         print("\n[Step 1] Inserting term data...")
         insert_term(cursor, conn)
 
-        # Step 2: Process CSV data
         print("\n[Step 2] Processing CSV data...")
-        # Import CS and ECE courses
         courses, sections = process_course_data(
             CSV_FILE,
             subject_filter=[
@@ -296,15 +265,12 @@ def main():
             ],
         )
 
-        # Step 3: Insert courses
         print("\n[Step 3] Inserting courses...")
         insert_courses(cursor, conn, courses)
 
-        # Step 4: Insert sections
         print("\n[Step 4] Inserting sections...")
         insert_sections(cursor, conn, sections)
 
-        # Step 5: Verify data
         verify_data(cursor)
 
         print("\n" + "=" * 50)

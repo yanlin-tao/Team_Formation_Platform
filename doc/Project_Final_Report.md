@@ -1,90 +1,122 @@
-# Final Project Report - Team SQLMaster
-## Project video link:   
-## Changes from the original proposal  
-Our TeamUp UIUC platform successfully achieved its core mission of providing a centralized, course-based teammate finder for UIUC students. The overall direction and functionality align perfectly with our original plan, though there are minor adjustments to some specific features.
+# PT1-Stage 4: Final Project Report
 
-### Usefulness and achievement
-**Achievements regarding usefulness:**  
+<p align="left">
+    <img src="./img_src/label.png" alt="label Diagram"
+        style="width:300px; height:auto; max-width:30%;">
+</p>
+
+## Project video link: https://youtu.be/-jaM2hMnwcA
+
+## Changes from the original proposal  
+Our TeamUp UIUC platform successfully achieved its core mission of providing a centralized, course-based teammate finder for UIUC students. The overall direction and functionality still align with our original plan, but several concrete changes were made during implementation:
+
+- **Unchanged core direction**:  
+  The application remains course‑centric and section‑aware. Students still search by term/course/section, create posts to recruit teammates, manage teams, and handle join requests – exactly as envisioned in Stage 1.
+
+- **De‑scoped creative features**:  
+  We originally proposed more complex components such as a drag‑and‑drop interactive team dashboard, heatmap‑style visualizations, and a machine‑learning–based synergy score for recommendations. These turned out to be too time‑consuming relative to the required CRUD and advanced SQL work, so they were not implemented in the final product.
+
+- **Reputation system simplification**:  
+  The schema still includes a score field on the user profile, but the full peer feedback pipeline and history‑aware reputation design from the proposal were simplified to a single numeric “collaboration score” field and some example stats instead of a full evaluation workflow.
+
+- **Newly emphasized user flows**:  
+  In practice we added more concrete, rubric‑driven flows that were only loosely described in the proposal, including **My Teams**, **My Courses**, **Team Detail**, and a **Notifications** page for join requests. These improve day‑to‑day usability even without the more ambitious visualization and recommendation features.
+
+## Usefulness and achievement
+**Achievements regarding usefulness**  
+
 - **Course-based organization**: Our platform is fundamentally course‑centric. Students begin by searching a course from the integrated catalog, which contains over 1,260 courses and 4,377 sections from real UIUC Spring 2025 schedule data. The dedicated posts and comments system are organized inside each course. Students can directly find the relevant courses and posts they want. 
+
 - **Posts and comments system**: The posting system serves as the primary method for students to present their target team descriptions and target team size within each course. Beyond creating and browsing posts, students can comment on posts to ask questions, negotiate roles, or clarify expectations before sending the request and joining a team. The post system essentially functions as a structured, course‑specific social space for students to showcase their strengths and initiate collaboration.
+
 - **Efficient Team management**: There is a "My Team" team management section designed for efficient management. The page displays the detailed information of the team, including the team name, the cours esection, the target size, the open slots, the team members and their roles. The platform’s backend triggers update team status in real time when members join or leave, ensuring accurate availability without manual updates.
+
 - **Match Request System**: The match request and communication system provides a formal, course‑organized process for joining teams. Students can send a join request to any team with an open seat, attaching a short message explaining their background or asking specific questions. Team leaders receive these requests in an organized notification inbox and can choose to accept or reject the request. This prevents the lost of messages and informal miscommunication that happens on Discord or GroupMe.
-- **Comprehensive user profiles**: Each student has a detailed profile showing photos, skills, major, year, the past requests and matches, and historical collaboration score across different UIUC courses. 
-This allow students to evaluate compatibility before collaborating. 
+
+- **Rich but focused user profiles**: Each student has a profile page with name, avatar, major, year, phone number, short bio, and a collaboration score field, together with curated statistics (active teams, requests, matches) and example spotlight projects. This gives potential teammates a quick, structured overview of someone’s background before collaborating, even though we do not yet surface a full, queryable history of every past request and match.
 
 **Limitations regarding usefulness**
+
 - **Inconvenience for ongoing communication**: While students can communicate through match requests and post comments, the platform currently does not support private messaging between users. This limits the ability for students to have ongoing, one-on-one conversations and may require them to rely on external tools for detailed coordination. Repeated discussions about roles or schedules can therefore become inconvenient.  
-- **Lack of keyword Search**: The platform organizes all features strictly around courses and sections. The posts system only supports course-based search, instead of keyword search. That restricts interactions between different classes but of the similar contents. 
+
+- **Limited keyword search scope**: The platform organizes all features strictly around courses and sections. We support keyword search for **courses** (by subject/number/title) and course‑scoped post search, but we do not offer a global free‑text search across all posts, comments, or skills. This restricts discovery for cross‑course topics that share similar content but live under different course spaces.
 
 ### Schema change
 
-The schema is the same as our design in the stage 2.
+After applying the fixes from **Stage 2 revisions** (e.g., making `UserSkill(user_id, skill_id)` a composite primary key and cleaning conceptual vs. logical details), the final physical schema we implemented in MySQL matches that logical design.  
+We did not introduce new tables or drop entities between Stage 2 and Stage 4; instead, we focused on adding indexes, stored procedures, transactions, and triggers on top of the existing table definitions.
 
 ### ER diagram and table implementation change
 
-The table implementation is the same as the design in our UML diagram. 
+Our final table implementations closely follow the revised UML/ER model from Stage 2, with only minor pragmatic adjustments:
+
+- The **core entities and relationships** (Term, Course, Section, User, Team, TeamMember, Post, Comment, MatchRequest, Skill, UserSkill, PostSkill) are implemented exactly as in the logical schema and support all current application flows.
+- Some entities such as **Endorsement** and the richer parts of the reputation system are present in the ER design and DDL but are not yet actively used by the current UI; we intentionally deferred those features while keeping the schema ready for future extensions.
+- In MatchRequest, we primarily use the **user→team** workflow (from_user_id → to_team_id) in our application, which is a practical subset of the more general contact model described conceptually.
+
+Overall, we believe the **implemented schema is a suitable and robust realization** of our conceptual design: it keeps the normalization and flexibility of the original ER diagram, while slightly simplifying how some optional relationships are exercised in this first version of the application.
 
 ### Functionality changes
 
-**Functionalities Added:**
-- **Popular Course and Post Feature**: On the home search page, we implemented a "Popular Posts" section that displays posts most viewed, alongside a "Popular Courses" tab that highlights courses with the most activity. This allows students to quickly identify trending discussions and high-interest courses, helping them discover teammates and projects that are currently active or widely engaging.
+**Functionalities added (beyond the original proposal):**
 
-**Functionalities Not Implemented:**
-- **Integration of Machine Learning Algorithm**: The platform does not currently integrate the machine learning algorithm into the matching process, including using skill and interest matches and synergy scores calculation.
-- **Interactive Team Dashboard**: Visualization features like drag-and-drop team management and visual heatmaps of team activity were not implementeded. While these could enhance the user experience and make team formation more visually engaging, they were considered lower priority compared to ensuring reliable and accurate core functionality.   
+- **Popular courses and posts**:  
+  On the entry page we implemented a “Popular Posts” section backed by an advanced SQL query that aggregates request and comment counts per post, and a “Popular Courses” section that highlights courses with the most active sections. This helps students quickly discover trending course spaces and recruiting activity.
 
-Although these advanced functionalities were not implemented due to time and resources constraints, the platform prioritizes robust database design, and seamless fundamental workflows. This provides smooth and reliable user experience even without the more visually sophisticated features.
+- **My Teams & Team Detail**:  
+  We added a dedicated **My Teams** dashboard that lists all teams a user has joined (via the `sp_get_user_teams` stored procedure), and a **Team Detail** page that shows course/section info, team size and status, and the full member list with roles and join times. This makes it much easier to manage existing collaborations.
+
+- **My Courses overview**:  
+  The **My Courses** page aggregates courses where the user has teams and/or posts, shows simple engagement stats, and lets users quickly navigate to course‑level posts. This was not fully fleshed out in the original proposal but turned out to be a very practical way to summarize activity.
+
+- **Notifications / Match Request inbox**:  
+  We implemented a notifications page where users can see incoming and outgoing join requests, accept or reject them, and trigger transactional updates (TeamMember insertion, request status changes). This formalizes the join‑team workflow that was only briefly mentioned in the proposal.
+
+- **Full comment CRUD on posts**:  
+  Beyond simple commenting, we support creating, editing, and deleting comments, with backend logic to soft‑delete comments that have replies. This richer discussion model was not specified in detail originally.
+
+**Functionalities not implemented or simplified relative to proposal:**
+
+- **Integration of machine learning–based matching**:  
+  The platform does not currently integrate the machine learning algorithm into the matching process, including using skill and interest matches and synergy scores calculation. We focused instead on robust CRUD, search, and advanced SQL programs.
+
+- **Interactive team dashboard visualizations**:  
+  Features like drag‑and‑drop team management, real‑time heatmaps of skill coverage, and more advanced analytics dashboards were not implemented. While they could enhance the user experience and decision‑making, they were considered lower priority than building solid transactional and stored‑procedure support.
+
+Although these advanced functionalities were not implemented due to time and resources constraints, the platform prioritizes **reliable database design, correct transactional workflows, and clear core pages**. This provides a smooth and dependable user experience today, while leaving room for more sophisticated features in future iterations.
 
 ## Advanced database features
 
 Our application incorporates several advanced database features that complement and enhance the platform:
 
 ### **Transactions**
-We utilized numerous advanced queries during the implementation of the database functionality. We list two of the transactions here. 
-- This query retrieves popular posts along with their author, team, course, and section details, and counts the number of join requests and comments for each post, filtering only open or unassigned teams and ordering by popularity and recency.
-```sql
-SELECT 
-        p.post_id,
-        p.title,
-        p.content,
-        p.created_at,
-        t.target_size AS target_team_size,
-        u.display_name AS author_name,
-        c.title AS course_title,
-        c.subject AS course_subject,
-        c.number AS course_number,
-        s.crn AS section_code,
-        c.term_id,
-        COUNT(DISTINCT mr.request_id) AS request_count,  # 聚合
-        COUNT(DISTINCT cm.comment_id) AS comment_count,  # 聚合
-        0 AS view_count,
-        t.status
-    FROM Post p
-    LEFT JOIN User u ON p.user_id = u.user_id           # JOIN 1
-    LEFT JOIN Team t ON p.team_id = t.team_id           # JOIN 2
-    LEFT JOIN Course c ON t.course_id = c.course_id     # JOIN 3
-    LEFT JOIN Section s ON t.section_id = s.crn AND t.course_id = c.course_id  # JOIN 4
-    LEFT JOIN MatchRequest mr ON p.post_id = mr.post_id # JOIN 5
-    LEFT JOIN Comment cm ON p.post_id = cm.comment_id   # JOIN 6
-    WHERE (t.status IS NULL OR t.status = 'open')
-    GROUP BY p.post_id, p.title, p.content, p.created_at, t.target_size,  # GROUP BY
-             u.display_name, c.title, c.subject, c.number, s.crn, c.term_id, t.status
-    ORDER BY request_count DESC, comment_count DESC, p.created_at DESC
-    LIMIT %s
-```
-- Get the course information and the total number of sections associated with it. 
-```sql
-SELECT 
-    c.course_id,
-    c.subject,
-    c.number,
-    c.title,
-    COUNT(s.crn) as section_count
-FROM Course c
-LEFT JOIN Section s ON c.course_id = s.course_id
-WHERE c.course_id = %s
-GROUP BY c.course_id, c.subject, c.number, c.title
-```
+We use explicit, multi‑statement transactions with the isolation level `READ COMMITTED` for several critical workflows in our backend. These transactions combine **advanced queries** (JOINs, GROUP BY, subqueries) with multiple writes to keep data consistent:
+
+- **User registration (`POST /api/auth/register`)**  
+  Inside a transaction we:
+  - Run a JOIN + subquery to check for existing users with the same email or NetID.  
+  - Use an aggregated query (`SELECT COALESCE(MAX(user_id), 0) + 1`) to generate a new user id.  
+  - Insert the new row into `User`.  
+  If any step fails, we roll back; otherwise we commit, guaranteeing that we never partially create an inconsistent user.
+
+- **Profile update (`PUT /api/profile/me`)**  
+  We:
+  - Use a `LEFT JOIN` + `GROUP BY` over `User` and `TeamMember` to compute how many teams a user has joined.  
+  - Use a subquery to count how many posts the user has authored.  
+  - Then conditionally update multiple profile fields in one `UPDATE` statement.  
+  These operations are wrapped in a transaction so that validation and updates are consistent even under concurrent requests.
+
+- **Accepting a join request (`PUT /api/users/{user_id}/requests/{request_id}/accept`)**  
+  This transaction:
+  - Verifies the request and its post/author via an `INNER JOIN` on `MatchRequest` and `Post`.  
+  - Inserts or upserts a row into `TeamMember`.  
+  - Runs an aggregated subquery over `TeamMember` to compute the current team size and compare it with `target_size`, potentially updating the team status.  
+  All steps are executed under `READ COMMITTED` and either fully applied or rolled back, ensuring we do not end up with a request marked “accepted” but no corresponding membership.
+
+- **Post and comment lifecycles (create / update / delete)**  
+  For creating comments, updating comments, deleting comments, and deleting posts (with cascading actions on comments, requests, and possibly teams), we again use transactions that combine JOINs and subqueries with multiple write statements. This guarantees that complex multi‑table changes either fully succeed or leave the database unchanged.
+
+Across these endpoints, transactions complement our application by **preserving data integrity for multi‑step workflows** such as team joining, profile editing, and post/comment management, while still making use of MySQL’s advanced query capabilities inside each transaction.
 
 ### **Stored Procedures**
 We design 4 stored procedures. The design complement our application. Those procedures improve the database performance by precompiling. And the procedures keep our code easy to read, reuse and scale. 
@@ -281,8 +313,10 @@ BEGIN
     END IF;
 END //
 ```
+
 ### **Triggers**
 We design for triggers for now. Those triggers allow the data to update in real time instead of manual updating. 
+
 - **Team Status Triggers**     
 The trigger automatically update the status based on the number of members in the team. The trigger runs after a new team member is added. If the number of members reaches or exceeds the target size, the team status is set to `'full'`.
 ```sql
@@ -362,10 +396,15 @@ END //
 We define appropriate **primary keys** for each table and establish **foreign key constraints** for nearly all related entities, ensuring data integrity and relational consistency throughout the database. These constraints are clearly documented in our database design. For each table, foreign keys are specified to enforce relationships, preventing invalid references and maintaining the logical structure of the data. For example, we define foreign key constraints as follows:
 
 ```sql
-FOREIGN KEY (name) REFERENCES Table(name)
+FOREIGN KEY (course_id, section_id) REFERENCES Section(course_id, crn);
+
+FOREIGN KEY (user_id) REFERENCES User(user_id);
+
+FOREIGN KEY (post_id) REFERENCES Post(post_id);
 ```
 
 ## Technical challenges and advice
+
 **Ning Wei (ningwei3)**  
 One major challenge we faced was ensuring that our backend could reliably connect to the database hosted on Google Cloud Platform (GCP). A Cloud SQL instance lives inside a controlled network environment. The backend cannot connect unless your client machine or server has an approved IP address. This resulted in significant time spent connecting everyone to the backend, and required extensive team communication. Our recommendation is to get this step right before starting the design and always remember to maintain effective team communication.
 
@@ -379,6 +418,7 @@ One major challenge we faced on the frontend was managing asynchronous state upd
 One of the technical challenge we met is the cross platform environment setup as I am a Windows system while my teammates are all MacOS. Many of the shell scripts behaved differently across these platforms due to differences in path formats, executable permissions, and default shell behavior. The environemnt setup and the frontend-backend connection is also different. Our advice is to create a containerized environments for better consistency.
 
 ## Future work
+
 - **Skills Matching Algorithm Implementation**  
 We could complete the skill matching algorithm, which integrates deep learning or LLM to review skill overlap, skill levels, and required vs. possessed skills. The ideal implementation is to generate a "synergy scores", considering collaboration preferences, skill match and work styles. This creates a more personalized user experience. 
 
@@ -390,6 +430,7 @@ Current communications are delivered mainly through posts, comments, and match r
 
 
 ## Division of Labor
+
 - **Ning Wei (ningwei3)**: GCP database and environment setup, backend CRUD management and debugging
 - **Jack Jiang (jackj6)**: synthetic data design, backend–frontend API connections, final video recording 
 - **Lixuan Gu (lixuang2)**: frontend tab layout and main UI components, integration of frontend features with backend logic 

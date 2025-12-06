@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""
-Script to import Post and Comment data from CSV files into MySQL database.
-"""
 
 import csv
 import mysql.connector
 from mysql.connector import Error
 
-# Database configuration
 DB_CONFIG = {
     "host": "34.172.159.62",
     "port": 3306,
@@ -18,7 +14,6 @@ DB_CONFIG = {
 
 
 def connect_db():
-    """Establish database connection."""
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         print("✓ Successfully connected to database")
@@ -29,7 +24,6 @@ def connect_db():
 
 
 def import_posts(cursor, conn, csv_file):
-    """Import post data from CSV file."""
     print(f"\n--- Importing Posts from {csv_file} ---")
 
     posts = []
@@ -78,7 +72,6 @@ def import_posts(cursor, conn, csv_file):
 
 
 def import_comments(cursor, conn, csv_file):
-    """Import comment data from CSV file."""
     print(f"\n--- Importing Comments from {csv_file} ---")
 
     comments = []
@@ -131,20 +124,16 @@ def import_comments(cursor, conn, csv_file):
 
 
 def verify_data(cursor):
-    """Verify the imported data."""
     print("\n--- Verification ---")
 
-    # Count posts
     cursor.execute("SELECT COUNT(*) FROM Post")
     post_count = cursor.fetchone()[0]
     print(f"Total Posts: {post_count}")
 
-    # Count comments
     cursor.execute("SELECT COUNT(*) FROM Comment")
     comment_count = cursor.fetchone()[0]
     print(f"Total Comments: {comment_count}")
 
-    # Show sample data
     print("\nSample Posts:")
     cursor.execute("SELECT post_id, user_id, team_id, title FROM Post LIMIT 5")
     for row in cursor.fetchall():
@@ -163,7 +152,6 @@ def main():
     print("Post and Comment Data Import Script")
     print("=" * 60)
 
-    # Connect to database
     conn = connect_db()
     if not conn:
         return
@@ -171,13 +159,10 @@ def main():
     cursor = conn.cursor()
 
     try:
-        # Import posts
         import_posts(cursor, conn, "data/post.csv")
 
-        # Import comments
         import_comments(cursor, conn, "data/comment.csv")
 
-        # Verify data
         verify_data(cursor)
 
         print("\n" + "=" * 60)
