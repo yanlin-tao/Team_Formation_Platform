@@ -3,12 +3,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+def get_env_or_default(env_key, default_value):
+    value = os.getenv(env_key)
+    return value if value else default_value
+
+
 DB_CONFIG = {
-    "host": os.getenv("DB_HOST", "34.172.159.62"),
-    "port": int(os.getenv("DB_PORT", 3306)),
-    "user": os.getenv("DB_USER", "admin"),
-    "password": os.getenv("DB_PASSWORD", "CS411sqlmaster@"),
-    "database": os.getenv("DB_NAME", "CS411-teamup"),
+    "host": get_env_or_default("DB_HOST", "34.172.159.62"),
+    "port": int(get_env_or_default("DB_PORT", "3306")),
+    "user": get_env_or_default("DB_USER", "admin"),
+    "password": get_env_or_default("DB_PASSWORD", "CS411sqlmaster@"),
+    "database": get_env_or_default("DB_NAME", "CS411-teamup"),
     "charset": "utf8mb4",
     "collation": "utf8mb4_unicode_ci",
 }
@@ -35,16 +41,13 @@ def get_db_config():
 
 
 def validate_config():
-    required_vars = ["DB_HOST", "DB_USER", "DB_NAME"]
-    missing = []
-
-    for var in required_vars:
-        if not os.getenv(var):
-            missing.append(var)
-
+    """Validate configuration. Falls back to defaults defined above when .env missing."""
+    missing = [var for var in ["DB_HOST", "DB_USER", "DB_NAME"] if not os.getenv(var)]
     if missing:
-        raise ValueError(
-            f"Missing required environment variables: {', '.join(missing)}"
+        print(
+            "[INFO] Using default values for: " + ", ".join(missing) +
+            ". To customize, create backend/.env."
         )
-
+    if not DB_CONFIG.get("host") or not DB_CONFIG.get("database"):
+        raise ValueError("Database configuration is incomplete.")
     return True

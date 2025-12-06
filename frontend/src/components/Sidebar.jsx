@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { 
-  HiHome, 
-  HiBell, 
-  HiMagnifyingGlass, 
-  HiChatBubbleLeftRight, 
-  HiAcademicCap, 
-  HiUserGroup 
+import {
+  HiHome,
+  HiBell,
+  HiChatBubbleLeftRight,
+  HiAcademicCap,
+  HiUserGroup,
+  HiUserCircle
 } from 'react-icons/hi2'
 import './Sidebar.css'
 
@@ -22,52 +22,53 @@ function Sidebar() {
         </div>
       </div>
       <nav className="sidebar-nav">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}
         >
           <HiHome className="nav-icon" />
           <span>Home</span>
         </Link>
-        <Link 
-          to="/notifications" 
+        <Link
+          to="/notifications"
           className={`nav-item ${location.pathname === '/notifications' ? 'active' : ''}`}
         >
           <HiBell className="nav-icon" />
           <span>Notifications</span>
         </Link>
-        <Link 
-          to="/search" 
-          className={`nav-item ${location.pathname === '/search' ? 'active' : ''}`}
-        >
-          <HiMagnifyingGlass className="nav-icon" />
-          <span>Search</span>
-        </Link>
-        <Link 
-          to="/messages" 
+        <Link
+          to="/messages"
           className={`nav-item ${location.pathname === '/messages' ? 'active' : ''}`}
         >
           <HiChatBubbleLeftRight className="nav-icon" />
           <span>Messages</span>
         </Link>
-        <Link 
-          to="/courses" 
+        <Link
+          to="/courses"
           className={`nav-item ${location.pathname === '/courses' ? 'active' : ''}`}
         >
           <HiAcademicCap className="nav-icon" />
           <span>My Courses</span>
         </Link>
-        <Link 
-          to="/teams" 
+        <Link
+          to="/teams"
           className={`nav-item ${location.pathname === '/teams' ? 'active' : ''}`}
         >
           <HiUserGroup className="nav-icon" />
           <span>My Teams</span>
         </Link>
       </nav>
+      <div className="sidebar-footer">
+        <Link
+          to="/profile"
+          className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}
+        >
+          <HiUserCircle className="nav-icon" />
+          <span>Profile</span>
+        </Link>
+      </div>
     </div>
   )
 }
 
 export default Sidebar
-

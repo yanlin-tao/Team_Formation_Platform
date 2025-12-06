@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""
-Import User Data Script
-This script imports user data from CSV into MySQL database.
-"""
 
 import csv
 import mysql.connector
 import sys
 
-# Database configuration
 DB_CONFIG = {
     "host": "34.172.159.62",
     "port": 3306,
@@ -17,12 +12,10 @@ DB_CONFIG = {
     "database": "CS411-teamup",
 }
 
-# CSV file path
 CSV_FILE = "data/user.csv"
 
 
 def connect_db():
-    """Connect to MySQL database"""
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor()
@@ -34,7 +27,6 @@ def connect_db():
 
 
 def process_user_data(csv_file):
-    """Process CSV file and extract user data"""
     users = []
 
     print(f"Reading CSV file: {csv_file}")
@@ -43,7 +35,6 @@ def process_user_data(csv_file):
         reader = csv.DictReader(f)
 
         for row in reader:
-            # Extract and validate user data
             user_data = {
                 "user_id": int(row["user_id"]),
                 "netid": row["netid"][:64],
@@ -67,7 +58,6 @@ def process_user_data(csv_file):
 
 
 def insert_users(cursor, conn, users):
-    """Insert user data into database"""
     print("\nInserting users...")
 
     inserted = 0
@@ -90,7 +80,7 @@ def insert_users(cursor, conn, users):
             )
             inserted += 1
         except mysql.connector.Error as err:
-            if err.errno == 1062:  # Duplicate entry
+            if err.errno == 1062:
                 skipped += 1
             else:
                 print(f"✗ Error inserting user {user['user_id']}: {err}")
@@ -102,7 +92,6 @@ def insert_users(cursor, conn, users):
 
 
 def verify_data(cursor):
-    """Verify inserted data"""
     print("\n" + "=" * 50)
     print("Verifying inserted data...")
     print("=" * 50)
@@ -111,7 +100,6 @@ def verify_data(cursor):
     user_count = cursor.fetchone()[0]
     print(f"User records: {user_count}")
 
-    # Show sample data
     print("\nSample Users:")
     cursor.execute(
         "SELECT user_id, netid, email, display_name, major, grade FROM User LIMIT 5"
@@ -119,7 +107,6 @@ def verify_data(cursor):
     for row in cursor.fetchall():
         print(f"  {row}")
 
-    # Show distribution by major
     print("\nUser Distribution by Major:")
     cursor.execute(
         "SELECT major, COUNT(*) as count FROM User GROUP BY major ORDER BY count DESC LIMIT 10"
@@ -129,24 +116,19 @@ def verify_data(cursor):
 
 
 def main():
-    """Main execution function"""
     print("=" * 50)
     print("User Data Import Script")
     print("=" * 50)
 
-    # Connect to database
     conn, cursor = connect_db()
 
     try:
-        # Step 1: Process CSV data
         print("\n[Step 1] Processing CSV data...")
         users = process_user_data(CSV_FILE)
 
-        # Step 2: Insert users
         print("\n[Step 2] Inserting users...")
         insert_users(cursor, conn, users)
 
-        # Step 3: Verify data
         verify_data(cursor)
 
         print("\n" + "=" * 50)

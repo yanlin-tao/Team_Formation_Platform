@@ -1,0 +1,557 @@
+:root {
+  --uiuc-navy: #13294B;
+  --uiuc-orange: #FF5F00;
+  --uiuc-light-blue: #6CACE4;
+  --uiuc-light-orange: #FFB81C;
+  --uiuc-gray: #5B6770;
+  --uiuc-light-gray: #E8E8E8;
+  --uiuc-bg: #F8F9FA;
+  --uiuc-white: #FFFFFF;
+}
+
+.profile-page {
+  min-height: 100vh;
+  background: var(--uiuc-bg);
+}
+
+.profile-content {
+  margin-left: 260px;
+  padding: 2.5rem 3rem 3rem;
+  width: calc(100% - 260px);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-error {
+  background: rgba(255, 95, 0, 0.08);
+  border: 1px solid rgba(255, 95, 0, 0.25);
+  color: var(--uiuc-orange);
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.profile-card.loading-card {
+  width: 100%;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1rem;
+  color: var(--uiuc-gray);
+}
+
+.profile-hero {
+  background: var(--uiuc-white);
+  border: 1px solid var(--uiuc-light-gray);
+  border-radius: 18px;
+  padding: 2rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  box-shadow: 0 15px 35px rgba(19, 41, 75, 0.08);
+}
+
+.profile-bio {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--uiuc-orange), var(--uiuc-light-orange));
+  color: var(--uiuc-white);
+  font-weight: 700;
+  font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 24px rgba(255, 95, 0, 0.35);
+}
+
+.profile-meta h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--uiuc-navy);
+}
+
+.profile-tags {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0.9rem 0 0.8rem;
+}
+
+.profile-tags span {
+  background: rgba(19, 41, 75, 0.08);
+  color: var(--uiuc-navy);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.profile-description {
+  margin: 0 0 0.75rem;
+  color: var(--uiuc-gray);
+  line-height: 1.6;
+}
+
+.profile-contact-info {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-item {
+  font-size: 0.9rem;
+  color: var(--uiuc-navy);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contact-item strong {
+  font-weight: 600;
+  color: var(--uiuc-gray);
+  min-width: 90px;
+}
+
+.contact-item .avatar-link {
+  color: var(--uiuc-orange);
+  text-decoration: none;
+  word-break: break-all;
+  transition: color 0.2s;
+}
+
+.contact-item .avatar-link:hover {
+  color: #E85400;
+  text-decoration: underline;
+}
+
+.profile-availability {
+  font-size: 0.95rem;
+  color: var(--uiuc-navy);
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 220px;
+}
+
+.profile-actions button {
+  border: none;
+  border-radius: 12px;
+  padding: 0.9rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.profile-actions .primary {
+  background: var(--uiuc-orange);
+  color: var(--uiuc-white);
+  box-shadow: 0 12px 24px rgba(255, 95, 0, 0.35);
+}
+
+.profile-actions .ghost {
+  background: transparent;
+  color: var(--uiuc-navy);
+  border: 1px solid rgba(19, 41, 75, 0.2);
+}
+
+.profile-actions .ghost.danger {
+  color: #c62828;
+  border-color: rgba(198, 40, 40, 0.4);
+}
+
+.profile-actions .ghost.danger:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.profile-stat-card {
+  background: var(--uiuc-white);
+  border: 1px solid var(--uiuc-light-gray);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.stat-label {
+  color: var(--uiuc-gray);
+  font-size: 0.95rem;
+}
+
+.stat-value {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--uiuc-navy);
+  margin: 0.5rem 0;
+}
+
+.stat-trend {
+  color: var(--uiuc-orange);
+  font-size: 0.9rem;
+}
+
+.profile-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1.75rem;
+}
+
+.profile-left-column, .profile-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-section {
+  background: var(--uiuc-white);
+  border: 1px solid var(--uiuc-light-gray);
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--uiuc-navy);
+}
+
+.text-button {
+  border: none;
+  background: none;
+  color: var(--uiuc-orange);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.profile-card {
+  border: 1px solid rgba(19, 41, 75, 0.08);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(145deg, rgba(19, 41, 75, 0.02), #fff);
+}
+
+.card-title {
+  font-weight: 600;
+  color: var(--uiuc-navy);
+}
+
+.card-role {
+  font-size: 0.95rem;
+  color: var(--uiuc-gray);
+  margin: 0.25rem 0 0.75rem;
+}
+
+.card-focus {
+  margin: 0 0 0.9rem;
+  color: var(--uiuc-gray);
+  line-height: 1.6;
+}
+
+.card-progress {
+  margin-bottom: 0.75rem;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--uiuc-gray);
+  font-size: 0.85rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(19, 41, 75, 0.1);
+  border-radius: 999px;
+  margin-top: 0.35rem;
+}
+
+.progress-value {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--uiuc-orange), var(--uiuc-light-orange));
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--uiuc-gray);
+}
+
+.card-meta .ghost.small {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.skills-grid h3 {
+  margin: 0 0 0.75rem;
+  color: var(--uiuc-navy);
+}
+
+.skill-chips, .skill-chips.alt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-chips span {
+  background: rgba(19, 41, 75, 0.07);
+  color: var(--uiuc-navy);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.skill-chips.alt span {
+  background: rgba(255, 95, 0, 0.12);
+  color: var(--uiuc-orange);
+}
+
+.learning-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.learning-list li {
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px dashed rgba(19, 41, 75, 0.15);
+  background: rgba(19, 41, 75, 0.02);
+}
+
+.learning-list strong {
+  color: var(--uiuc-navy);
+}
+
+.learning-list p {
+  margin: 0.35rem 0 0;
+  color: var(--uiuc-gray);
+}
+
+.spotlight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.spotlight-list article {
+  padding: 1.25rem 1.4rem;
+  border-radius: 14px;
+  border: 1px solid rgba(19, 41, 75, 0.1);
+  background: rgba(19, 41, 75, 0.02);
+}
+
+.spotlight-course {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--uiuc-orange);
+}
+
+.spotlight-list h3 {
+  margin: 0.4rem 0 0.35rem;
+  color: var(--uiuc-navy);
+}
+
+.spotlight-list p {
+  margin: 0;
+  color: var(--uiuc-gray);
+  line-height: 1.6;
+}
+
+.spotlight-list .ghost.small {
+  margin-top: 0.75rem;
+}
+
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(19, 41, 75, 0.1);
+}
+
+.activity-list h3 {
+  margin: 0;
+  color: var(--uiuc-navy);
+}
+
+.activity-list p {
+  margin: 0.25rem 0 0;
+  color: var(--uiuc-gray);
+}
+
+.activity-list span {
+  color: var(--uiuc-gray);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 1100px) {
+  .profile-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-edit-form {
+  width: 100%;
+}
+
+.profile-edit-form h2 {
+  margin: 0 0 1.5rem 0;
+  color: var(--uiuc-navy);
+  font-size: 1.5rem;
+}
+
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.edit-form-grid .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-form-grid .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.edit-form-grid label {
+  font-weight: 600;
+  color: var(--uiuc-navy);
+  font-size: 0.9rem;
+}
+
+.edit-form-grid input,
+.edit-form-grid textarea {
+  padding: 0.75rem;
+  border: 2px solid var(--uiuc-light-gray);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.edit-form-grid input:focus,
+.edit-form-grid textarea:focus {
+  outline: none;
+  border-color: var(--uiuc-orange);
+}
+
+.edit-form-grid textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.edit-form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.edit-form-actions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.edit-form-actions .primary {
+  background: var(--uiuc-orange);
+  color: var(--uiuc-white);
+}
+
+.edit-form-actions .primary:hover:not(:disabled) {
+  background: #E85400;
+}
+
+.edit-form-actions .ghost {
+  background: transparent;
+  color: var(--uiuc-navy);
+  border: 2px solid var(--uiuc-light-gray);
+}
+
+.edit-form-actions .ghost:hover:not(:disabled) {
+  border-color: var(--uiuc-gray);
+}
+
+.edit-form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .profile-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .profile-hero {
+    flex-direction: column;
+  }
+
+  .profile-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

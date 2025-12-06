@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HiUserGroup } from 'react-icons/hi2'
+import { HiUserGroup, HiPlus } from 'react-icons/hi2'
 import Sidebar from '../components/Sidebar'
 import TermSelector from '../components/TermSelector'
 import SearchBar from '../components/SearchBar'
 import CourseTags from '../components/CourseTags'
 import PostCard from '../components/PostCard'
-import { fetchTerms, fetchPopularPosts, searchPosts } from '../services/api'
+import { fetchTerms, fetchPopularPosts, searchPosts, getStoredUser } from '../services/api'
 import teamupLogo from '../assets/teamup-logo.png'
 import './EntryPage.css'
 
@@ -20,6 +20,7 @@ function EntryPage() {
   const [termsLoading, setTermsLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+  const storedUser = getStoredUser()
 
   useEffect(() => {
     const initializeTerms = async () => {
@@ -50,15 +51,15 @@ function EntryPage() {
   useEffect(() => {
     // 只有在已选择学期且没有搜索时才加载popular posts
     if (selectedTermId !== null && !isSearchMode) {
-      const loadPopularPosts = async () => {
-        try {
-          setLoading(true)
+  const loadPopularPosts = async () => {
+    try {
+      setLoading(true)
           const data = await fetchPopularPosts(selectedTermId)
-          setPosts(data)
-          setError(null)
-        } catch (err) {
-          setError('Failed to load popular posts. Please try again later.')
-          console.error('Error loading posts:', err)
+      setPosts(data)
+      setError(null)
+    } catch (err) {
+      setError('Failed to load popular posts. Please try again later.')
+      console.error('Error loading posts:', err)
         } finally {
           setLoading(false)
         }
@@ -137,17 +138,25 @@ function EntryPage() {
     navigate(`/posts/${postId}`)
   }
 
+  const handleCreatePost = () => {
+    if (!storedUser) {
+      navigate('/auth')
+      return
+    }
+    navigate('/posts/create')
+  }
+
   return (
     <div className="entry-page">
       <Sidebar />
       <div className="entry-content">
         <div className="entry-top-bar">
-          <div className="entry-header">
+        <div className="entry-header">
             <h1 className="entry-title">
               <HiUserGroup className="title-icon" />
               TeamUp UIUC
             </h1>
-            <p className="entry-subtitle">Find your perfect teammates for course projects</p>
+          <p className="entry-subtitle">Find your perfect teammates for course projects</p>
           </div>
           <div className="entry-logo">
             <div className="logo-container">
@@ -186,13 +195,20 @@ function EntryPage() {
                   : 'Popular Posts'}
               </span>
             </h2>
-            <div className="section-badge">{posts.length} posts</div>
+            <button 
+              className="section-badge create-post-btn"
+              onClick={handleCreatePost}
+              title="Create a new post"
+            >
+              <HiPlus className="create-post-icon" />
+              Create Post
+            </button>
           </div>
           
           {loading && (
             <div className="loading-container">
               <div className="loading-spinner"></div>
-              <div className="loading-message">Loading posts...</div>
+            <div className="loading-message">Loading posts...</div>
             </div>
           )}
 

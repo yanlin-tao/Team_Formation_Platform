@@ -1,21 +1,3 @@
-"""
-Replace the contents of the Post table with the rows in data/post.csv.
-
-Usage:
-    python scripts/update_posts_from_csv.py \
-        --host 34.172.159.62 --port 3306 \
-        --user admin --password CS411sqlmaster@ \
-        --database CS411-teamup
-
-Steps performed:
-    1. Load all rows from data/post.csv.
-    2. Fetch the list of valid team_id values from the Team table.
-    3. Delete all rows from Post.
-    4. Insert the CSV rows whose team_id exists in Team.
-
-Rows whose team_id is missing in the database are skipped and reported.
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -25,7 +7,7 @@ from pathlib import Path
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser()
     parser.add_argument("--host", required=True)
     parser.add_argument("--port", type=int, default=3306)
     parser.add_argument("--user", required=True)
@@ -45,7 +27,7 @@ def main() -> int:
 
     try:
         import mysql.connector
-    except ModuleNotFoundError as exc:  # pragma: no cover - convenience message.
+    except ModuleNotFoundError as exc:
         print(
             "mysql-connector-python is required. Install it via: pip install mysql-connector-python",
             file=sys.stderr,
