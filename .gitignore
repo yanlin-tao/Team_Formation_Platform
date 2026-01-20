@@ -1,3 +1,5 @@
 .DS_Store
 doc/.DS_Store
 doc/img_src/.DS_Store
+start.sh
+./frontend/node_modules

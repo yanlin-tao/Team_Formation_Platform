@@ -16,8 +16,18 @@ BACKEND_URL="http://localhost:${BACKEND_PORT}"
 FRONTEND_URL="http://localhost:${FRONTEND_PORT}"
 HEALTH_CHECK_URL="${BACKEND_URL}/api/health"
 
-BACKEND_PID_FILE="/tmp/teamup_backend.pid"
-FRONTEND_PID_FILE="/tmp/teamup_frontend.pid"
+mp"
+mkdir -p "$TMP_DIR"
+BACKEND_PID_FILE="$TMP_DIR/teamup_backend.pid"
+FRONTEND_PID_FILE="$TMP_DIR/teamup_frontend.pid"
+BACKEND_LOG="$TMP_DIR/teamup_backend.log"
+FRONTEND_LOG="$TMP_DIR/teamup_frontend.log"
+
+
+# PID files for cleanup
+# BACKEND_PID_FILE="/tmp/teamup_backend.pid"
+# FRONTEND_PID_FILE="/tmp/teamup_frontend.pid"
+>>>>>>> Stashed changes
 
 print_info() {
     echo -e "${BLUE}[INFO]${NC} $1"
@@ -107,26 +117,27 @@ if [ ! -d "$FRONTEND_DIR" ]; then
     exit 1
 fi
 
-if [ -n "$CONDA_DEFAULT_ENV" ]; then
-    print_info "Found active conda environment: $CONDA_DEFAULT_ENV"
-elif [ -d "$BACKEND_DIR/mytrend" ]; then
+# Check if virtual environment exists (optional, but recommended)
+# Check for common virtual environment names: venv, mytrend, env
+if [ -d "$BACKEND_DIR/mytrend" ]; then
+>>>>>>> Stashed changes
     print_info "Found mytrend virtual environment, activating it..."
-    source "$BACKEND_DIR/mytrend/bin/activate"
+    source "$BACKEND_DIR/mytrend/Scripts/activate"
 elif [ -d "$BACKEND_DIR/venv" ]; then
     print_info "Found virtual environment in backend, activating it..."
-    source "$BACKEND_DIR/venv/bin/activate"
+    source "$BACKEND_DIR/venv/Scripts/activate"
 elif [ -d "mytrend" ]; then
     print_info "Found mytrend virtual environment in root, activating it..."
-    source mytrend/bin/activate
+    source mytrend/Scripts/activate
 elif [ -d "venv" ]; then
     print_info "Found virtual environment in root, activating it..."
-    source venv/bin/activate
+    source venv/Scripts/activate
 elif [ -d "env" ]; then
     print_info "Found env virtual environment in root, activating it..."
-    source env/bin/activate
+    source env/Scripts/activate
 else
     print_warning "No virtual environment found. Using system Python."
-    print_warning "It's recommended to use a virtual environment (conda, venv, mytrend, or env)."
+    print_warning "It's recommended to use a virtual environment (venv, mytrend, or env)."
 fi
 
 print_info "Checking backend dependencies..."
@@ -147,7 +158,7 @@ cd ..
 
 print_info "Starting backend server on port $BACKEND_PORT..."
 cd "$BACKEND_DIR"
-python3 main.py > /tmp/teamup_backend.log 2>&1 &
+python main.py > "$BACKEND_LOG" 2>&1 &
 BACKEND_PID=$!
 echo $BACKEND_PID > "$BACKEND_PID_FILE"
 cd ..
@@ -181,7 +192,8 @@ fi
 
 print_info "Starting frontend server on port $FRONTEND_PORT..."
 cd "$FRONTEND_DIR"
-npm run dev > /tmp/teamup_frontend.log 2>&1 &
+# npm run dev > /tmp/teamup_frontend.log 2>&1 &
+npm run dev > "$FRONTEND_LOG" 2>&1 &
 FRONTEND_PID=$!
 echo $FRONTEND_PID > "$FRONTEND_PID_FILE"
 cd ..
@@ -199,7 +211,13 @@ print_info "Frontend:     $FRONTEND_URL"
 print_info "Health Check: $HEALTH_CHECK_URL"
 echo ""
 
-if command -v open &> /dev/null; then
+# Try to open browser (macOS and Linux)
+if [[ "$OS" == "Windows_NT" ]] || command -v cmd.exe &> /dev/null; then
+    print_info "Opening browser on Windows..."
+    cmd.exe /c start "" "$FRONTEND_URL"
+elif command -v open &> /dev/null; then
+    # macOS
+>>>>>>> Stashed changes
     print_info "Opening browser..."
     sleep 2
     open "$FRONTEND_URL" 2>/dev/null || true
@@ -207,12 +225,14 @@ elif command -v xdg-open &> /dev/null; then
     print_info "Opening browser..."
     sleep 2
     xdg-open "$FRONTEND_URL" 2>/dev/null || true
+else
+    print_info "Please manually open: $FRONTEND_URL"
 fi
 
 echo ""
 print_info "View logs in real-time:"
-print_info "  Backend:  tail -f /tmp/teamup_backend.log"
-print_info "  Frontend: tail -f /tmp/teamup_frontend.log"
+print_warning "Check backend logs: $BACKEND_LOG"
+print_info "  Backend:  tail -f $BACKEND_LOG"
 echo ""
 print_warning "Press Ctrl+C to stop all services"
 echo ""
@@ -236,4 +256,3 @@ while true; do
         fi
     fi
 done
-
